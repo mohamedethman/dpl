@@ -1,0 +1,130 @@
+<div class="container mt-4">
+  <!-- Rounded Panel with Page Title -->
+  <div class="rounded-panel">
+    <div class="vertical-line"></div>
+    <h2 class="page-title">Liste des ATCs</h2>
+  </div>
+
+  <div class="row mb-3 align-items-center">
+    <div class="col-md-6">
+      <input
+        type="text"
+        class="form-control"
+        [(ngModel)]="searchTerm"
+        placeholder="Rechercher par codeATC ..."
+      />
+    </div>
+    <div class="col-md-6 d-flex justify-content-end">
+      <!-- Add New DCI Button -->
+      <button class="btn btn-add btns" (click)="openModal()">
+        + Nouveau ATC
+      </button>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Code ATC</th>
+          <th>Description</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let atc of paginatedAtcList">
+          <td>{{ atc.id }}</td>
+          <td>{{ atc.codeATC }}</td>
+          <td>{{ atc.description }}</td>
+          <td>
+            <button class="btn btn-primary btn-sm" (click)="openModal(atc)">
+              Edit
+            </button>
+            <button class="btn btn-delete btn-sm" (click)="deleteDci(dci.id!)">
+              Delete
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Pagination Controls -->
+  <div class="pagination-container">
+    <nav *ngIf="totalPages > 1">
+      <ul class="pagination">
+        <li class="page-item" [class.disabled]="currentPage === 1">
+          <a class="page-link" (click)="changePage(currentPage - 1)"
+            >Précédent</a
+          >
+        </li>
+        <li
+          class="page-item"
+          *ngFor="let page of [].constructor(totalPages); let i = index"
+          [class.active]="currentPage === i + 1"
+        >
+          <a class="page-link" (click)="changePage(i + 1)">{{ i + 1 }}</a>
+        </li>
+        <li class="page-item" [class.disabled]="currentPage === totalPages">
+          <a class="page-link" (click)="changePage(currentPage + 1)">Suivant</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>
+
+<!-- Modal -->
+<!-- Modal -->
+<div id="atcModal" class="modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <!-- Header -->
+      <div class="modal-header form-header text-white position-relative">
+        <h5 class="modal-title">
+          <span *ngIf="isEditMode; else addMode">Modifier ATC</span>
+          <ng-template #addMode>Ajouter un Nouveau ATC</ng-template>
+        </h5>
+        <button type="button" class="btn-close-custom" (click)="closeModal()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+
+      <!-- Body -->
+      <div class="modal-body">
+        <form [formGroup]="atcForm">
+          <!-- Code ATC -->
+          <div class="form-group">
+            <label>Code ATC</label>
+            <input
+              type="text"
+              class="form-control"
+              formControlName="codeATC"
+              placeholder="Entrez le code ATC"
+            />
+          </div>
+
+          <!-- Description -->
+          <div class="form-group">
+            <label>Description</label>
+            <input
+              type="text"
+              class="form-control"
+              formControlName="description"
+              placeholder="Entrez la description"
+            />
+          </div>
+        </form>
+      </div>
+
+      <!-- Footer -->
+      <div class="modal-footer">
+        <button class="btn btn-secondary" (click)="closeModal()">Fermer</button>
+        <button class="btn btn-success" (click)="saveAtc()">
+          {{ isEditMode ? "Modifier" : "Ajouter" }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

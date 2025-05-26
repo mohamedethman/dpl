@@ -1,0 +1,919 @@
+<!-- Medicament Form Section -->
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"
+/>
+
+<!-- Search Card -->
+
+<div class="container mt-4">
+  <div *ngIf="!isMedicamentSubmitted">
+    <div class="container mt-4">
+      <div class="row">
+        <div class="col-12">
+          <div class="rounded-panel">
+            <h3 class="mb-0">
+              <i class="fas fa-edit-ul me-2"></i>Renouvellement AMM
+            </h3>
+          </div>
+          <div class="card w-100">
+            <!-- <div class="card-header" style="background-color: #DFCFBE  !important;">
+            <h3>Enregistrer Medicament</h3>
+          </div> -->
+            <div class="card-body">
+              <form
+                [formGroup]="medicamentForm"
+                (ngSubmit)="submitMedicament()"
+                class="p-1 rounded"
+              >
+                <!-- Form Title -->
+
+                <div class="row">
+                  <!-- Nom du Médicament -->
+                  <div class="col-md-6 mb-3">
+                    <label for="nom_medicament" class="form-label fw-bold"
+                      >Nom du Médicament</label
+                    >
+                    <input
+                      formControlName="nom_medicament"
+                      class="form-control border-theme"
+                      id="nom_medicament"
+                    />
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label for="forme_pharmaceutique" class="form-label fw-bold"
+                      >Forme Pharmaceutique</label
+                    >
+                    <select
+                      formControlName="forme_pharmaceutique"
+                      class="form-select border-theme"
+                      id="forme_pharmaceutique"
+                    >
+                      <option
+                        *ngFor="let forme of formesPharmaceutiques"
+                        [value]="forme.code"
+                      >
+                        {{ forme.libelle }}
+                      </option>
+                    </select>
+                  </div>
+                  <!-- <div class="col-md-6 mb-3">
+                    <label for="dosage" class="form-label fw-bold"
+                      >Dosage</label
+                    >
+                    <select
+                      formControlName="dosage"
+                      class="form-select border-theme"
+                      id="dosage"
+                    >
+                      <option
+                        *ngFor="let dosage of dosages"
+                        [value]="dosage.code"
+                      >
+                        {{ dosage.libelle }}
+                      </option>
+                    </select>
+                  </div> -->
+                </div>
+
+                <div class="row">
+                  <!-- Forme Pharmaceutique -->
+
+                  <!-- Voie d'Administration -->
+                  <div class="col-md-6 mb-3">
+                    <label for="voie_administration" class="form-label fw-bold"
+                      >Voie d'Administration</label
+                    >
+                    <select
+                      formControlName="voie_administration"
+                      class="form-select border-theme"
+                      id="voie_administration"
+                    >
+                      <option
+                        *ngFor="let voie of voiesAdministration"
+                        [value]="voie.code"
+                      >
+                        {{ voie.libelle }}
+                      </option>
+                    </select>
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label
+                      for="code_atc"
+                      class="form-label fw-bold d-flex justify-content-between align-items-center"
+                    >
+                      Code ATC
+                      <div class="form-check form-switch">
+                        <input
+                          type="checkbox"
+                          [checked]="isOtherATCSelected"
+                          (change)="isOtherATCSelected = !isOtherATCSelected"
+                          class="form-check-input"
+                          id="toggleATC"
+                        />
+                        <label class="form-check-label" for="toggleATC"
+                          >Autre</label
+                        >
+                      </div>
+                    </label>
+
+                    <select
+                      formControlName="code_atc"
+                      class="form-select border-theme"
+                    >
+                      <option
+                        *ngFor="let atc of atcCodes"
+                        [value]="atc.codeATC"
+                      >
+                        {{ atc.codeATC }}
+                      </option>
+                    </select>
+
+                    <label *ngIf="isOtherATCSelected" class="mt-3"
+                      >Autre Code ATC</label
+                    >
+                    <input
+                      *ngIf="isOtherATCSelected"
+                      type="text"
+                      formControlName="autreAtc"
+                      class="form-control border-theme mt-2"
+                      placeholder="Saisir un Code ATC"
+                    />
+                  </div>
+                </div>
+
+                <div class="row">
+                  <!-- Code ATC -->
+
+                  <!-- <div class="col-md-6 mb-3">
+                    <label for="dci" class="form-label fw-bold">DCI</label>
+                    <input
+                      formControlName="dci"
+                      class="form-control border-theme"
+                      id="dci"
+                      (input)="searchDCI($event.target.value)"
+                      placeholder="Search for DCI"
+                    />
+
+                    <div
+                      *ngIf="dciOptions.length"
+                      class="list-group shadow-sm mt-2"
+                    >
+                      <button
+                        *ngFor="let dci of dciOptions"
+                        type="button"
+                        class="list-group-item list-group-item-action"
+                        (click)="selectMainDci(dci)"
+                      >
+                        {{ dci.nomSubstance }}
+                      </button>
+                    </div>
+                  </div> -->
+                </div>
+
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <label for="conditionnement" class="form-label fw-bold"
+                      >Conditionnement</label
+                    >
+
+                    <input
+                      formControlName="conditionnement"
+                      class="form-control border-theme"
+                      id="conditionnement"
+                    />
+                    <!-- <select
+                      formControlName="conditionnement"
+                      class="form-select border-theme"
+                      id="conditionnement"
+                    >
+                      <option
+                        *ngFor="let conditionnement of conditionnements"
+                        [value]="conditionnement.code"
+                      >
+                        {{ conditionnement.libelle }}
+                      </option>
+                    </select> -->
+                  </div>
+                </div>
+
+                <div class="row">
+                  <!-- Conditionnement -->
+
+                  <!-- Add this after the existing form controls -->
+
+                  <!-- Substances Section -->
+
+                  <div class="row">
+                    <div class="col-md-12 mb-3">
+                      <label class="form-label fw-bold">DCI avec Dosage</label>
+
+                      <!-- DCI Selection Toggle -->
+                      <!-- <div class="form-check form-switch mb-3">
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          id="useCustomDci"
+                          [(ngModel)]="useCustomDci"
+                          [ngModelOptions]="{ standalone: true }"
+                        />
+                        <label class="form-check-label" for="useCustomDci">
+                          {{
+                            useCustomDci
+                              ? "Saisir un DCI personnalisé"
+                              : "Sélectionner un DCI"
+                          }}
+                        </label>
+                      </div> -->
+
+                      <!-- DCI Selection with Dosage -->
+                      <div class="row mb-3" *ngIf="!useCustomDci">
+                        <div class="col-md-12">
+                          <div class="row">
+                            <!-- New row for inputs and button -->
+                            <div class="col-md-5">
+                              <input
+                                class="form-control border-theme"
+                                [(ngModel)]="dciSearchText"
+                                [ngModelOptions]="{ standalone: true }"
+                                (input)="
+                                  searchSubstanceDCI($event.target.value)
+                                "
+                                placeholder="Rechercher un DCI"
+                              />
+                            </div>
+                            <div class="col-md-5">
+                              <input
+                                type="text"
+                                class="form-control border-theme"
+                                [(ngModel)]="dciDosage"
+                                [ngModelOptions]="{ standalone: true }"
+                                placeholder="Dosage (ex: 500mg)"
+                                required
+                              />
+                            </div>
+                            <div class="col-md-2">
+                              <button
+                                type="button"
+                                class="btn-primary w-100"
+                                (click)="addDci()"
+                                [disabled]="!selectedSubstanceDci || !dciDosage"
+                              >
+                                <i class="fas fa-plus-circle me-2"></i> Ajouter
+                              </button>
+                            </div>
+                          </div>
+
+                          <div
+                            *ngIf="substanceOptions.length"
+                            class="list-group shadow-sm mt-2"
+                          >
+                            <button
+                              *ngFor="let dci of substanceOptions"
+                              type="button"
+                              class="list-group-item list-group-item-action"
+                              (click)="selectSubstanceDci(dci)"
+                            >
+                              {{ dci.nomSubstance }}
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Custom DCI Input with Dosage -->
+                      <div class="row mb-3" *ngIf="useCustomDci">
+                        <div class="col-md-5">
+                          <input
+                            type="text"
+                            class="form-control border-theme"
+                            [(ngModel)]="customDci"
+                            [ngModelOptions]="{ standalone: true }"
+                            placeholder="Saisir un DCI personnalisé"
+                          />
+                        </div>
+                        <div class="col-md-5">
+                          <input
+                            type="text"
+                            class="form-control border-theme"
+                            [(ngModel)]="dciDosage"
+                            [ngModelOptions]="{ standalone: true }"
+                            placeholder="Dosage (ex: 500mg)"
+                            required
+                          />
+                        </div>
+                        <div class="col-md-2 d-flex align-items-center">
+                          <button
+                            type="button"
+                            class="btn-primary w-100"
+                            (click)="addDci()"
+                            [disabled]="!customDci || !dciDosage"
+                          >
+                            <i class="fas fa-plus-circle me-2"></i> Ajouter
+                          </button>
+                        </div>
+                      </div>
+
+                      <!-- Table of added DCIs with Dosages -->
+                      <div
+                        class="table-responsive mb-3"
+                        *ngIf="dcisList.length > 0"
+                      >
+                        <table class="table table-bordered table-hover">
+                          <thead class="table-light">
+                            <tr>
+                              <th>Substance</th>
+                              <th>Dosage</th>
+                              <th>Actions</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr *ngFor="let dci of dcisList; let i = index">
+                              <td>
+                                {{ dci.nomSubstance }}
+                                <span
+                                  *ngIf="dci.isCustom"
+                                  class="badge bg-info ms-2"
+                                  >Personnalisé</span
+                                >
+                              </td>
+                              <td>{{ dci.dosage }}</td>
+                              <td class="text-center">
+                                <button
+                                  type="button"
+                                  class="btn btn-sm btn-danger"
+                                  (click)="removeDci(i)"
+                                >
+                                  <i class="fas fa-trash-alt"></i>
+                                </button>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+
+                      <!-- Validation message -->
+                      <div
+                        *ngIf="dcisList.length === 0"
+                        class="alert alert-warning"
+                      >
+                        Aucun DCI ajouté. Veuillez ajouter au moins un DCI avec
+                        son dosage.
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <!-- Fabricant Checkbox and Fields -->
+                    <div class="col-md-12 mb-3">
+                      <div class="form-check">
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          id="labFabriquant"
+                          [formControl]="medicamentForm.get('labFabriquant')"
+                          (change)="onFabriquantChange($event)"
+                        />
+                        <label
+                          class="form-check-label fw-bold"
+                          for="labFabriquant"
+                        >
+                          Laboratoire fabricant est différent de l'exploitant
+                        </label>
+                      </div>
+
+                      <div
+                        *ngIf="medicamentForm.get('labFabriquant')?.value"
+                        class="mt-3"
+                      >
+                        <div class="row">
+                          <div class="col-md-6 mb-3">
+                            <label for="nomFabricant" class="form-label fw-bold"
+                              >Nom du Fabricant</label
+                            >
+                            <input
+                              formControlName="nomFabricant"
+                              class="form-control border-theme"
+                              id="nomFabricant"
+                            />
+                          </div>
+                          <div class="col-md-6 mb-3">
+                            <label
+                              for="adresseFabricant"
+                              class="form-label fw-bold"
+                              >Adresse du Fabricant</label
+                            >
+                            <input
+                              formControlName="adresseFabricant"
+                              class="form-control border-theme"
+                              id="adresseFabricant"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Prix and Devise -->
+                  <div class="row">
+                    <div class="col-md-6 mb-3">
+                      <label
+                        for="prixGrossisteHorsTaxe"
+                        class="form-label fw-bold"
+                        >Prix Grossiste Hors Taxe</label
+                      >
+                      <input
+                        type="number"
+                        step="0.01"
+                        formControlName="prixGrossisteHorsTaxe"
+                        class="form-control border-theme"
+                        id="prixGrossisteHorsTaxe"
+                      />
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label for="devise" class="form-label fw-bold"
+                        >Devise</label
+                      >
+                      <select
+                        formControlName="devise"
+                        class="form-select border-theme"
+                        id="devise"
+                      >
+                        <option value="$">$</option>
+                        <option value="€">€</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="text-center">
+                  <button
+                    type="submit"
+                    class="btn btn-submit shadow-sm fw-bold"
+                    [disabled]="medicamentForm.invalid"
+                  >
+                    Enregistrer Medicament
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Wizard Section -->
+
+  <div *ngIf="isMedicamentSubmitted">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+          <div class="rounded-panel">
+            <h3 class="page-title">ENREGISTREMENT DES MEDICAMENTS</h3>
+          </div>
+        </div>
+
+        <div class="col-12 d-flex justify-content-end">
+          <div class="mt-3">
+            <button class="btn btn-success mr-2" (click)="CompleterPlusTard()">
+              Compléter plus tard
+            </button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="col-12">
+            <div class="card shadow-lg p-1">
+              <div class="card-body">
+                <div
+                  class="wizard-header d-flex flex-wrap justify-content-center"
+                >
+                  <div
+                    class="wizard-step"
+                    *ngFor="let step of steps; let i = index"
+                    [class.active]="selectedIndex === i"
+                    (click)="selectedIndex = i"
+                  >
+                    <div class="step-circle">{{ i + 1 }}</div>
+                    <span class="step-label">{{ step.libelle }}</span>
+                  </div>
+                  <div
+                    class="wizard-step"
+                    [class.active]="selectedIndex === steps.length"
+                    (click)="selectedIndex = steps.length"
+                  >
+                    <div class="step-circle">{{ steps.length + 1 }}</div>
+                    <span class="step-label">Récapitulatif</span>
+                  </div>
+                </div>
+
+                <div class="step-content">
+                  <form
+                    *ngIf="selectedIndex < steps.length"
+                    [formGroup]="formGroups[selectedIndex]"
+                    (ngSubmit)="onSubmit()"
+                  >
+                    <div class="row">
+                      <div
+                        *ngFor="let element of steps[selectedIndex].elements"
+                        class="col-md-6 mb-3"
+                      >
+                        <!-- Hide "Contrat de sous traitance" ONLY when labFabriquantValue is true -->
+                        <ng-container
+                          *ngIf="shouldShowElement(element.nomElement)"
+                        >
+                          <div *ngIf="element.typeElement === 'TEXTAREA'">
+                            <label>{{ element.nomElement }}</label>
+                            <textarea
+                              formControlName="{{ element.nomElement }}"
+                              class="form-control"
+                              rows="2"
+                            ></textarea>
+                          </div>
+                          <div *ngIf="element.typeElement === 'TEXTE'">
+                            <label>{{ element.nomElement }}</label>
+                            <input
+                              formControlName="{{ element.nomElement }}"
+                              class="form-control"
+                              type="text"
+                            />
+                          </div>
+                          <div *ngIf="element.typeElement === 'FICHIER'">
+                            <label>{{
+                              element.nomElement === "AMM pays d’origine"
+                                ? "AMM Mauritanienne"
+                                : element.nomElement
+                            }}</label>
+                            <input
+                              formControlName="{{ element.nomElement }}"
+                              (change)="onFileSelected($event, element)"
+                              class="form-control"
+                              type="file"
+                            />
+                          </div>
+                        </ng-container>
+                      </div>
+                    </div>
+                  </form>
+
+                  <div
+                    class="container-fluid bg-white shadow-sm p-4 rounded"
+                    *ngIf="selectedIndex === steps.length"
+                  >
+                    <h2 class="mb-4 border-bottom pb-2">
+                      🗂️ Récapitulatif des Informations
+                    </h2>
+
+                    <div
+                      *ngIf="
+                        !loading &&
+                        recapDossier &&
+                        dossierModuleElements.length > 0
+                      "
+                      class="p-3 rounded border"
+                      style="max-height: 75vh; overflow-y: auto"
+                    >
+                      <h3 class="text-primary mb-3">
+                        📄 Détails du Dossier (ID: {{ dossierId }})
+                      </h3>
+
+                      <!-- Bloc Médicament + Laboratoire -->
+                      <h4 class="text-secondary">
+                        💊 Médicament & 🧪 Laboratoire
+                      </h4>
+                      <div class="row">
+                        <!-- Médicament -->
+                        <div class="col-md-6 mb-3">
+                          <div class="card h-100">
+                            <div class="card-header bg-light">
+                              <i class="fas fa-capsules"></i> Médicament
+                            </div>
+                            <div class="card-body">
+                              <!-- Infos Médicament -->
+                              <p>
+                                <strong>Nom:</strong>
+                                {{
+                                  dossierModuleElements[0].dossier.medicament
+                                    .nomMedicament
+                                }}
+                              </p>
+                              <p>
+                                <strong>Code ATC:</strong>
+                                <ng-container
+                                  *ngIf="
+                                    dossierModuleElements[0].dossier.medicament
+                                      .codeATC;
+                                    else autreAtc
+                                  "
+                                >
+                                  {{
+                                    dossierModuleElements[0].dossier.medicament
+                                      .codeATC.codeATC
+                                  }}
+                                  -
+                                  {{
+                                    dossierModuleElements[0].dossier.medicament
+                                      .codeATC.description
+                                  }}
+                                </ng-container>
+                                <ng-template #autreAtc>
+                                  {{
+                                    dossierModuleElements[0].dossier.medicament
+                                      .autreAtc
+                                  }}
+                                </ng-template>
+                              </p>
+
+                              <p><strong>Substances :</strong></p>
+                              <ng-container
+                                *ngIf="
+                                  dossierModuleElements[0].dossier.medicament
+                                    .substances?.length > 0;
+                                  else noSubstances
+                                "
+                              >
+                                <div
+                                  class="table-responsive"
+                                  style="
+                                    max-height: 200px;
+                                    overflow-y: auto;
+                                    border: 1px solid #dee2e6;
+                                    border-radius: 0.5rem;
+                                  "
+                                >
+                                  <table
+                                    class="table table-sm table-striped mb-0"
+                                  >
+                                    <thead class="table-light sticky-top">
+                                      <tr>
+                                        <th>Nom</th>
+                                        <th>Type</th>
+                                        <th>Dosage</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      <tr
+                                        *ngFor="
+                                          let substance of dossierModuleElements[0]
+                                            .dossier.medicament.substances
+                                        "
+                                      >
+                                        <td>{{ substance.nomSubstance }}</td>
+                                        <td>{{ substance.typeSubstance }}</td>
+                                        <td>{{ substance.dosage }}</td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                                </div>
+                              </ng-container>
+                              <ng-template #noSubstances>
+                                <p class="text-muted fst-italic">
+                                  Aucune substance renseignée.
+                                </p>
+                              </ng-template>
+
+                              <p>
+                                <strong>Forme:</strong>
+                                {{
+                                  dossierModuleElements[0].dossier.medicament
+                                    .libFormePharmaceutique
+                                }}
+                              </p>
+                              <!-- <p>
+                                <strong>Dosage:</strong>
+                                {{
+                                  dossierModuleElements[0].dossier.medicament
+                                    .libDosage
+                                }}
+                              </p> -->
+                              <p>
+                                <strong>Voie:</strong>
+                                {{
+                                  dossierModuleElements[0].dossier.medicament
+                                    .libVoieAdministration
+                                }}
+                              </p>
+                              <p>
+                                <strong>Conditionnement:</strong>
+                                {{
+                                  dossierModuleElements[0].dossier.medicament
+                                    .autreConditionnement
+                                }}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+
+                        <!-- Laboratoire -->
+                        <div class="col-md-6 mb-3">
+                          <div class="card h-100">
+                            <div class="card-header bg-light">
+                              <i class="fas fa-flask"></i> Laboratoire
+                            </div>
+                            <div class="card-body">
+                              <p>
+                                <strong>Nom:</strong>
+                                {{
+                                  dossierModuleElements[0].dossier.medicament
+                                    .laboratoire.nom
+                                }}
+                              </p>
+                              <p>
+                                <strong>Type:</strong>
+                                {{
+                                  dossierModuleElements[0].dossier.medicament
+                                    .laboratoire.type
+                                }}
+                              </p>
+                              <p>
+                                <strong>Adresse:</strong>
+                                {{
+                                  dossierModuleElements[0].dossier.medicament
+                                    .laboratoire.adresse
+                                }}
+                              </p>
+                              <p>
+                                <strong>Contact:</strong>
+                                {{
+                                  dossierModuleElements[0].dossier.medicament
+                                    .laboratoire.contactPrincipal
+                                }}
+                              </p>
+                              <p>
+                                <strong>Pays:</strong>
+                                {{
+                                  dossierModuleElements[0].dossier.medicament
+                                    .laboratoire.pays
+                                }}
+                              </p>
+                              <p>
+                                <strong>Téléphone:</strong>
+                                {{
+                                  dossierModuleElements[0].dossier.medicament
+                                    .laboratoire.telephone
+                                }}
+                              </p>
+                              <p>
+                                <strong>Email:</strong>
+                                {{
+                                  dossierModuleElements[0].dossier.medicament
+                                    .laboratoire.email
+                                }}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Modules et éléments -->
+                      <h3 class="mt-4">Modules et Éléments</h3>
+                      <div class="row">
+                        <div
+                          class="col-md-6"
+                          *ngFor="
+                            let element of getUniqueModules();
+                            let i = index
+                          "
+                        >
+                          <div
+                            class="card mb-4 border-start border-4"
+                            [ngClass]="{
+                              'border-primary':
+                                element.moduleElement.module.id === 1,
+                              'border-success':
+                                element.moduleElement.module.id === 2,
+                              'border-info':
+                                element.moduleElement.module.id === 3,
+                              'border-warning':
+                                element.moduleElement.module.id === 4,
+                              'border-danger':
+                                element.moduleElement.module.id === 5
+                            }"
+                          >
+                            <div
+                              class="card-header fw-bold"
+                              [ngClass]="{
+                                'text-primary':
+                                  element.moduleElement.module.id === 1,
+                                'text-success':
+                                  element.moduleElement.module.id === 2,
+                                'text-info':
+                                  element.moduleElement.module.id === 3,
+                                'text-warning':
+                                  element.moduleElement.module.id === 4,
+                                'text-danger':
+                                  element.moduleElement.module.id === 5
+                              }"
+                            >
+                              <i class="fas fa-folder-open me-2"></i>
+                              {{ element.moduleElement.module.libelle }}
+                            </div>
+                            <div class="card-body px-3">
+                              <ul class="list-group list-group-flush">
+                                <li
+                                  class="list-group-item d-flex justify-content-between align-items-start"
+                                  *ngFor="
+                                    let item of filterElementsByModule(
+                                      element.moduleElement.module.libelle
+                                    )
+                                  "
+                                >
+                                  <div class="me-auto">
+                                    <div class="fw-semibold">
+                                      <i class="fas fa-file-alt me-2"></i>
+                                      {{ item.moduleElement.nomElement }}:
+                                    </div>
+                                    <div
+                                      class="text-muted small"
+                                      *ngIf="
+                                        item.moduleElement.typeElement ===
+                                        'TEXTE'
+                                      "
+                                    >
+                                      {{ item.contenuTexte }}
+                                    </div>
+                                  </div>
+
+                                  <button
+                                    *ngIf="
+                                      item.moduleElement.typeElement ===
+                                      'FICHIER'
+                                    "
+                                    (click)="
+                                      downloadFile(
+                                        item.dossier.id,
+                                        item.moduleElement.id,
+                                        item.moduleElement.nomElement
+                                      )
+                                    "
+                                    class="btn btn-sm btn-outline-secondary"
+                                    title="Télécharger le fichier"
+                                  >
+                                    <i class="fas fa-download"></i>
+                                  </button>
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Message si aucun dossier -->
+                    <div
+                      *ngIf="
+                        !loading &&
+                        (!recapDossier || dossierModuleElements.length === 0)
+                      "
+                      class="alert alert-warning mt-3 text-center"
+                    >
+                      Aucun détail de dossier trouvé.
+                    </div>
+
+                    <!-- Loader -->
+                    <div *ngIf="loading" class="text-center mt-3">
+                      <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Chargement...</span>
+                      </div>
+                      <p>Chargement des données en cours...</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="stepper-navigation mt-4 text-end">
+                  <button
+                    class="btn btn-secondary me-4"
+                    (click)="goBack()"
+                    [disabled]="selectedIndex === 0"
+                  >
+                    Précédent
+                  </button>
+
+                  <!-- Show "Suivant" button on all steps except the last one -->
+                  <button
+                    *ngIf="selectedIndex < steps.length"
+                    class="btn btn-success"
+                    (click)="goForward()"
+                    [disabled]="!formGroups[selectedIndex].valid"
+                  >
+                    Suivant
+                  </button>
+
+                  <!-- Show "Soumettre" button only on the recap step -->
+                  <button
+                    *ngIf="selectedIndex === steps.length"
+                    class="btn btn-success"
+                    (click)="submitDossier()"
+                  >
+                    Soumettre
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

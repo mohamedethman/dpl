@@ -1,0 +1,32 @@
+<div class="main-wrapper" *ngIf="userConnected">
+  <!-- Navbar -->
+  <app-navbar
+    #navbar
+    [userConnected]="userConnected"
+    [menuItems]="menuItems"
+  ></app-navbar>
+
+  <div class="page-wrapper">
+    <div class="page-content-full">
+      <!-- Spinner for lazyload modules -->
+      <div *ngIf="isLoading" class="spinner-wrapper">
+        <div class="spinner">Loading...</div>
+      </div>
+
+      <div class="content-container d-flex" contentAnimate *ngIf="!isLoading">
+        <!-- Sidebar -->
+        <div class="sidebar-wrapper">
+          <app-sidebar></app-sidebar>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+          <router-outlet></router-outlet>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <app-footer #footer></app-footer>
+  </div>
+</div>

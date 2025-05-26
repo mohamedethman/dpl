@@ -1,0 +1,340 @@
+.container {
+  // max-width: 600px;
+  margin: 0 auto;
+}
+
+.module {
+  border: 1px solid #ddd;
+  margin-bottom: 20px;
+  padding: 15px;
+  border-radius: 5px;
+}
+
+.module-title {
+  font-size: 1.2em;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #0056b3;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+input[type="text"],
+textarea {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box; /* Ensures padding doesn't affect width */
+}
+
+input[type="file"] {
+  margin-bottom: 10px;
+}
+
+.step {
+  margin-bottom: 15px;
+}
+
+button {
+  background-color: #0056b3;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  margin-bottom: 20px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #ffc107;
+}
+
+.navigation {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.navigation button {
+  margin: 0 5px;
+}
+#progress-bar-container {
+  width: 100%;
+  background-color: #f3f3f3;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+#progress-bar {
+  width: 20%; /* Starts at 0%, adjust based on module completed */
+  height: 20px;
+  background-color: #4caf50;
+  text-align: center;
+  line-height: 20px;
+  color: white;
+  border-radius: 5px;
+}
+
+.hidden {
+  display: none;
+}
+
+/* .header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 80px;
+    background-color: #f8f9fa;
+  }
+  
+  .logo-container {
+    text-align: center;
+    flex: 1;
+  }
+  
+  .logo {
+    width: 85px;
+    height: 85;
+    object-fit: cover;
+  }
+  
+  .app-name {
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: 10px;
+  } */
+
+.user-panel {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.user-image-container {
+  position: relative;
+}
+
+.user-image {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #ccc;
+}
+
+.user-status-circle {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 10px;
+  height: 10px;
+  background-color: green;
+  border-radius: 50%;
+  border: 2px solid white;
+}
+
+.logout-button {
+  margin-left: 15px;
+}
+
+.logout-button .btn {
+  padding: 5px 10px;
+  font-size: 14px;
+}
+
+.user-panel-options {
+  display: block; /* Ensures the panel is shown when isPanelVisible is true */
+  position: absolute;
+  top: 40px; /* Adjust the position */
+  left: 0;
+  background: white;
+  border: 1px solid #ddd;
+  // box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+  padding: 10px;
+  list-style: none;
+}
+
+.user-panel-options ul {
+  margin: 0;
+  padding: 0;
+}
+
+.user-panel-options li {
+  margin: 5px 0;
+}
+
+.user-panel-options li a {
+  text-decoration: none;
+  color: #333;
+}
+.border-theme {
+  color: #1c625b;
+  border-color: #00a95c;
+}
+.user-panel-options li a:hover {
+  color: #007bff;
+}
+/* Styling the rounded panel containing the header */
+.rounded-panel {
+  display: flex;
+  align-items: center;
+  background-color: #f5f5f5;
+  border-radius: 15px;
+  padding: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+/* Vertical line before the header */
+.vertical-line {
+  height: 40px;
+  width: 4px;
+  background-color: #646464;
+  margin-right: 15px;
+}
+
+/* Page title styles */
+.page-title {
+  font-size: 20px;
+  color: #797979;
+  text-align: left;
+  margin: 0; /* Remove default margin */
+  font-weight: 600;
+}
+/* Stepper Card Styling */
+.card {
+  border-radius: 2px;
+  border: none;
+  background: #ffffff;
+  margin-bottom: 20px;
+}
+
+/* Wizard Header */
+.wizard-header {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+}
+
+/* Progress Line */
+.wizard-header::before {
+  content: "";
+  position: absolute;
+  top: 20px;
+  left: 10%;
+  width: 80%;
+  height: 4px;
+  background: #ddd;
+  z-index: 0;
+}
+
+/* Individual Steps */
+.wizard-step {
+  width: 150px; /* Set a fixed width */
+  min-width: 150px;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  cursor: pointer;
+}
+
+/* Step Circle */
+.step-circle {
+  width: 40px;
+  height: 40px;
+  background: #ccc;
+  color: #fff;
+  font-weight: bold;
+  font-size: 18px;
+  border-radius: 50%;
+  line-height: 40px;
+  margin: auto;
+  transition: all 0.3s ease;
+}
+
+/* Step Label */
+.step-label {
+  display: block;
+  font-size: 14px;
+  margin-top: 5px;
+  font-weight: bold;
+  color: #777;
+}
+
+/* Active Step Styling */
+.wizard-step.active .step-circle {
+  background: rgb(70, 159, 84);
+}
+
+.wizard-step.active .step-label {
+  color: rgb(70, 159, 84);
+}
+
+/* Progress Line for Completed Steps */
+.wizard-step.active ~ .wizard-step .step-circle {
+  background: #ccc;
+}
+cdk-step .cdk-step-header {
+  display: none !important;
+}
+
+.btn-submit {
+  background-color: #00a95c;
+}
+
+.btn {
+  margin-top: 20px;
+  margin-right: 10px; /* Corrected margin syntax */
+}
+/* Autocomplete dropdown */
+.autocomplete-dropdown {
+  position: absolute;
+  z-index: 1000;
+  width: 100%;
+}
+
+.autocomplete-dropdown .list-group-item {
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.autocomplete-dropdown .list-group-item:hover {
+  background-color: #f8f9fa;
+}
+
+/* Selected DCIs list */
+.selected-dcis {
+  background-color: #f8f9fa;
+}
+
+.selected-dcis .bg-light {
+  transition: all 0.2s ease;
+}
+
+.selected-dcis .bg-light:hover {
+  background-color: #e9ecef !important;
+}
+
+/* Submit button */
+.btn-submit {
+  background-color: #0d6efd;
+  color: white;
+  min-width: 150px;
+}
+
+.btn-submit:hover {
+  background-color: #0b5ed7;
+}
+
+.btn-submit:disabled {
+  background-color: #6c757d;
+  opacity: 0.65;
+}

@@ -1,0 +1,247 @@
+<nav class="page-breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a routerLink=".">Parametrages</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Gestion des clients</li>
+    </ol>
+</nav>
+
+<div class="animated fadeIn">
+    <div class="row">
+        <div class="card col-md-12">
+            <div class="card-body">
+                <form action="" method="post" class="form-horizontal">
+                    <div class="form-group row" style="margin-bottom: 10px">
+                        <div class="col-md-8">
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <input type="text"  name="tel" class="form-control" placeholder="Téléphone"
+                                           mdInput [(ngModel)]="beanRecherche.telephone">
+                                </div>
+                                <!--<div class="col-md-4">
+                                    <input type="text"  name="nom" class="form-control" placeholder="Nom"
+                                           mdInput [(ngModel)]="beanRecherche.nom">
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="text" name="prenom" class="form-control" placeholder="Prénom"
+                                           mdInput [(ngModel)]="beanRecherche.prenom">
+                                </div>-->
+                            </div>
+                        </div>
+                        <div class="col-md-2" style="text-align: left">
+<!--                            <div *ngxPermissionsOnly="[roles.RECHERCHER_CLIENT]">-->
+                            <div>
+                                <a  class="badge badge-primary" (click)="rechercherClient()">
+                                    <i class="feather icon-search"></i> Recherche</a>
+                            </div>
+                        </div>
+                        <div class="col-md-2" style="text-align: right">
+<!--                            <div *ngxPermissionsOnly="[roles.AJOUTER_CLIENT]">-->
+                            <div >
+                              <!--  <a   class="badge badge-pill" data-toggle="modal" (click)="openModalEditClient(scrollableModal,newClient , false)">
+                                    <i class="feather icon-user-plus"></i> Nouvel
+                                </a>-->
+                            </div>
+                        </div>
+                    </div>
+
+                    <table width="100%" class="table-sm table-bordered">
+                        <thead>
+                        <tr>
+                            <th>Téléphone</th>
+                            <th>Nom</th>
+<!--                            <th>Prénom</th>-->
+<!--                            <th>Prénom du père</th>-->
+                            <th>Type client</th>
+                            <th>Date Adhésion</th>
+                            <th>Statut</th>
+                            <th>Solde</th>
+                            <th width="10%">Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr *ngFor="let cli of listClients | slice: (page-1) * pageSize : page * pageSize">
+                            <td>{{cli.telephone}}</td>
+                            <td>{{cli.nom}}</td>
+                            <td>{{cli.typeClient?.type}}</td>
+<!--                            <td>{{cli.prenom}}</td>-->
+<!--                            <td>{{cli.prenomPere}}</td>-->
+                            <td>{{utilService.formatDateT(cli.dateAdhesion)}}</td>
+                            <td *ngIf="cli.statut=='ACTIF'"><i class="badge badge-info">{{cli.statut}}</i></td>
+                            <td *ngIf="cli.statut=='INACTIF'"><i class="badge badge-secondary">{{cli.statut}}</i></td>
+                            <td>{{cli.solde}}</td>
+                            <td align="center">
+                                <div class="btn-group">
+                                    <div>
+                                        <a class="badge badge-primary" style="margin-left: 5px" title="Modifier"
+                                           (click)="openModalEditClient(scrollableModal, cli, true)">
+                                            <i class="feather icon-edit"></i>
+                                        </a>
+                                    </div>
+                                    <!--<div>
+                                        <a class="badge badge-secondary" style="margin-left: 5px" title="Supprimer"
+                                           (click)="openModalDeleteClient(scrollableModalDelete, cli)">
+                                            <i class="feather icon-trash-2"></i></a>
+                                    </div>-->
+                                    <div *ngIf="cli.statut=='INACTIF'">
+                                        <a class="badge badge-success" style="margin-left: 5px" title="Activer"
+                                           (click)="openModalDeleteClient(scrollableModalActive, cli)">
+                                            <i class="feather icon-check-square"></i></a>
+                                    </div>
+                                    <div *ngIf="cli.statut=='ACTIF'">
+                                        <a class="badge badge-danger" style="margin-left: 5px" title="Désactiver"
+                                           (click)="openModalDeleteClient(scrollableModalDesactive, cli)">
+                                            <i class="feather icon-x-square"></i></a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <!-- pager -->
+                    <ngb-pagination *ngIf="listClients!=null && listClients.length>0" class="d-flex justify-content-end" [collectionSize]="listClients.length" [(page)]="page"
+                                    [pageSize]="pageSize" [maxSize]="5" [rotate]="true" [ellipses]="false" [boundaryLinks]="true">
+                    </ngb-pagination>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<ng-template #scrollableModal let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Editer un client</h5>
+        <a  class="close" (click)="modal.close('by: close icon')" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </a>
+    </div>
+    <div class="modal-body">
+        <div class="example" *ngIf="showSpin">
+            <div class="d-flex justify-content-center">
+                <div class="spinner-border" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>
+        </div>
+<!--        <div class="form-group row">-->
+<!--            <label class="col-md-3 col-form-label" for="prenom">Prénom</label>-->
+<!--            <div class="col-md-4" >-->
+<!--                <input type="text" id="prenom" name="prenom"  class="form-control"-->
+<!--                       mdInput [(ngModel)]="newClient.prenom" />-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="form-group row">-->
+<!--            <label class="col-md-3 col-form-label" >Prénom du père</label>-->
+<!--            <div class="col-md-4" >-->
+<!--                <input type="text"  name="prenompere"  class="form-control"-->
+<!--                       mdInput [(ngModel)]="newClient.prenomPere" />-->
+<!--            </div>-->
+<!--        </div>-->
+        <div class="form-group row">
+            <label class="col-md-3 col-form-label" for="nom">Nom</label>
+            <div class="col-md-4" >
+                <input type="text" id="nom" name="nom"  class="form-control"
+                       mdInput [(ngModel)]="newClient.nom" />
+            </div>
+        </div>
+        <div class="form-group row" >
+            <label class="col-md-3 col-form-label" for="nom">Type client</label>
+            <div class="col-md-4" >
+                <ng-select [items]="listTypeClients"
+                           bindLabel="type"
+                           bindValue="id"
+                           [multiple]="false"
+                           [(ngModel)]="newClient.typeClient.id">
+                </ng-select>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-md-3 col-form-label" >Téléphone</label>
+            <div class="col-md-4" >
+                <input type="text" name="tel" class="form-control"
+                       mdInput [(ngModel)]="newClient.telephone" readonly />
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-md-3 col-form-label" >Email</label>
+            <div class="col-md-4" >
+                <input type="text" name="email" class="form-control"
+                       mdInput [(ngModel)]="newClient.email"  />
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-md-3 col-form-label" >Solde</label>
+            <div class="col-md-4" >
+                <input type="number" name="email" class="form-control"
+                       mdInput [(ngModel)]="newClient.solde" [readonly]="true" />
+            </div>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <a  class="badge badge-secondary" (click)="modal.close('by: close a')">
+            <i class="feather icon-x"></i> Annuler</a>
+        <a  class="badge badge-primary" *ngIf="modeAjout" (click)="updateClient(); modal.close('by: save a')">
+            <i class="feather icon-save"></i> Modifier</a>
+        <a  class="badge badge-primary" *ngIf="!modeAjout" (click)="saveClient(); modal.close('by: save a')">
+            <i class="feather icon-save"></i> Enregistrer</a>
+
+    </div>
+</ng-template>
+
+
+<!-- Modal -->
+<ng-template #scrollableModalDelete let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title" id="scrollableModalDelete">Supprimer un client</h5>
+        <a  class="close" (click)="modal.close('by: close icon')" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </a>
+    </div>
+    <div class="modal-body">
+    <span> Etes vous sûr de bien vouloir supprimer le client
+      <b>{{newClient.prenom}} {{newClient.prenomPere}} {{newClient.nom}} ({{newClient.telephone}})</b>?</span>
+    </div>
+    <div class="modal-footer">
+        <a  class="badge badge-secondary" (click)="modal.close('by: close a')">
+            <i class="feather icon-x"></i> Non</a>
+        <a  class="badge badge-primary" (click)="deleteClient(); modal.close('by: save a')">
+            <i class="feather icon-trash-2"></i> Oui</a>
+    </div>
+</ng-template>
+<ng-template #scrollableModalActive let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title" id="scrollableModalActive">Activer un client</h5>
+        <a  class="close" (click)="modal.close('by: close icon')" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </a>
+    </div>
+    <div class="modal-body">
+    <span> Etes vous sûr de bien vouloir activer le client:
+      <b>{{newClient.prenom}} {{newClient.nom}} ({{newClient.telephone}})</b>?</span>
+    </div>
+    <div class="modal-footer">
+        <a  class="badge badge-secondary" (click)="modal.close('by: close a')">
+            <i class="feather icon-x"></i> Non</a>
+        <a  class="badge badge-primary" (click)="activerClient(); modal.close('by: save a')">
+            <i class="feather icon-trash-2"></i> Oui</a>
+    </div>
+</ng-template>
+<ng-template #scrollableModalDesactive let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title" id="scrollableModalDeactive">Désctiver un client</h5>
+        <a  class="close" (click)="modal.close('by: close icon')" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </a>
+    </div>
+    <div class="modal-body">
+    <span> Etes vous sûr de bien vouloir désactiver le client :
+      <b>{{newClient.prenom}} {{newClient.nom}} ({{newClient.telephone}})</b>?</span>
+    </div>
+    <div class="modal-footer">
+        <a  class="badge badge-secondary" (click)="modal.close('by: close a')">
+            <i class="feather icon-x"></i> Non</a>
+        <a  class="badge badge-primary" (click)="desactiverClient(); modal.close('by: save a')">
+            <i class="feather icon-trash-2"></i> Oui</a>
+    </div>
+</ng-template>

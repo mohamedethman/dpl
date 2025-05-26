@@ -1,0 +1,33 @@
+<ng-wizard [config]="config" (stepChanged)="stepChanged($event)">
+
+    <ng-wizard-step [title]="'Step 1'" [description]="'Step 1 description'"
+                    [canEnter]="isValidTypeBoolean" [canExit]="isValidFunctionReturnsBoolean.bind(this)">
+        <span>Step 1 content</span>
+    </ng-wizard-step>
+
+    <ng-wizard-step [title]="'Step 2'" [description]="'Step 2 description'" >
+        <span>Step 2 content</span>
+    </ng-wizard-step>
+
+    <ng-wizard-step [title]="'Step 3'" [description]="'Step 3 description'"
+                    [canEnter]="isValidFunctionReturnsObservable.bind(this)"
+                    [canExit]="isValidFunctionReturnsBoolean.bind(this)">
+        <span>Step 3 content</span>
+    </ng-wizard-step>
+
+    <ng-wizard-step [title]="'Step 4'" [description]="'Step 4 description'">
+        <span>Step 4 content</span>
+    </ng-wizard-step>
+
+    <ng-wizard-step [title]="'Step 5'" [description]="'Step 5 description'">
+        <span>Step 5 content</span>
+    </ng-wizard-step>
+
+    <ng-wizard-step [title]="'Step 6'" [description]="'Step 6 description'">
+        <span>Step 6 content</span>
+    </ng-wizard-step>
+
+    <ng-wizard-step [title]="'Step 7'" [description]="'Step 7 description'">
+        <span>Step 7 content</span>
+    </ng-wizard-step>
+</ng-wizard>

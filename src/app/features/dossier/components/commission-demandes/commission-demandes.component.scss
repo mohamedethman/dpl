@@ -1,0 +1,56 @@
+/* src/app/features/recherche-dossiers/recherche-dossiers.component.scss */
+.badge-draft {
+  background-color: #6c757d; /* Grey */
+  color: white;
+}
+
+.bg-dpl {
+  background-color: #00a95c;
+  color: white;
+}
+.form-label {
+  font-weight: bold !important;
+}
+.badge-soumis {
+  background-color: #007bff; /* Blue */
+  color: white;
+}
+
+.badge-autorise {
+  background-color: #28a745; /* Green */
+  color: white;
+}
+
+.badge-rejete {
+  background-color: #dc3545; /* Red */
+  color: white;
+}
+
+.bade-valide {
+  background-color: #28a745; /* Green */
+  color: white;
+}
+
+.badge-en_cours_evaluation {
+  background-color: #ffc107; /* Yellow */
+  color: black;
+}
+
+.badge-suspendu {
+  background-color: #17a2b8; /* Teal */
+  color: white;
+}
+
+.badge-retire {
+  background-color: #343a40; /* Black */
+  color: white;
+}
+
+.badge-expire {
+  background-color: #f8f9fa; /* Light Gray */
+  color: black;
+}
+th {
+  color: white !important;
+  background-color: #00a95c;
+}

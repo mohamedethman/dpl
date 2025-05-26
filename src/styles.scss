@@ -1,0 +1,54 @@
+/* You can add global styles to this file, and also import other style files */
+@import "@ng-select/ng-select/themes/default.theme.css";
+/* Mandatory */
+@import 'ng-wizard/themes/ng_wizard.min.css';
+@import "bootstrap/scss/functions";
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/mixins";
+@import "bootstrap/scss/bootstrap";
+@import '~@fortawesome/fontawesome-free/css/all.min.css';
+
+/* Optional */
+/* If a theme other than default is used, the css file for that theme is required. */
+@import 'assets/themes/ng_wizard_theme_arrows.min.css';
+@import 'assets/themes/ng_wizard_theme_circles.min.css';
+@import 'assets/themes/ng_wizard_theme_dots.min.css';
+
+
+.container, .page-wrapper .page-content, .container-fluid, .container-xl, .container-lg, .container-md, .container-sm {
+  width: 100%;
+  padding-right: 0.01rem;
+  padding-left: 0.01rem;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.bg-tr-pm{
+  background-color: lightgreen;
+}
+
+.thead{
+  background-color: aquamarine !important;
+}
+.bg-tr-priori{
+  background-color: #d9f5a2;
+}
+
+.bg-tr{
+  background-color: #FFFFFF;
+}
+
+/* Importing Bootstrap SCSS file. */
+@import 'bootstrap/scss/bootstrap';
+
+.tr-print tr
+{
+  display: table-row-group;
+  page-break-inside:avoid;
+  page-break-after:auto;
+}
+
+.form-control:disabled, .dataTable-wrapper .dataTable-top .dataTable-search .dataTable-input:disabled, .ng-select .ng-select-container:disabled, select:disabled, .form-control[readonly], .dataTable-wrapper .dataTable-top .dataTable-search [readonly].dataTable-input, .ng-select [readonly].ng-select-container, select[readonly] {
+  background-color: #e9ecef1a;
+  opacity: 1;
+}

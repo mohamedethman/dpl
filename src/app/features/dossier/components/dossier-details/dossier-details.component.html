@@ -1,0 +1,1225 @@
+<div class="container mt-4">
+  <!-- Header buttons remain the same -->
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <button class="btn btn-secondary" (click)="goBackToList()">
+      <i class="fas fa-arrow-left"></i> Retour à la liste
+    </button>
+    <div>
+      <button
+        class="btn btn-primary mr-2"
+        (click)="downloadAllFiles(dossierId)"
+      >
+        <i class="fas fa-download"></i> Télécharger tous les fichiers
+      </button>
+    </div>
+  </div>
+
+  <!-- Days remaining indicator -->
+
+  <!-- Loading spinner -->
+  <div *ngIf="loading" class="text-center my-4">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Chargement...</span>
+    </div>
+    <p class="mt-2">Chargement des informations...</p>
+  </div>
+
+  <!-- Display badge only if not loading and nbJoursRestants is defined -->
+  <div
+    *ngIf="!loading && userProfile === 'LNCQ' && nbJoursRestants != null"
+    class="d-flex align-items-center justify-content-end mb-3"
+  >
+    <span
+      class="badge d-flex align-items-center px-3 py-2"
+      [ngClass]="{
+        'bg-danger': nbJoursRestants <= 5,
+        'bg-warning': nbJoursRestants > 5 && nbJoursRestants <= 15,
+        'bg-success': nbJoursRestants > 15
+      }"
+    >
+      <i class="fas fa-clock me-2"></i>
+      <span class="fw-bold">{{ nbJoursRestants }}</span>
+      <span class="ms-1">
+        {{ nbJoursRestants === 1 ? "jour restant" : "jours restants" }}
+      </span>
+    </span>
+
+    <span
+      *ngIf="nbJoursRestants <= 5"
+      class="badge bg-danger bg-opacity-10 text-danger d-flex align-items-center px-2 py-1"
+    >
+      <i class="fas fa-exclamation-triangle me-1"></i>
+      <small>Échéance proche</small>
+    </span>
+  </div>
+
+  <!-- Loading and error states -->
+  <div *ngIf="loading" class="text-center">
+    <p>Chargement des détails du dossier...</p>
+  </div>
+
+  <div *ngIf="error" class="alert alert-danger">
+    {{ error }}
+  </div>
+
+  <!-- Main content with accordions -->
+  <div *ngIf="!loading && recapDossier && dossierModuleElements.length > 0">
+    <h2>
+      Détails du Dossier (Médicament:
+      {{ dossierModuleElements[0].dossier.medicament.nomMedicament }} )
+    </h2>
+
+    <!-- Medicine and Lab accordion -->
+    <div class="accordion mb-4" id="medicamentAccordion">
+      <div class="accordion-item border-0 shadow-sm">
+        <h2 class="accordion-header" id="medicamentHeading">
+          <button
+            class="accordion-button rounded-top-3 py-3 bg-light-blue text-dark border-0 shadow-none"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#medicamentCollapse"
+            aria-expanded="true"
+            aria-controls="medicamentCollapse"
+          >
+            <div class="d-flex align-items-center w-100">
+              <!-- <div
+                class="flex-shrink-0 bg-primary bg-opacity-10 p-2 rounded-circle me-3"
+              ></div> -->
+              <div class="flex-grow-1">
+                <h5 class="mb-0 fw-semibold">Médicament et Laboratoire</h5>
+              </div>
+              <div class="flex-shrink-0">
+                <i class="fas fa-chevron-down transition-all"></i>
+              </div>
+            </div>
+          </button>
+        </h2>
+        <div
+          id="medicamentCollapse"
+          class="accordion-collapse collapse show border-0"
+          aria-labelledby="medicamentHeading"
+          data-bs-parent="#medicamentAccordion"
+        >
+          <div class="accordion-body px-4 pt-4 pb-0 bg-white rounded-bottom-3">
+            <div class="row g-4">
+              <!-- Medicine Column -->
+              <div class="col-lg-6">
+                <div class="card h-100 border-0 shadow-none">
+                  <div class="card-header bg-white border-0 px-0 pt-0 pb-3">
+                    <h5 class="d-flex align-items-center mb-0">
+                      <span
+                        class="flex-shrink-0 bg-info bg-opacity-10 p-2 rounded-circle me-2"
+                      >
+                        <i class="fas fa-capsules text-info"></i>
+                      </span>
+                      <span>Médicament</span>
+                    </h5>
+                  </div>
+                  <div class="card-body px-0 pt-0 pb-3">
+                    <div class="info-grid mb-3">
+                      <div class="info-item">
+                        <span class="info-label">Nom du médicament</span>
+                        <span class="info-value text-dark fw-medium">
+                          {{
+                            dossierModuleElements[0].dossier.medicament
+                              .nomMedicament
+                          }}
+                        </span>
+                      </div>
+                      <div class="info-item">
+                        <span class="info-label">Code ATC</span>
+                        <span class="info-value">
+                          {{
+                            dossierModuleElements[0].dossier.medicament.codeATC
+                              ?.codeATC ||
+                              dossierModuleElements[0].dossier.medicament
+                                .autreAtc
+                          }}
+                        </span>
+                      </div>
+                      <div class="info-item">
+                        <span class="info-label">Forme Pharmaceutique</span>
+                        <span class="info-value">
+                          {{
+                            dossierModuleElements[0].dossier.medicament
+                              .libFormePharmaceutique
+                          }}
+                        </span>
+                      </div>
+                      <div class="info-item">
+                        <span class="info-label">Voie d'administration</span>
+                        <span class="info-value">
+                          {{
+                            dossierModuleElements[0].dossier.medicament
+                              .voieAdministration
+                          }}
+                        </span>
+                      </div>
+                      <div class="info-item">
+                        <span class="info-label">Conditionnement</span>
+                        <span class="info-value">
+                          {{
+                            dossierModuleElements[0].dossier.medicament
+                              .autreConditionnement
+                          }}
+                        </span>
+                      </div>
+                    </div>
+
+                    <!-- Substances Table -->
+                    <div class="mb-4">
+                      <h6 class="d-flex align-items-center mb-2 text-dark">
+                        <i class="fas fa-list-ul text-muted me-2 fs-6"></i>
+                        Substances
+                      </h6>
+                      <ng-container
+                        *ngIf="
+                          dossierModuleElements[0].dossier.medicament.substances
+                            ?.length > 0;
+                          else noSubstances
+                        "
+                      >
+                        <div class="table-responsive border rounded">
+                          <table class="table table-sm table-hover mb-0">
+                            <thead class="table-light">
+                              <tr>
+                                <th class="ps-3">Nom</th>
+                                <th>Type</th>
+                                <th class="pe-3 text-end">Dosage</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr
+                                *ngFor="
+                                  let substance of dossierModuleElements[0]
+                                    .dossier.medicament.substances
+                                "
+                              >
+                                <td class="ps-3">
+                                  {{ substance.nomSubstance }}
+                                </td>
+                                <td>
+                                  <span
+                                    class="badge bg-primary bg-opacity-10 text-primary"
+                                  >
+                                    {{ substance.typeSubstance }}
+                                  </span>
+                                </td>
+                                <td class="pe-3 text-end">
+                                  {{ substance.dosage }}
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </ng-container>
+                      <ng-template #noSubstances>
+                        <div
+                          class="alert alert-light border text-center py-2 mb-0"
+                        >
+                          <i class="fas fa-info-circle me-2"></i>Aucune
+                          substance renseignée
+                        </div>
+                      </ng-template>
+                    </div>
+
+                    <!-- Evaluation Report -->
+                    <div
+                      *ngIf="dossierModuleElements?.[0]?.dossier"
+                      class="border-top pt-3"
+                    >
+                      <div
+                        class="d-flex justify-content-between align-items-center"
+                      >
+                        <div>
+                          <span class="d-block text-muted small"
+                            >Conformité des échantillons</span
+                          >
+                          <span
+                            class="badge"
+                            [ngClass]="{
+                              'bg-success':
+                                dossierModuleElements[0].dossier
+                                  .conformeEchantillons,
+                              'bg-danger':
+                                !dossierModuleElements[0].dossier
+                                  .conformeEchantillons
+                            }"
+                          >
+                            {{
+                              dossierModuleElements[0].dossier
+                                .conformeEchantillons
+                                ? "Conforme"
+                                : "Non conforme"
+                            }}
+                          </span>
+                        </div>
+                        <button
+                          *ngIf="
+                            dossierModuleElements[0].dossier
+                              .conformeEchantillons
+                          "
+                          class="btn btn-outline-primary btn-sm"
+                          (click)="downloadEvaluationReport()"
+                        >
+                          <i class="fas fa-download me-1"></i> Rapport
+                          d'évaluation
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Laboratory Column -->
+              <div class="col-lg-6">
+                <div class="card h-100 border-0 shadow-none">
+                  <div class="card-header bg-white border-0 px-0 pt-0 pb-3">
+                    <h5 class="d-flex align-items-center mb-0">
+                      <span
+                        class="flex-shrink-0 bg-warning bg-opacity-10 p-2 rounded-circle me-2"
+                      >
+                        <i class="fas fa-flask text-purple"></i>
+                      </span>
+                      <span>Laboratoire</span>
+                    </h5>
+                  </div>
+                  <div class="card-body px-0 pt-0">
+                    <!-- Main two-column layout -->
+                    <div class="row gx-3">
+                      <!-- First Column: Laboratoire Details -->
+                      <div class="col-md-6">
+                        <div class="info-grid">
+                          <div class="info-item">
+                            <span class="info-label">Nom</span>
+                            <span class="info-value text-dark fw-medium">
+                              {{
+                                dossierModuleElements[0].dossier.medicament
+                                  .laboratoire.nom
+                              }}
+                            </span>
+                          </div>
+                          <div class="info-item">
+                            <span class="info-label">Type</span>
+                            <span class="info-value">
+                              <span
+                                class="badge bg-secondary bg-opacity-10 text-secondary"
+                              >
+                                {{
+                                  dossierModuleElements[0].dossier.medicament
+                                    .laboratoire.type
+                                }}
+                              </span>
+                            </span>
+                          </div>
+                          <div class="info-item">
+                            <span class="info-label">Adresse</span>
+                            <span class="info-value">
+                              <i
+                                class="fas fa-map-marker-alt text-muted me-1"
+                              ></i>
+                              {{
+                                dossierModuleElements[0].dossier.medicament
+                                  .laboratoire.adresse
+                              }}
+                            </span>
+                          </div>
+                          <div class="info-item">
+                            <span class="info-label">Pays</span>
+                            <span class="info-value">
+                              <i class="fas fa-globe text-muted me-1"></i>
+                              {{
+                                dossierModuleElements[0].dossier.medicament
+                                  .laboratoire.pays
+                              }}
+                            </span>
+                          </div>
+
+                          <div class="info-item">
+                            <span class="info-label">Contact Principal</span>
+                            <span class="info-value">
+                              <i class="fas fa-user text-muted me-1"></i>
+                              {{
+                                dossierModuleElements[0].dossier.medicament
+                                  .laboratoire.contactPrincipal
+                              }}
+                            </span>
+                          </div>
+                          <div class="info-item">
+                            <span class="info-label">Téléphone</span>
+                            <span class="info-value">
+                              <i class="fas fa-phone text-muted me-1"></i>
+                              {{
+                                dossierModuleElements[0].dossier.medicament
+                                  .laboratoire.telephone
+                              }}
+                            </span>
+                          </div>
+                          <div class="info-item">
+                            <span class="info-label">Email</span>
+                            <span class="info-value">
+                              <i class="fas fa-envelope text-muted me-1"></i>
+                              {{
+                                dossierModuleElements[0].dossier.medicament
+                                  .laboratoire.email
+                              }}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Second Column: Fabricant Details -->
+                      <div class="col-md-6">
+                        <div class="info-grid">
+                          <div
+                            class="info-item"
+                            *ngIf="
+                              dossierModuleElements[0].dossier.medicament
+                                .nomFabricant
+                            "
+                          >
+                            <span class="info-label">Nom Fabricant</span>
+                            <span class="info-value text-dark fw-medium">
+                              {{
+                                dossierModuleElements[0].dossier.medicament
+                                  .nomFabricant
+                              }}
+                            </span>
+                          </div>
+                          <div
+                            class="info-item"
+                            *ngIf="
+                              dossierModuleElements[0].dossier.medicament
+                                .adresseFabricant
+                            "
+                          >
+                            <span class="info-label">Adresse Fabricant</span>
+                            <span class="info-value">
+                              <i
+                                class="fas fa-map-marker-alt text-muted me-1"
+                              ></i>
+                              {{
+                                dossierModuleElements[0].dossier.medicament
+                                  .adresseFabricant
+                              }}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modules accordion -->
+    <div class="accordion mb-3" id="modulesAccordion">
+      <div
+        class="accordion-item"
+        *ngFor="let element of getUniqueModules(); let i = index"
+      >
+        <h2 class="accordion-header" id="moduleHeading{{ i }}">
+          <button
+            class="accordion-button collapsed"
+            type="button"
+            data-bs-toggle="collapse"
+            [attr.data-bs-target]="'#moduleCollapse' + i"
+            aria-expanded="false"
+            [attr.aria-controls]="'moduleCollapse' + i"
+          >
+            <i
+              class="fas me-2"
+              [ngClass]="{
+                'fa-1': element.moduleElement.module.id === 1,
+                'fa-2': element.moduleElement.module.id === 2,
+                'fa-3': element.moduleElement.module.id === 3,
+                'fa-4': element.moduleElement.module.id === 4,
+                'fa-5': element.moduleElement.module.id === 5
+              }"
+            ></i>
+            {{ element.moduleElement.module.libelle }}
+            <span class="ms-auto">
+              <button
+                *ngIf="element.hasMenu"
+                (click)="
+                  downloadFolder(
+                    dossierId,
+                    element.moduleElement.module.id,
+                    element.moduleElement.module.libelle
+                  );
+                  $event.stopPropagation()
+                "
+                class="btn btn-sm btn-outline-secondary"
+              >
+                <i class="fas fa-download"></i>
+              </button>
+            </span>
+          </button>
+        </h2>
+        <div
+          [id]="'moduleCollapse' + i"
+          class="accordion-collapse collapse"
+          [attr.aria-labelledby]="'moduleHeading' + i"
+          data-bs-parent="#modulesAccordion"
+        >
+          <div class="accordion-body">
+            <div class="list-group">
+              <div
+                class="list-group-item"
+                *ngFor="
+                  let item of filterElementsByModule(
+                    element.moduleElement.module.libelle
+                  )
+                "
+              >
+                <div class="d-flex justify-content-between align-items-center">
+                  <div>
+                    <strong>{{ item.moduleElement.nomElement }}:</strong>
+                    <span *ngIf="item.moduleElement.typeElement !== 'FICHIER'">
+                      {{ item.contenuTexte }}</span
+                    >
+                  </div>
+                  <button
+                    *ngIf="item.moduleElement.typeElement === 'FICHIER'"
+                    (click)="
+                      downloadFile(
+                        item.dossier.id,
+                        item.moduleElement.id,
+                        item.moduleElement.nomElement
+                      )
+                    "
+                    class="btn btn-sm btn-outline-secondary"
+                  >
+                    <i class="fas fa-download"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Profile-specific sections (keep these as they were) -->
+    <!-- Add this section where you have the other profile-specific actions -->
+    <div
+      class="sticky-buttons card shadow-sm border-0 p-3"
+      *ngIf="
+        mode === 'list' && userProfile === 'LNCQ' && !conformeEchantillons2
+      "
+    >
+      <div class="card-header bg-light-blue border-0 pb-2">
+        <h4 class="mb-0 d-flex align-items-center">
+          <i class="fas fa-clipboard-check me-2"></i>
+          Validation de conformité
+        </h4>
+      </div>
+
+      <div class="card-body">
+        <!-- Conformity Toggle -->
+        <div class="form-group mb-4">
+          <div class="form-check form-switch">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              id="conformeEchantillons"
+              [(ngModel)]="conformeEchantillons"
+              name="conformeEchantillons"
+              [class.is-valid]="conformeEchantillons"
+            />
+            <label
+              class="form-check-label fw-medium"
+              for="conformeEchantillons"
+            >
+              Les échantillons sont conformes
+            </label>
+          </div>
+        </div>
+
+        <!-- File Upload with Progress and Preview -->
+        <div class="form-group mb-4">
+          <label class="fw-medium mb-2 d-flex align-items-center">
+            <i class="fas fa-file-upload text-primary me-2"></i>
+            Rapport de conformité
+          </label>
+
+          <div
+            class="file-upload-area border rounded p-3"
+            [class.has-file]="selectedFiles.length > 0"
+            [class.uploading]="isUploading"
+            [class.drag-over]="dragOver"
+            (click)="fileInput.click()"
+            (drop)="onFileDrop($event)"
+            (dragover)="dragOver = true; $event.preventDefault()"
+            (dragleave)="dragOver = false"
+          >
+            <input
+              #fileInput
+              type="file"
+              class="d-none"
+              id="validationFile"
+              (change)="onFileSelected($event)"
+              accept=".pdf,.doc,.docx"
+            />
+
+            <!-- Upload Prompt -->
+            <div
+              *ngIf="selectedFiles.length === 0 && !isUploading"
+              class="text-center py-2"
+            >
+              <i class="fas fa-cloud-upload-alt fa-2x text-muted mb-2"></i>
+              <p class="mb-1">Glissez-déposez ou cliquez pour sélectionner</p>
+              <small class="text-muted"
+                >Formats acceptés: PDF, DOC, DOCX
+              </small>
+            </div>
+
+            <!-- Upload Progress -->
+            <div *ngIf="isUploading" class="upload-progress text-center">
+              <div class="progress mb-3">
+                <div
+                  class="progress-bar progress-bar-striped progress-bar-animated"
+                  [style.width]="uploadProgress + '%'"
+                ></div>
+              </div>
+              <p class="mb-0">
+                <i class="fas fa-spinner fa-spin me-2"></i>
+                Téléversement en cours ({{ uploadProgress }}%)
+              </p>
+            </div>
+            <div
+              *ngIf="selectedFiles && selectedFiles.length > 0"
+              class="file-preview"
+            >
+              <div
+                class="file-item"
+                *ngFor="let file of selectedFiles; let i = index"
+              >
+                <span class="file-name">
+                  <i
+                    class="fas fa-file"
+                    [ngClass]="{
+                      'fa-file-pdf text-danger':
+                        file.type === 'application/pdf',
+                      'fa-file-word text-primary':
+                        file.type === 'application/msword' ||
+                        file.type ===
+                          'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+                    }"
+                  ></i>
+                  {{ file.name }}
+                </span>
+                <button
+                  class="btn btn-sm btn-link text-danger"
+                  (click)="removeFile(i)"
+                >
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="d-grid">
+          <button
+            class="btn btn-primary py-2"
+            (click)="submitValidation()"
+            [disabled]="isSubmitting || selectedFiles.length === 0"
+          >
+            <span *ngIf="!isSubmitting">
+              <i class="fas fa-check-circle me-1"></i> Valider la conformité
+            </span>
+            <span *ngIf="isSubmitting">
+              <span
+                class="spinner-border spinner-border-sm me-1"
+                role="status"
+                aria-hidden="true"
+              ></span>
+              En cours...
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Preview Modal -->
+    <div
+      class="modal fade"
+      [class.show]="showPreviewModal"
+      [style.display]="showPreviewModal ? 'block' : 'none'"
+    >
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">{{ previewFileName }}</h5>
+            <button
+              type="button"
+              class="btn-close"
+              (click)="showPreviewModal = false"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div
+              *ngIf="
+                selectedFiles.length > 0 &&
+                selectedFiles[0].type === 'application/pdf'
+              "
+              class="ratio ratio-16x9"
+            >
+              <iframe [src]="previewFileUrl | safeUrl" frameborder="0"></iframe>
+            </div>
+            <div
+              *ngIf="
+                selectedFiles.length > 0 &&
+                selectedFiles[0].type.includes('word')
+              "
+              class="text-center py-4"
+            >
+              <i class="fas fa-file-word fa-5x text-primary mb-3"></i>
+              <p>Prévisualisation non disponible pour les documents Word</p>
+              <a
+                [href]="previewFileUrl"
+                class="btn btn-outline-primary"
+                download
+              >
+                <i class="fas fa-download me-1"></i> Télécharger
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- COM profile evaluations -->
+    <div
+      *ngIf="userProfile === 'COM' && evaluations && evaluations.length > 0"
+      class="mt-4"
+    >
+      <div class="card border-0 shadow-sm">
+        <div class="card-header bg-light-blue text-dark py-3">
+          <h5 class="mb-0 d-flex align-items-center">
+            <i class="fas fa-clipboard-list me-2"></i>
+            Historique des Évaluations
+          </h5>
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+              <thead class="table-light">
+                <tr>
+                  <th class="ps-4">Date</th>
+                  <th>Évaluateur</th>
+                  <th>Commentaire</th>
+                  <th>Statut</th>
+                  <th>Recommandation</th>
+                  <th class="pe-4 text-end">Documents</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let evaluation of evaluations">
+                  <td class="ps-4">
+                    {{ evaluation.dateEvaluation | date : "dd/MM/yyyy" }}
+                  </td>
+                  <td>
+                    <span class="badge bg-info bg-opacity-10 text-info">
+                      {{ evaluation.evaluateur?.prenom }}
+                      {{ evaluation.evaluateur?.nom }}
+                    </span>
+                  </td>
+                  <td>
+                    <div
+                      class="text-truncate"
+                      style="max-width: 200px"
+                      [title]="evaluation.commentaire"
+                    >
+                      {{ evaluation.commentaire || "--" }}
+                    </div>
+                  </td>
+                  <td>
+                    <span
+                      class="badge"
+                      [ngClass]="{
+                        'bg-success': evaluation.statutEvaluation === 'TERMINE',
+                        'bg-warning':
+                          evaluation.statutEvaluation === 'EN_COURS',
+                        'bg-secondary':
+                          evaluation.statutEvaluation === 'BROUILLON'
+                      }"
+                    >
+                      {{ evaluation.statutEvaluation }}
+                    </span>
+                  </td>
+                  <td>
+                    <span
+                      class="badge"
+                      [ngClass]="{
+                        'bg-success': evaluation.recommendation === 'ACCEPTE',
+                        'bg-warning':
+                          evaluation.recommendation === 'ACCEPTE_SOUS_RESERVE',
+                        'bg-danger': evaluation.recommendation === 'DEFAVORABLE'
+                      }"
+                    >
+                      {{ evaluation.recommendation }}
+                    </span>
+                  </td>
+                  <td class="pe-4 text-end">
+                    <button
+                      class="btn btn-sm btn-outline-primary"
+                      (click)="downloadEvaluationTechnique(evaluation.id)"
+                    >
+                      <i class="fas fa-download"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- COM decision form -->
+    <!-- COM Decision Form - Fixed Version -->
+    <div *ngIf="userProfile === 'COM'" class="mt-4">
+      <div class="card border-0 shadow-sm">
+        <div class="card-header bg-light-blue text-dark py-3">
+          <h5 class="mb-0 d-flex align-items-center">
+            <i class="fas fa-gavel me-2"></i>
+            Décision Finale
+          </h5>
+        </div>
+        <div class="card-body">
+          <form>
+            <!-- Comment Section -->
+            <div class="mb-4">
+              <label
+                for="commentaires"
+                class="form-label d-flex align-items-center"
+              >
+                <i class="fas fa-comment-medical text-primary me-2"></i>
+                Commentaires de la Commission
+              </label>
+              <textarea
+                class="form-control"
+                id="commentaires"
+                rows="3"
+                [(ngModel)]="comDecisionCommentaire"
+                name="comDecisionCommentaire"
+              >
+            placeholder="Saisissez les commentaires...">
+          </textarea
+              >
+            </div>
+
+            <!-- Decision Section -->
+            <div class="mb-4">
+              <label
+                for="decision"
+                class="form-label d-flex align-items-center"
+              >
+                <i class="fas fa-balance-scale-left text-primary me-2"></i>
+                Décision Finale
+              </label>
+              <select
+                class="form-select"
+                id="decision"
+                [(ngModel)]="selectedComDecision"
+                name="selectedComDecision"
+              >
+                (change)="onDecisionChange()">
+                <!-- Optional change handler -->
+                <option value="" disabled selected>
+                  Sélectionner une décision...
+                </option>
+                <option
+                  *ngFor="let decision of allDecisions"
+                  [value]="decision.code"
+                >
+                  {{ decision.libelle }}
+                </option>
+              </select>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="d-grid">
+              <button
+                class="btn btn-primary py-2"
+                (click)="validerDossier()"
+                [disabled]="!selectedComDecision || !comDecisionCommentaire"
+              >
+                <i class="fas fa-file-signature me-1"></i>
+                Enregistrer la Décision
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Other profile sections (DPL, SUP, EXA) -->
+    <!-- ... keep these sections as they were but wrap in cards with headers ... -->
+    <div *ngIf="mode === 'list' && userProfile == 'DPL'" class="mt-4">
+      <div class="card border-0 shadow-sm">
+        <div class="card-header bg-light-blue text-dark py-3">
+          <h5 class="mb-0 d-flex align-items-center">
+            <i class="fas fa-clipboard-check me-2"></i>
+            Validation de recevabilité
+          </h5>
+        </div>
+        <div class="card-body">
+          <div class="d-grid gap-3 d-md-flex justify-content-md-center">
+            <button
+              class="btn btn-success px-4 py-2 d-flex align-items-center"
+              (click)="recevoirDossier()"
+            >
+              <i class="fas fa-check-circle me-2"></i>
+              <span>Dossier Recevable</span>
+            </button>
+            <button
+              class="btn btn-danger px-4 py-2 d-flex align-items-center"
+              (click)="rejeterDossier()"
+            >
+              <i class="fas fa-times-circle me-2"></i>
+              <span>Dossier Non Recevable</span>
+            </button>
+          </div>
+          <div class="mt-3 text-center text-muted small">
+            <i class="fas fa-info-circle me-1"></i>
+            Veuillez examiner attentivement le dossier avant de prendre une
+            décision
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="mode === 'list' && userProfile === 'SUP'" class="mt-4">
+      <div class="card border-0 shadow-sm">
+        <div class="card-header bg-light-blue text-dark py-3">
+          <h5 class="mb-0 d-flex align-items-center">
+            <i class="fas fa-user-shield me-2"></i>
+            Gestion du Dossier
+          </h5>
+        </div>
+        <div class="card-body">
+          <!-- Assign Evaluator Section -->
+          <div class="mb-4">
+            <h6 class="d-flex align-items-center mb-3">
+              <i class="fas fa-user-tag text-primary me-2"></i>
+              Affectation à un évaluateur
+            </h6>
+            <div class="row g-3 align-items-end">
+              <div class="col-md-8">
+                <label class="form-label">Sélectionner un évaluateur</label>
+                <select class="form-select" [(ngModel)]="selectedExaminateurId">
+                  <option value="" disabled selected>
+                    Choisir un évaluateur...
+                  </option>
+                  <option
+                    *ngFor="let examinateur of examinateurs"
+                    [value]="examinateur.id"
+                  >
+                    {{ examinateur.prenom }} {{ examinateur.nom }}
+                  </option>
+                </select>
+              </div>
+              <div class="col-md-4">
+                <button
+                  class="btn btn-primary w-100"
+                  (click)="assignerDossier()"
+                  [disabled]="!selectedExaminateurId"
+                >
+                  <i class="fas fa-user-plus me-1"></i> Assigner
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Evaluations Table -->
+          <div
+            *ngIf="dossierModuleElements[0]?.dossier?.evaluations?.length > 0"
+          >
+            <h6 class="d-flex align-items-center mb-3">
+              <i class="fas fa-clipboard-list text-primary me-2"></i>
+              Évaluations soumises
+            </h6>
+            <div class="table-responsive border rounded">
+              <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                  <tr>
+                    <th class="ps-3">Date</th>
+                    <th>Évaluateur</th>
+                    <th>Recommandation</th>
+                    <th>Statut</th>
+                    <th class="pe-3 text-end">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    *ngFor="
+                      let evaluation of dossierModuleElements[0].dossier
+                        .evaluations
+                    "
+                  >
+                    <td class="ps-3">
+                      {{ evaluation.dateEvaluation | date : "dd/MM/yyyy" }}
+                    </td>
+                    <td>
+                      <span class="badge bg-info bg-opacity-10 text-info">
+                        {{ evaluation.evaluateur?.prenom }}
+                        {{ evaluation.evaluateur?.nom }}
+                      </span>
+                    </td>
+                    <td>
+                      <span
+                        class="badge"
+                        [ngClass]="{
+                          'bg-success':
+                            evaluation.recommendation === 'FAVORABLE',
+                          'bg-warning': evaluation.recommendation === 'RESERVE',
+                          'bg-light-blue':
+                            evaluation.recommendation === 'DEFAVORABLE',
+                          'bg-info':
+                            evaluation.recommendation ===
+                            'ACCEPTE_SOUS_RESERVE',
+                          'bg-primary': evaluation.recommendation === 'ACCEPTE'
+                        }"
+                      >
+                        {{ evaluation.recommendation }}
+                      </span>
+                    </td>
+                    <td>
+                      <span class="badge bg-primary bg-opacity-10 text-primary">
+                        {{ evaluation.statutEvaluation }}
+                      </span>
+                    </td>
+                    <td class="pe-3 text-end">
+                      <button
+                        class="btn btn-sm btn-outline-primary"
+                        (click)="downloadZipEvaluation(evaluation.id)"
+                      >
+                        <i class="fas fa-download"></i> Télécharger
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Validation Button -->
+          <div
+            class="mt-4 text-center"
+            *ngIf="dossierModuleElements[0]?.dossier?.evaluations?.length > 0"
+          >
+            <button class="btn btn-success px-4" (click)="validerEvaluations()">
+              <i class="fas fa-check-double me-1"></i> Valider les Évaluations
+            </button>
+          </div>
+
+          <!-- Empty State -->
+          <div
+            *ngIf="!dossierModuleElements[0]?.dossier?.evaluations?.length"
+            class="alert alert-light text-center py-4"
+          >
+            <i class="fas fa-inbox fa-2x text-muted mb-3"></i>
+            <h6 class="text-muted">Aucune évaluation disponible</h6>
+            <p class="small text-muted mb-0">
+              Les évaluations apparaîtront ici une fois soumises par les
+              évaluateurs
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="mode === 'list' && userProfile === 'EXA'" class="mt-4">
+      <div class="card border-0 shadow-sm">
+        <div class="card-header bg-light-blue text-dark py-3">
+          <h5 class="mb-0 d-flex align-items-center">
+            <i class="fas fa-clipboard-check me-2"></i>
+            Évaluation du Dossier
+          </h5>
+        </div>
+        <div class="card-body">
+          <form>
+            <!-- Comment Section -->
+            <div class="mb-4">
+              <label
+                for="commentaire"
+                class="form-label d-flex align-items-center"
+              >
+                <i class="fas fa-comment-dots text-primary me-2"></i>
+                Commentaire d'évaluation
+              </label>
+              <textarea
+                class="form-control"
+                id="commentaire"
+                rows="4"
+                [(ngModel)]="evaluationCommentaire"
+                [ngModelOptions]="{ standalone: true }"
+                placeholder="Saisissez vos observations techniques..."
+              ></textarea>
+            </div>
+
+            <!-- Recommendation Section -->
+            <div class="mb-4">
+              <label
+                for="recommandation"
+                class="form-label d-flex align-items-center"
+              >
+                <i class="fas fa-balance-scale text-primary me-2"></i>
+                Recommandation
+              </label>
+              <select
+                class="form-select"
+                id="recommandation"
+                [(ngModel)]="selectedRecommendation"
+                [ngModelOptions]="{ standalone: true }"
+              >
+                <option value="" disabled selected>
+                  Sélectionner une recommandation...
+                </option>
+                <option
+                  *ngFor="let recommendation of recommendations"
+                  [value]="recommendation.code"
+                >
+                  {{ recommendation.libelle }}
+                </option>
+              </select>
+            </div>
+
+            <!-- File Upload Sections -->
+            <div class="row g-3">
+              <div class="col-md-4">
+                <div class="card h-100 border">
+                  <div class="card-body text-center">
+                    <div
+                      class="bg-light-blue p-3 rounded-circle d-inline-flex mb-3"
+                    >
+                      <i class="fas fa-file-alt text-primary fs-4"></i>
+                    </div>
+                    <h6 class="card-title">Rapport Technique</h6>
+                    <p class="card-text small text-muted">
+                      Format: PDF, DOC, DOCX
+                    </p>
+                    <input
+                      type="file"
+                      class="d-none"
+                      id="rapportFiles"
+                      multiple
+                      (change)="onRapportFilesSelected($event)"
+                      accept=".pdf,.doc,.docx"
+                    />
+                    <label
+                      for="rapportFiles"
+                      class="btn btn-sm btn-outline-primary"
+                    >
+                      <i class="fas fa-upload me-1"></i> Sélectionner
+                    </label>
+                    <div *ngIf="rapportFiles?.length > 0" class="mt-2 small">
+                      <i class="fas fa-check-circle text-success me-1"></i>
+                      {{ rapportFiles.length }} fichier(s) sélectionné(s)
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="card h-100 border">
+                  <div class="card-body text-center">
+                    <div
+                      class="bg-light-blue p-3 rounded-circle d-inline-flex mb-3"
+                    >
+                      <i class="fas fa-file-medical text-primary fs-4"></i>
+                    </div>
+                    <h6 class="card-title">Évaluation Technique</h6>
+                    <p class="card-text small text-muted">
+                      Format: PDF, DOC, DOCX
+                    </p>
+                    <input
+                      type="file"
+                      class="d-none"
+                      id="evaluationFiles"
+                      multiple
+                      (change)="onEvaluationFilesSelected($event)"
+                      accept=".pdf,.doc,.docx"
+                    />
+                    <label
+                      for="evaluationFiles"
+                      class="btn btn-sm btn-outline-primary"
+                    >
+                      <i class="fas fa-upload me-1"></i> Sélectionner
+                    </label>
+                    <div *ngIf="evaluationFiles?.length > 0" class="mt-2 small">
+                      <i class="fas fa-check-circle text-success me-1"></i>
+                      {{ evaluationFiles.length }} fichier(s) sélectionné(s)
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="card h-100 border">
+                  <div class="card-body text-center">
+                    <div
+                      class="bg-light-blue p-3 rounded-circle d-inline-flex mb-3"
+                    >
+                      <i class="fas fa-file-contract text-primary fs-4"></i>
+                    </div>
+                    <h6 class="card-title">Évaluation Administrative</h6>
+                    <p class="card-text small text-muted">
+                      Format: PDF, DOC, DOCX
+                    </p>
+                    <input
+                      type="file"
+                      class="d-none"
+                      id="evaluationadFiles"
+                      multiple
+                      (change)="onEvaluationAdFilesSelected($event)"
+                      accept=".pdf,.doc,.docx"
+                    />
+                    <label
+                      for="evaluationadFiles"
+                      class="btn btn-sm btn-outline-primary"
+                    >
+                      <i class="fas fa-upload me-1"></i> Sélectionner
+                    </label>
+                    <div
+                      *ngIf="evaluationadFiles?.length > 0"
+                      class="mt-2 small"
+                    >
+                      <i class="fas fa-check-circle text-success me-1"></i>
+                      {{ evaluationadFiles.length }} fichier(s) sélectionné(s)
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="mt-4 text-center">
+              <button
+                class="btn btn-success px-4 py-2"
+                (click)="evaluerDossier()"
+                [disabled]="!selectedRecommendation"
+              >
+                <i class="fas fa-save me-1"></i> Enregistrer l'évaluation
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div
+    *ngIf="!loading && (!recapDossier || dossierModuleElements.length === 0)"
+    class="text-center"
+  >
+    <p>Aucun détail de dossier trouvé.</p>
+  </div>
+</div>

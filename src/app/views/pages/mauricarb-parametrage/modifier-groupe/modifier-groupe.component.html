@@ -1,0 +1,90 @@
+<nav class="page-breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a routerLink=".">Parametrages</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Groupes</li>
+    </ol>
+</nav>
+
+<div class="animated fadeIn">
+    <div class="row">
+        <div class="card col-md-12">
+            <div class="card-body">
+                <!--<form method="get" class="form-horizontal">-->
+                <div class="form-group row">
+                    <label class="col-md-3 col-form-label" for="code">Code</label>
+                    <div class="col-md-4" >
+                        <input type="text" id="code" name="code"  [readonly]="!estModeAjout" class="form-control"
+                               mdInput [(ngModel)]="newGroupe.code" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-3 col-form-label" for="nom">Nom</label>
+                    <div class="col-md-4" >
+                        <input type="text" id="nom" name="nom"  class="form-control"
+                               mdInput [(ngModel)]="newGroupe.libelle" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-3 col-form-label" for="etat">Etat</label>
+                    <div class="col-md-4" >
+                        <input class="form-check-input" type="checkbox" id="etat" name="etat"
+                               mdInput [(ngModel)]="newGroupe.estActiver"  style="margin-left: 5%">
+                    </div>
+                </div>
+
+                <!--Roles-->
+                <div class="row">
+                    <div class="col-lg-6 col-xl-4 mb-4 mb-lg-3">
+                        <div class="list-group-item list-group-item-action" style="padding: 2%">
+                            <h5 class="text-capitalize">Module</h5>
+                        </div>
+                        <div class="list-group">
+                            <div *ngFor="let parent of listAllMenu">
+                                <a  *ngIf="parent.estParentInProfile"  (click)="onChoisirModule(parent)" class="list-group-item list-group-item-action">
+                                    <i class="feather icon-list mr-3" aria-hidden="true"></i> {{parent.label}}</a>
+                                <a   *ngIf="!parent.estParentInProfile" style="color: #5b7a5b" (click)="onChoisirModule(parent)" class="list-group-item list-group-item-action">
+                                    <i class="feather icon-list mr-3" aria-hidden="true"></i> {{parent.label}}</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-xl-4 mb-4 mb-lg-3">
+                        <div *ngIf="menuSelected">
+                            <div class="list-group-item list-group-item-action" style="padding: 2%">
+                                <h5 class="text-capitalize">Roles disponibles </h5>
+                            </div>
+                            <div class="sortable-drag-list" [sortablejs]="menuSelected.childrenOutProfil" [sortablejsOptions]="groupOptions">
+                                <div class="drag-handle" *ngFor="let menu of menuSelected.childrenOutProfil">
+                                    <a   style="color: #5b7a5b" class="list-group-item list-group-item-action">
+                                        <i class="feather icon-arrow-right-circle mr-3" aria-hidden="true"></i> {{ menu.label }}
+                                    </a>
+                                    <!--<h6 class="text-capitalize"> <i class="feather icon-arrow-left-circle mr-3" aria-hidden="true"></i> {{ menu.label }} </h6>-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-xl-4 mb-4">
+                        <div *ngIf="menuSelected">
+                            <div class="list-group-item list-group-item-action" style="padding: 2%">
+                                <h5 class="text-capitalize">Roles choisis</h5>
+                            </div>
+                            <div class="sortable-drag-list" [sortablejs]="menuSelected.childrenInProfil" [sortablejsOptions]="groupOptions">
+                                <div class="drag-handle" *ngFor="let menu of menuSelected.childrenInProfil">
+                                    <a   style="color: #5b7a5b" class="list-group-item list-group-item-action">
+                                        <i class="feather icon-arrow-left-circle mr-3" aria-hidden="true"></i> {{ menu.label }}
+                                    </a>
+                                    <!--<h6 class="text-capitalize"> <i class="feather icon-arrow-right-circle mr-3" aria-hidden="true"></i> {{ menu.label }}</h6>-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--</form>-->
+            </div>
+            <div class="card-footer" align="center">
+                <a  class="badge badge-primary" (click)="enregistrerProfil()">
+                    <i class="feather icon-save"></i> Enregistrer</a>
+
+            </div>
+        </div>
+    </div>
+</div>

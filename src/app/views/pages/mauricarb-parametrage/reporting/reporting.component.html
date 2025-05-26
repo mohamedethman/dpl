@@ -1,0 +1,105 @@
+<nav class="page-breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a routerLink=".">Reporting</a></li>
+        <li aria-current="page" class="breadcrumb-item active">Statistiques</li>
+    </ol>
+</nav>
+
+<div class="animated fadeIn">
+    <div class="row">
+        <div class="card col-md-12">
+            <div class="card-body">
+                <div class="p-3">
+                    <div class="form-group row" style="margin-bottom: 10px">
+                        <div class="col-md-12">
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <ng-select [items]="produits"
+                                               bindLabel="nom" placeholder="Produit"
+                                               bindValue="idProduit"
+                                               [multiple]="false"
+                                               [(ngModel)]="beanRecherche.produitId">
+                                    </ng-select>
+                                </div>
+                                <div class="col-md-3">
+                                    <ng-select [items]="clients"
+                                               bindLabel="nomComplet" placeholder="Client"
+                                               bindValue="id"
+                                               [multiple]="false"
+                                               [(ngModel)]="beanRecherche.clientId">
+                                    </ng-select>
+                                </div>
+                                <div class="col-md-3">
+                                    <ng-select [items]="agents"
+                                               bindLabel="nomComplet" placeholder="Agent"
+                                               bindValue="id"
+                                               [multiple]="false"
+                                               [(ngModel)]="beanRecherche.agentId">
+                                    </ng-select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12" style="margin-top: 5px">
+                            <div class="form-group row">
+                                <label class="col-form-label" >De</label>
+                                <div class="col-md-3">
+                                    <input type="date" name="dateDebut" class="form-control"
+                                           mdInput [(ngModel)]="beanRecherche.dateDebut" placeholder=""/>
+                                </div>
+                                <label class="col-form-label" >à</label>
+                                <div class="col-md-3">
+                                    <input type="date" name="dateFin" class="form-control"
+                                           mdInput [(ngModel)]="beanRecherche.dateFin"/>
+                                </div>
+                                <div class="col-md-3">
+                                    <a class="btn btn-primary" (click)="recherche()">
+                                        <i class="feather icon-search"></i> Recherche</a>
+                                </div>
+                                <div class="col-md-2" style="text-align: right" *ngIf="detailsJour.length>0">
+                                    <a class="btn btn-warning" (click)="searchExport()">
+                                        <i class="feather icon-download"></i> Exporter
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <table width="100%" class="table-sm table-bordered" style="margin-top: 20px">
+                        <thead>
+                        <tr>
+                            <th class="border border-gray-300">Produit</th>
+                            <th class="border border-gray-300">Quantité</th>
+                            <th class="border border-gray-300">Agent</th>
+                            <th class="border border-gray-300">Client</th>
+                            <th class="border border-gray-300">Points</th>
+                            <th class="border border-gray-300">Date</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr *ngFor="let sale of detailsJour">
+                            <td class="border border-gray-300">
+                                <ul *ngFor="let detail of sale.details">
+                                    {{detail.produit?.nom}}
+                                </ul>
+                            </td>
+                            <td class="border border-gray-300">
+                                <ul *ngFor="let detail of sale.details">
+                                    {{detail.quantite}}
+                                </ul>
+                            </td>
+                            <td class="border border-gray-300">{{ sale.agent.prenom }} {{ sale.agent.nom }}</td>
+                            <td class="border border-gray-300">{{ sale.client?.nom }}</td>
+                            <td class="border border-gray-300">{{ sale.pointsAjoutes }}</td>
+                            <td class="border border-gray-300">{{ sale.dateTransaction | date }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="mt-4" style="margin-top: 20px">
+                        <h4 class="text-xl">Total des ventes : {{ totalSalesDaily }}</h4>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

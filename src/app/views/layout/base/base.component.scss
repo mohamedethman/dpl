@@ -1,0 +1,58 @@
+/* base.component.scss */
+
+.main-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.page-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.page-content-full {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0; /* Important for proper flexbox scrolling */
+}
+
+.content-container {
+  flex: 1;
+  display: flex;
+  min-height: 0; /* Crucial for proper scrolling behavior */
+}
+
+.sidebar-wrapper {
+  flex: 0 0 250px;
+  background-color: #00a95c;
+  position: sticky;
+  top: 0;
+  align-self: flex-start; /* Prevents height inheritance issues */
+  height: auto; /* Let content determine height */
+  max-height: 100vh; /* But never exceed viewport */
+  overflow: visible; /* No scrollbar */
+}
+
+.main-content {
+  flex: 1;
+  overflow-y: auto; /* Only main content scrolls */
+  padding: 20px;
+  min-height: 0; /* Important for scrolling */
+}
+
+.spinner-wrapper {
+  position: fixed;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.7);
+  z-index: 9999;
+}

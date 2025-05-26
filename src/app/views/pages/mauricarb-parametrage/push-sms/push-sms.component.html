@@ -1,0 +1,53 @@
+<nav class="page-breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a routerLink=".">Gestion des SMS</a></li>
+        <li aria-current="page" class="breadcrumb-item active">Push SMS</li>
+    </ol>
+</nav>
+
+<div class="animated fadeIn">
+    <div class="row">
+        <div class="card col-md-12">
+            <div class="card-body">
+                <div class="example" *ngIf="showSpin">
+                    <div class="d-flex justify-content-center">
+                        <div class="spinner-border" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="container mt-3">
+<!--                    <h3 class="text-center">Envoyer un Message</h3>-->
+                    <div class="form-group">
+                        <label style="margin-right: 10px">Destinataires:</label>
+                         <i class="badge badge-primary" title="Selectionner tous">  <input type="checkbox"  (change)="toggleSelectAll($event)"
+                                                     [checked]="isAllSelected()" /> </i>
+                        <ng-select [items]="clients"
+                                   bindLabel="nomComplet"
+                                   bindValue="telephone"
+                                   [multiple]="true"
+                                   [(ngModel)]="telephonesSelected">
+                        </ng-select>
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label" >Message</label>
+                            <textarea [placeholder]="'Saisir un texte'"  class="form-control" name="fr"
+                                      [(ngModel)]="newSms.text" rows="10"  ></textarea>
+                        </div>
+                        <div class="col-md-6"  style="text-align: right">
+                            <label class="form-label" >رسالة</label>
+                            <textarea dir="rtl" [placeholder]="'أدخل النص'"  class="form-control"
+                                      [(ngModel)]="newSms.textAr" name="ar" rows="10" ></textarea>
+                        </div>
+                    </div>
+                    <div class="row col-md-12">
+
+                    </div>
+                    <button (click)="sendMessage()" class="btn btn-primary mt-3">
+                        <i class="feather icon-send"></i> Envoyer </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

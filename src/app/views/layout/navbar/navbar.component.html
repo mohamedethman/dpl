@@ -1,0 +1,353 @@
+<div class="horizontal-menu">
+  <nav class="navbar top-navbar bg-white shadow-sm">
+    <div
+      class="container-fluid d-flex justify-content-between align-items-center position-relative"
+    >
+      <!-- Left: Logo & Title -->
+      <a routerLink="/dashbord" class="navbar-brand d-flex align-items-center">
+        <img src="assets/images/logo2.png" height="50px" />
+        <span class="font-weight-bold text-dark" style="font-size: 1.2rem">
+          Ministère de la Santé
+        </span>
+      </a>
+
+      <!-- Center: Title -->
+      <h1
+        class="navbar-title text-center position-absolute w-100"
+        style="
+          left: 0;
+          top: 50%;
+          transform: translateY(-50%);
+          font-size: 1.5rem;
+          color: rgb(100, 100, 100);
+          font-weight: bolder;
+        "
+      >
+        DAMPS
+      </h1>
+
+      <!-- Right: Notifications & Profile Dropdown -->
+      <div class="d-flex align-items-center">
+        <!-- Notifications Dropdown -->
+        <div class="dropdown me-3" *ngIf="!showSpin">
+          <button
+            class="btn btn-light position-relative"
+            type="button"
+            id="dropdownMenuButtonNotifications"
+            data-bs-toggle="dropdown"
+            data-bs-auto-close="outside"
+            aria-expanded="false"
+          >
+            <i class="fas fa-bell" style="font-size: 20px"></i>
+            <span
+              *ngIf="notificationCount > 0"
+              class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+            >
+              {{ notificationCount }}
+              <span class="visually-hidden">unread notifications</span>
+            </span>
+          </button>
+          <ul
+            class="dropdown-menu dropdown-menu-end p-2 shadow-lg"
+            aria-labelledby="dropdownMenuButtonNotifications"
+            style="min-width: 300px"
+          >
+            <h5 class="dropdown-header">Notifications</h5>
+            <hr class="my-1" />
+            <!-- Filter Options -->
+            <li class="dropdown-item d-flex justify-content-between">
+              <button
+                class="btn btn-link p-0 text-decoration-none"
+                (click)="filterNotifications('all')"
+                [class.active]="filterType === 'all'"
+              >
+                Tout
+              </button>
+              <button
+                class="btn btn-link p-0 text-decoration-none"
+                (click)="filterNotifications('unread')"
+                [class.active]="filterType === 'unread'"
+              >
+                Non lu
+              </button>
+            </li>
+            <hr class="my-1" />
+
+            <!-- Notifications List -->
+            <!-- Notifications List -->
+            <!-- Notifications List -->
+            <li
+              *ngFor="let notification of getPaginatedNotifications()"
+              class="dropdown-item"
+            >
+              <div
+                class="d-flex align-items-start"
+                (click)="markNotificationAsRead(notification)"
+              >
+                <i
+                  class="fas me-2"
+                  [ngClass]="{
+                    'fa-envelope-open text-success':
+                      notification.statut === 'Lu',
+                    'fa-envelope text-danger': notification.statut === 'Envoyé'
+                  }"
+                  style="font-size: 14px"
+                >
+                </i>
+                <div class="flex-grow-1" (click)="gotodetails(notification)">
+                  <small class="text-muted d-block">
+                    {{ notification.dateEnvoi | date : "yyyy-MM-dd HH:mm" }}
+                  </small>
+                  <p class="mb-0 font-weight-bold">{{ notification.title }}</p>
+                  <p class="mb-0 text-muted">
+                    {{
+                      notification.message === "Votre demande a été autorisée"
+                        ? "Votre demande a été recevable"
+                        : notification.message
+                    }}
+                  </p>
+
+                  <!-- Download link with stopPropagation -->
+                  <div class="mt-2" (click)="$event.stopPropagation()">
+                    <ng-container
+                      *ngIf="userProfile === 'EXA'; else nonExaLinks"
+                    >
+                      <!-- Links for EXA profile -->
+                      <a
+                        (click)="
+                          downloadFile('maquette', notification.idDossier)
+                        "
+                        class="btn btn-sm btn-link p-0 text-primary cursor-pointer"
+                        *ngIf="notification.idDossier"
+                      >
+                        <i class="fas fa-file-alt me-1"></i>Rapport technique
+                      </a>
+                      <br />
+                      <a
+                        (click)="
+                          downloadFile(
+                            'guide-technique',
+                            notification.idDossier
+                          )
+                        "
+                        class="btn btn-sm btn-link p-0 text-primary cursor-pointer mt-1"
+                        *ngIf="notification.idDossier"
+                      >
+                        <i class="fas fa-file-alt me-1"></i>Evaluation technique
+                        et bioequivalence
+                      </a>
+                      <br />
+                      <a
+                        (click)="
+                          downloadFile(
+                            'guide-evaluation',
+                            notification.idDossier
+                          )
+                        "
+                        class="btn btn-sm btn-link p-0 text-primary cursor-pointer mt-1"
+                        *ngIf="notification.idDossier"
+                      >
+                        <i class="fas fa-file-alt me-1"></i>Evaluation
+                        administrative
+                      </a>
+                    </ng-container>
+
+                    <ng-template #nonExaLinks>
+                      <!-- COM Profile -->
+                      <ng-container *ngIf="userProfile === 'COM'">
+                        <a
+                          (click)="
+                            downloadRapportTechnique(notification.idDossier)
+                          "
+                          class="btn btn-sm btn-link p-0 text-primary cursor-pointer"
+                          *ngIf="notification.idDossier"
+                        >
+                          <i class="fas fa-file-archive me-1"></i>Télécharger
+                          les Rapport techniques
+                        </a>
+                      </ng-container>
+
+                      <!-- SUP Profile -->
+                      <ng-container *ngIf="userProfile === 'SUP'">
+                        <a
+                          (click)="
+                            downloadEvaluationZip(notification.idDossier)
+                          "
+                          class="btn btn-sm btn-link p-0 text-primary cursor-pointer"
+                          *ngIf="notification.idDossier"
+                        >
+                          <i class="fas fa-file-archive me-1"></i>Télécharger
+                          les évaluations (ZIP)
+                        </a>
+                      </ng-container>
+
+                      <!-- LAB Profile -->
+                      <ng-container *ngIf="userProfile === 'LAB'">
+                        <a
+                          (click)="handleFileDownload(notification.idDossier)"
+                          class="btn btn-sm btn-link p-0 text-primary cursor-pointer"
+                          *ngIf="
+                            notification.link &&
+                            notification.link.includes('ACCUSE')
+                          "
+                        >
+                          <i class="fas fa-file-archive me-1"></i>Télécharger
+                          l'accusé de reception
+                        </a>
+
+                        <a
+                          (click)="renouvlementDownload(notification.idDossier)"
+                          class="btn btn-sm btn-link p-0 text-primary cursor-pointer"
+                          *ngIf="
+                            notification.link &&
+                            notification.link.includes('RENOUVELLEMENT_AMM')
+                          "
+                        >
+                          <i class="fas fa-file-archive me-1"></i>Télécharger
+                          Renouvellement AMM
+                        </a>
+                        <br
+                          *ngIf="
+                            notification.link &&
+                            notification.link.includes('ACCUSE')
+                          "
+                        />
+                        <a
+                          (click)="downloaddecision(notification.idDossier)"
+                          class="btn btn-sm btn-link p-0 text-primary cursor-pointer"
+                          *ngIf="
+                            notification.link &&
+                            notification.link.includes('NOTIFICATION_AMM')
+                          "
+                        >
+                          <i class="fas fa-file-archive me-1"></i>Télécharger la
+                          decision
+                        </a>
+                        <br
+                          *ngIf="
+                            notification.link &&
+                            notification.link.includes('NOTIFICATION_AMM')
+                          "
+                        />
+                        <a
+                          (click)="downalodamm(notification.idDossier)"
+                          class="btn btn-sm btn-link p-0 text-primary cursor-pointer"
+                          *ngIf="
+                            notification.link &&
+                            notification.link.includes('DELIVRANCE_AMM')
+                          "
+                        >
+                          <i class="fas fa-file-archive me-1"></i>Télécharger
+                          l'AMM
+                        </a>
+                      </ng-container>
+                    </ng-template>
+                  </div>
+                </div>
+              </div>
+            </li>
+
+            <!-- Pagination Controls -->
+            <li class="dropdown-item">
+              <div class="d-flex justify-content-between align-items-center">
+                <button
+                  class="btn btn-sm btn-outline-secondary"
+                  (click)="goToPage(currentPage - 1); $event.stopPropagation()"
+                  [disabled]="currentPage === 1"
+                >
+                  <i class="fas fa-chevron-left"></i>
+                </button>
+
+                <div class="mx-2">
+                  <span
+                    *ngFor="let page of getPageNumbers()"
+                    class="badge mx-1 cursor-pointer"
+                    [ngClass]="{
+                      'bg-primary': page === currentPage,
+                      'bg-light text-dark': page !== currentPage
+                    }"
+                    (click)="goToPage(page); $event.stopPropagation()"
+                  >
+                    {{ page }}
+                  </span>
+                </div>
+
+                <button
+                  class="btn btn-sm btn-outline-secondary"
+                  (click)="goToPage(currentPage + 1); $event.stopPropagation()"
+                  [disabled]="currentPage === totalPages"
+                >
+                  <i class="fas fa-chevron-right"></i>
+                </button>
+              </div>
+            </li>
+
+            <!-- No Notifications Message -->
+            <li
+              *ngIf="filteredNotifications.length === 0"
+              class="text-center p-2"
+            >
+              <p class="mb-0">Aucune nouvelle notification</p>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Profile Dropdown -->
+        <div class="dropdown" *ngIf="!showSpin">
+          <button
+            class="btn btn-warning dropdown-toggle d-flex align-items-center"
+            type="button"
+            id="dropdownMenuButton"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <i class="fas fa-sign-out-alt me-2"></i> Quitter
+          </button>
+          <ul
+            class="dropdown-menu dropdown-menu-end p-2 shadow-lg"
+            aria-labelledby="dropdownMenuButton"
+          >
+            <li class="text-center p-2">
+              <img
+                src="assets/images/se-deconnecter.png"
+                height="40"
+                width="40"
+                alt=""
+              />
+              <p class="mb-0 mt-2 font-weight-bold">
+                {{ userConnected.prenom }} {{ userConnected.nom }}
+              </p>
+              <p class="text-muted mb-0">{{ userConnected.profil?.libelle }}</p>
+            </li>
+            <hr class="my-2" />
+            <!-- <li>
+              <a
+                class="dropdown-item d-flex align-items-center"
+                (click)="openModalEditUser(modalEditerUser)"
+              >
+                <i class="fas fa-key me-2"></i> Changer mot de passe
+              </a>
+            </li> -->
+            <li>
+              <a
+                href="#"
+                class="dropdown-item d-flex align-items-center text-danger"
+                (click)="onLogout($event)"
+              >
+                <i class="fas fa-power-off me-2"></i> Se déconnecter
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <!-- Mobile Menu Toggle -->
+      <button
+        class="navbar-toggler d-lg-none border-0"
+        type="button"
+        (click)="toggleHeaderMenu()"
+      >
+        <i class="fas fa-bars"></i>
+      </button>
+    </div>
+  </nav>
+</div>

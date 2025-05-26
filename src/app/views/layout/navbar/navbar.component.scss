@@ -1,0 +1,99 @@
+.pt-3,
+.py-3 {
+  padding-top: 0.5rem !important;
+}
+
+.dropdown-menu {
+  width: 200px;
+  border-radius: 8px;
+}
+
+.dropdown-item {
+  padding: 8px 15px;
+  font-size: 14px;
+}
+
+.dropdown-item i {
+  font-size: 16px;
+  color: #555;
+}
+
+.btn-warning {
+  font-weight: bold;
+  padding: 8px 15px;
+  display: flex;
+  align-items: center;
+}
+
+.btn-warning i {
+  font-size: 18px;
+  margin-right: 8px;
+}
+
+.navbar-toggler {
+  font-size: 18px;
+  padding: 5px 10px;
+  color: #333;
+}
+.navbar-brand img {
+  margin-right: 5px; /* Adjust as needed */
+}
+/* Active filter button */
+.btn-link.active {
+  font-weight: bold;
+  color: #007bff !important;
+}
+
+/* Notification item hover effect */
+.dropdown-item:hover {
+  background-color: #f8f9fa;
+}
+
+/* Active filter button */
+.btn-link.active {
+  font-weight: bold;
+  color: #007bff !important;
+}
+
+/* Notification item hover effect */
+.dropdown-item:hover {
+  background-color: #f8f9fa;
+  cursor: pointer;
+}
+
+/* Notification dropdown header */
+.dropdown-header {
+  font-size: 1.1rem;
+  font-weight: bold;
+  padding: 0.5rem 1rem;
+}
+
+/* Notification item padding */
+.dropdown-item {
+  padding: 0.75rem 1rem;
+}
+
+/* Notification icon alignment */
+.fas {
+  margin-top: 4px;
+}
+
+.dropdown-menu {
+  max-width: 300px; /* Ensure it does not exceed the intended width */
+  word-wrap: break-word;
+  white-space: normal;
+}
+
+.dropdown-item {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.dropdown-item p {
+  word-wrap: break-word;
+  white-space: normal;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}

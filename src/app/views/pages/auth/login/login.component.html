@@ -1,0 +1,121 @@
+<div class="spinner-wrapper" *ngIf="pageLoading">
+  <div class="spinner"></div>
+</div>
+
+<div class="auth-container">
+  <div class="auth-header">
+    <div class="government-banner">
+      <div class="header-left-content">
+        <img src="assets/images/logo_rim.png" alt="Logo" class="logo-image" />
+        <div class="government-text">
+          <div class="government-title">
+            RÉPUBLIQUE ISLAMIQUE DE MAURITANIE<br />
+            <strong>Honneur - Fraternité - Justice</strong>
+          </div>
+          <div class="ministry-name">Ministère de la Santé</div>
+          <div class="ministry-name">DAMPS</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row w-100 mx-0 auth-page">
+    <div class="col-md-6 d-none d-md-flex">
+      <div class="auth-card-container">
+        <div class="auth-card">
+          <div class="spinner-wrapper" *ngIf="showpin">
+            <div class="spinner"></div>
+          </div>
+
+          <div *ngIf="!showpin">
+            <div class="auth-logo">
+              <img
+                src="assets/images/logo-user.png"
+                alt="Logo"
+                class="logo-image"
+              />
+            </div>
+
+            <form class="auth-form" #f="ngForm" (ngSubmit)="onLogin()">
+              <!-- Username Input -->
+              <div class="form-group">
+                <label for="username">Nom de l'utilisateur*</label>
+                <div class="input-with-icon">
+                  <i class="fas fa-user"></i>
+                  <input
+                    type="text"
+                    id="username"
+                    class="form-control"
+                    placeholder="Saisir le nom de l'utilisateur"
+                    name="login"
+                    [(ngModel)]="login"
+                    required
+                  />
+                </div>
+              </div>
+
+              <!-- Password Input -->
+              <div class="form-group">
+                <label for="password">Mot de passe*</label>
+                <div class="input-with-icon">
+                  <i class="fas fa-lock"></i>
+                  <input
+                    type="password"
+                    id="password"
+                    class="form-control"
+                    placeholder="Saisir le mot de passe"
+                    name="password"
+                    [(ngModel)]="password"
+                    required
+                  />
+                </div>
+              </div>
+
+              <!-- Submit Button -->
+              <div class="form-actions">
+                <button type="submit" class="btn-login">
+                  <i class="fas fa-sign-in-alt"></i> Se connecter
+                </button>
+              </div>
+
+              <!-- Registration Link -->
+              <div class="text-center mt-3">
+                <p>
+                  Vous n'avez pas de compte?
+                  <a routerLink="/auth/register" class="register-link"
+                    >S'inscrire</a
+                  >
+                </p>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6 d-none d-md-flex login-image-section">
+      <div class="login-image-overlay"></div>
+      <div class="login-image-top-content">
+        <img
+          class="logo-login-image"
+          src="assets/images/logo2.png"
+          alt="AMM Logo"
+        />
+        <div class="login-image-text">
+          <h2>
+            Bienvenue sur la Plateforme d'Autorisation de Mise sur le Marché
+            (AMM)
+          </h2>
+        </div>
+      </div>
+    </div>
+
+    <div class="auth-footer">
+      <p>
+        Copyright © 2025
+        <a href="#" target="_blank">Ministère de la Santé</a>. Tous les droits
+        sont réservés
+      </p>
+    </div>
+  </div>
+</div>

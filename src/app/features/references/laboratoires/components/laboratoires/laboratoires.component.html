@@ -1,0 +1,239 @@
+<div class="container mt-4">
+  <div class="rounded-panel">
+    <div class="vertical-line"></div>
+    <h2 class="page-title">Liste des Laboratoires</h2>
+  </div>
+
+  <div class="row mb-3 align-items-center">
+    <div class="col-md-6">
+      <input
+        type="text"
+        class="form-control"
+        [(ngModel)]="searchTerm"
+        placeholder="Rechercher par Nom ..."
+      />
+    </div>
+    <div class="col-md-6 d-flex justify-content-end">
+      <button class="btn btn-add btns" (click)="openModal()">
+        + Nouveau Laboratoire
+      </button>
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nom</th>
+          <th>Code</th>
+          <th>Type</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let laboratoire of paginatedLaboratoireList">
+          <td>{{ laboratoire.id }}</td>
+          <td>{{ laboratoire.nom }}</td>
+          <td>{{ laboratoire.code }}</td>
+          <td>{{ laboratoire.type }}</td>
+          <td>
+            <button
+              class="btn btn-primary btn-sm"
+              (click)="openModal(laboratoire)"
+            >
+              Edit
+            </button>
+            <button
+              class="btn btn-delete btn-sm"
+              (click)="deleteLaboratoire(laboratoire.id!)"
+            >
+              Delete
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pagination-container">
+    <nav *ngIf="totalPages > 1">
+      <ul class="pagination">
+        <li class="page-item" [class.disabled]="currentPage === 1">
+          <a class="page-link" (click)="changePage(currentPage - 1)"
+            >Précédent</a
+          >
+        </li>
+        <li
+          *ngFor="let i of [].constructor(totalPages); let index = index"
+          class="page-item"
+          [class.active]="currentPage === index + 1"
+        >
+          <a class="page-link" (click)="changePage(index + 1)">{{
+            index + 1
+          }}</a>
+        </li>
+        <li class="page-item" [class.disabled]="currentPage === totalPages">
+          <a class="page-link" (click)="changePage(currentPage + 1)">Suivant</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>
+
+<div id="laboratoireModal" class="modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <!-- Header -->
+      <div class="modal-header form-header text-white position-relative">
+        <h5 class="modal-title">
+          <span *ngIf="isEditMode; else addMode">Modifier Laboratoire</span>
+          <ng-template #addMode>Ajouter un Nouveau Laboratoire</ng-template>
+        </h5>
+        <button type="button" class="btn-close-custom" (click)="closeModal()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+
+      <!-- Body -->
+      <div class="modal-body">
+        <form [formGroup]="LaboratoireForm">
+          <!-- Nom -->
+          <div class="form-group">
+            <label>Nom</label>
+            <input
+              type="text"
+              class="form-control"
+              formControlName="nom"
+              placeholder="Entrez le nom"
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Code</label>
+            <input
+              type="number"
+              class="form-control"
+              formControlName="code"
+              placeholder="Entrez le code"
+            />
+          </div>
+
+          <!-- Type -->
+          <div class="form-group">
+            <label>Type</label>
+            <select class="form-control" formControlName="type">
+              <option value="EXPLOITANT">EXPLOITANT</option>
+              <option value="FABRIQUANT">FABRIQUANT</option>
+            </select>
+          </div>
+
+          <!-- Adresse -->
+          <div class="form-group">
+            <label>Adresse</label>
+            <input
+              type="text"
+              class="form-control"
+              formControlName="adresse"
+              placeholder="Entrez l'adresse"
+            />
+          </div>
+
+          <!-- Pays -->
+          <div class="form-group">
+            <label>Pays</label>
+            <input
+              type="text"
+              class="form-control"
+              formControlName="pays"
+              placeholder="Entrez le pays"
+            />
+          </div>
+
+          <!-- Téléphone -->
+          <div class="form-group">
+            <label>Téléphone</label>
+            <input
+              type="text"
+              class="form-control"
+              formControlName="telephone"
+              placeholder="Entrez le téléphone"
+            />
+          </div>
+
+          <!-- Email -->
+          <div class="form-group">
+            <label>Email</label>
+            <input
+              type="email"
+              class="form-control"
+              formControlName="email"
+              placeholder="Entrez l'email"
+            />
+          </div>
+
+          <!-- Site Web -->
+          <div class="form-group">
+            <label>Site Web</label>
+            <input
+              type="text"
+              class="form-control"
+              formControlName="siteWeb"
+              placeholder="Entrez le site web"
+            />
+          </div>
+
+          <!-- Contact Principal -->
+          <div class="form-group">
+            <label>Contact Principal</label>
+            <input
+              type="text"
+              class="form-control"
+              formControlName="contactPrincipal"
+              placeholder="Entrez le contact principal"
+            />
+          </div>
+
+          <!-- Documents Agrément -->
+          <div class="form-group">
+            <label>Documents Agrément</label>
+            <input
+              type="text"
+              class="form-control"
+              formControlName="documentsAgrement"
+              placeholder="Entrez les documents d'agrément"
+            />
+          </div>
+
+          <!-- Date Enregistrement -->
+          <div class="form-group">
+            <label>Date Enregistrement</label>
+            <input
+              type="date"
+              class="form-control"
+              formControlName="dateEnregistrement"
+              placeholder="Entrez la date d'enregistrement"
+            />
+          </div>
+
+          <!-- Statut -->
+          <div class="form-group">
+            <label>Statut</label>
+            <select class="form-control" formControlName="Statut">
+              <option value="ACTIF">ACTIF</option>
+              <option value="INACTIF">INACTIF</option>
+            </select>
+          </div>
+        </form>
+      </div>
+
+      <!-- Footer -->
+      <div class="modal-footer">
+        <button class="btn btn-secondary" (click)="closeModal()">Fermer</button>
+        <button class="btn btn-success" (click)="saveLaboratoire()">
+          {{ isEditMode ? "Modifier" : "Ajouter" }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

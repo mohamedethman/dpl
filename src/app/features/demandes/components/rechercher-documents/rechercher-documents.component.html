@@ -1,0 +1,253 @@
+<div class="container mt-4">
+  <!-- Search Card -->
+  <div class="card shadow-sm border-0 mb-4">
+    <div class="card-header bg-dpl text-white">
+      <h3 class="mb-0" *ngIf="userProfile === 'DPL'">
+        <i class="fas fa-file-alt me-2"></i>Documents envoyés
+      </h3>
+      <h3 class="mb-0" *ngIf="userProfile === 'LAB'">
+        <i class="fas fa-file-alt me-2"></i>Mes documents
+      </h3>
+    </div>
+
+    <div class="card-body">
+      <div class="row g-3">
+        <!-- Laboratoire Filter (DPL only) -->
+        <div class="col-md-6" *ngIf="userProfile === 'DPL'">
+          <div class="form-floating">
+            <select
+              class="form-select"
+              id="laboratoire"
+              [(ngModel)]="selectedLaboratoire"
+              (change)="onSearch()"
+            >
+              <option [value]="null">Tous les laboratoires</option>
+              <option *ngFor="let lab of laboratoires" [value]="lab.id">
+                {{ lab.nom }}
+              </option>
+            </select>
+            <label for="laboratoire" class="text-muted">
+              <i class="fas fa-flask me-2"></i>Laboratoire
+            </label>
+          </div>
+        </div>
+
+        <!-- Document Type Filter -->
+        <div class="col-md-6" [class.offset-md-6]="userProfile !== 'DPL'">
+          <div class="form-floating">
+            <select
+              class="form-select"
+              id="documentType"
+              [(ngModel)]="selectedDocumentType"
+              (change)="onDocumentTypeChange()"
+              required
+            >
+              <option [value]="null" disabled>Sélectionnez un type</option>
+              <option *ngFor="let type of documentTypes" [value]="type.code">
+                {{ type.libelle }}
+              </option>
+            </select>
+            <label for="documentType" class="text-muted">
+              <i class="fas fa-file-alt me-2"></i>Type de Document
+            </label>
+          </div>
+        </div>
+
+        <div class="col-md-12 d-flex align-items-center justify-content-end">
+          <button
+            class="btn bg-dpl text-white px-4 py-2"
+            (click)="onSearch()"
+            [disabled]="!selectedDocumentType"
+          >
+            <i class="fas fa-search me-2"></i>Rechercher
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="text-center mt-5 py-5">
+    <div
+      class="spinner-border text-primary"
+      style="width: 3rem; height: 3rem"
+      role="status"
+    >
+      <span class="visually-hidden">Chargement...</span>
+    </div>
+    <h5 class="mt-3 text-muted">Chargement des documents...</h5>
+  </div>
+
+  <!-- Error State -->
+  <div
+    *ngIf="error"
+    class="alert alert-warning alert-dismissible fade show mt-3"
+  >
+    <i class="fas fa-exclamation-triangle me-2"></i>
+    <strong>Attention!</strong> {{ error }}
+    <button type="button" class="btn-close" (click)="error = null"></button>
+  </div>
+
+  <!-- Results Table -->
+  <div
+    class="card shadow-sm border-0"
+    *ngIf="!loading && hasSearched && documents.length > 0"
+  >
+    <div class="card-header bg-light">
+      <h5 class="mb-0">
+        <i class="fas fa-list-ul me-2"></i>Résultats ({{ totalItems }})
+      </h5>
+    </div>
+
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover mb-0">
+          <thead class="table-primary">
+            <tr>
+              <!-- Médicament Column -->
+              <th (click)="onSort('nomMedicament')" class="cursor-pointer">
+                Médicament
+                <i
+                  class="fas fa-sort ms-2"
+                  *ngIf="sortColumn !== 'nomMedicament'"
+                ></i>
+                <i
+                  class="fas fa-sort-up ms-2"
+                  *ngIf="
+                    sortColumn === 'nomMedicament' && sortDirection === 'asc'
+                  "
+                ></i>
+                <i
+                  class="fas fa-sort-down ms-2"
+                  *ngIf="
+                    sortColumn === 'nomMedicament' && sortDirection === 'desc'
+                  "
+                ></i>
+              </th>
+
+              <!-- Entité Émettrice Column -->
+              <th (click)="onSort('entiteEmetrice')" class="cursor-pointer">
+                Entité Émettrice
+                <i
+                  class="fas fa-sort ms-2"
+                  *ngIf="sortColumn !== 'entiteEmetrice'"
+                ></i>
+                <i
+                  class="fas fa-sort-up ms-2"
+                  *ngIf="
+                    sortColumn === 'entiteEmetrice' && sortDirection === 'asc'
+                  "
+                ></i>
+                <i
+                  class="fas fa-sort-down ms-2"
+                  *ngIf="
+                    sortColumn === 'entiteEmetrice' && sortDirection === 'desc'
+                  "
+                ></i>
+              </th>
+
+              <th class="ps-4">Type Document</th>
+
+              <!-- Date Column -->
+              <th (click)="onSort('dateAutorisation')" class="cursor-pointer">
+                Date
+                <i
+                  class="fas fa-sort ms-2"
+                  *ngIf="sortColumn !== 'dateAutorisation'"
+                ></i>
+                <i
+                  class="fas fa-sort-up ms-2"
+                  *ngIf="
+                    sortColumn === 'dateAutorisation' && sortDirection === 'asc'
+                  "
+                ></i>
+                <i
+                  class="fas fa-sort-down ms-2"
+                  *ngIf="
+                    sortColumn === 'dateAutorisation' &&
+                    sortDirection === 'desc'
+                  "
+                ></i>
+              </th>
+
+              <th class="pe-4 text-end">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let doc of documents">
+              <td>
+                <strong>{{ doc.nomMedicament }}</strong>
+              </td>
+              <td>{{ doc.entiteEmetrice }}</td>
+              <td>{{ getDocumentTypeLabel(selectedDocumentType) }}</td>
+              <!-- Updated -->
+
+              <td>{{ formatDate(doc.dateAutorisation) }}</td>
+
+              <td class="pe-4 text-end">
+                <button
+                  class="btn btn-sm btn-outline-primary"
+                  (click)="downloadDocument(doc)"
+                  title="Télécharger"
+                  [disabled]="loading"
+                >
+                  <span *ngIf="!loading">
+                    <i class="fas fa-download me-1"></i> PDF
+                  </span>
+                  <span *ngIf="loading">
+                    <i class="fas fa-spinner fa-spin me-1"></i> Chargement...
+                  </span>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pagination -->
+      <div
+        class="d-flex justify-content-between align-items-center p-3 bg-light border-top"
+      >
+        <ngb-pagination
+          [collectionSize]="totalItems"
+          [(page)]="currentPage"
+          [pageSize]="pageSize"
+          [maxSize]="5"
+          [rotate]="true"
+          [boundaryLinks]="true"
+          (pageChange)="onPageChange($event)"
+          aria-label="Page navigation"
+        >
+        </ngb-pagination>
+
+        <div class="d-flex align-items-center">
+          <span class="me-2 text-muted small">Items par page:</span>
+          <select
+            class="form-select form-select-sm"
+            style="width: auto"
+            [(ngModel)]="pageSize"
+            (ngModelChange)="onPageSizeChange()"
+          >
+            <option *ngFor="let size of pageSizeOptions" [ngValue]="size">
+              {{ size }}
+            </option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <div
+    *ngIf="!loading && hasSearched && documents.length === 0 && !error"
+    class="text-center mt-5 py-5"
+  >
+    <div class="card shadow-sm border-0">
+      <div class="card-body py-5">
+        <i class="fas fa-inbox fa-4x text-muted mb-4"></i>
+        <h4 class="text-muted">Aucun document trouvé</h4>
+        <p class="text-muted">Modifiez vos critères de recherche</p>
+      </div>
+    </div>
+  </div>
+</div>

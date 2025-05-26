@@ -1,0 +1,153 @@
+
+ export class Roles {
+     // Tableau de bord
+     public readonly INSTANCES_ATTENTE_ENVOI_ANNOTATION: string = 'CR011';
+     public readonly INSTANCES_ATTENTE_CORRECTION: string = 'CR012';
+     public readonly INSTANCES_ATTENTE_ANNOTATION: string = 'CR013';
+     public readonly INSTANCES_ANNOTES_ATTENTE_VALIDATION: string = 'CR014';
+     public readonly INSTANCES_ATTENTE_CORRECTION_ANNOTATION: string = 'CR015';
+     public readonly INSTANCES_ANNOTES_VALIDES: string = 'CR016';
+     public readonly CHOIX_RAPPORTEURS_INSTANCE: string = 'CR017';
+     public readonly PPM_INSTANCES_SAISI_CONTENU: string = 'CR018';
+     public readonly PPM_INSTANCES_VALIDATION: string = 'CR019';
+     public readonly PPM_INSTANCES_TRAITES: string = 'CR020';
+     public readonly INSTANCES_SAISIR_NOTE_RAPPORTEURS: string = 'CR021';
+     public readonly MARCHE_INSTANCES_VALIDATION: string = 'CR022';
+     public readonly INSTANCE_CONVOCATION_CP_: string = 'CR023';
+     public readonly INSTANCE_SAISI_DECISION_CP_: string = 'CR024';
+     public readonly MISSION_INSTANCE_APPROBATION: string = 'CR025';
+     public readonly MISSION_INSTANCE_VALIDATION: string = 'CR026';
+     public readonly MISSION_INSTANCE_CORRECTION: string = 'CR027';
+     public readonly FICHE_CONTROL_POSTERIORI_A_EDIFIE: string = 'CR028';
+     public readonly FICHE_CONTROL_POSTERIORI_A_VALIDER: string = 'CR029';
+     public readonly FICHE_CONTROL_POSTERIORI_A_ENVOYER_CP: string = 'CR030';
+     public readonly FICHE_CONTROL_POSTERIORI_A_APPROUVER: string = 'CR031';
+     public readonly PPM_INSTANCE_ENVOI_CP: string = 'CR032';
+     public readonly MISSION_INSTANCE_RAPPORT: string = 'CR033';
+     public readonly MISSION_INSTANCE_ENVOI: string = 'CR034';
+    // Utilisateur
+     public readonly AJOUTER_USER: string = 'CR105';
+     public readonly MODIFIER_USER: string = 'CR106';
+     public readonly SUPPRIMER_USER: string = 'CR107';
+     public readonly RECHERCHER_USER: string = 'CR108';
+     // Groupe
+     public readonly AJOUTER_GROUPE: string = 'CR109';
+     public readonly MODIFIER_GROUPE: string = 'CR110';
+     public readonly SUPPRIMER_GROUPE: string = 'CR111';
+     public readonly RECHERCHER_GROUPE: string = 'CR112';
+     // Listes référentielles
+     public readonly LISTER_PERSONNEL: string = 'CR113';
+     public readonly LISTER_INTERIM: string = 'CR114';
+     public readonly LISTER_CS: string = 'CR115';
+     public readonly LISTER_CP: string = 'CR116';
+     public readonly LISTER_AUTORITES: string = 'CR117';
+     public readonly LISTER_BAILLEURS: string = 'CR118';
+     public readonly LISTER_MODE_PASSATION: string = 'CR119';
+     public readonly LISTER_FONCTIONS: string = 'CR120';
+     public readonly LISTER_SECTEURS: string = 'CR121';
+     public readonly CONFIGURER_PARAMETRES: string = 'CR122';
+     public readonly LISTER_CSECTORIELLE: string = 'CR123';
+    // Enregistrement
+     public readonly ENREGISTRER_DOSSIER: string = 'CR201';
+     public readonly CONSULTER_DOSSIER: string = 'CR202';
+     public readonly SAISIR_PPM: string = 'CR203';
+     public readonly CHANGER_PHOTO: string = 'CR204';
+     public readonly INSTANCES_POUR_ANNOTATION: string = 'CR205';
+     public readonly CONSULTER_PPM: string = 'CR206';
+     public readonly AFFICHER_DOSSIER: string = 'CR207';
+     public readonly ENVOYER_DOSSIER: string = 'CR208';
+     public readonly MODIFIER_DOSSIER: string = 'CR209';
+     public readonly SUPPRIMER_DOSSIER: string = 'CR210';
+     public readonly ANNOTER_DOSSIER: string = 'CR211';
+     public readonly DEMANDER_MODIFI_DOSSIER: string = 'CR212';
+     public readonly VALIDER_DOSSIER_ANNOTE: string = 'CR213'
+     public readonly INVALIDER_DOSSIER_ANNOTE: string = 'CR214'
+     public readonly AJOUTER_CONTENU_PPM: string = 'CR215';
+     public readonly AFFICHER_PPM: string = 'CR216';
+     public readonly VALIDER_PPM: string = 'CR217';
+     public readonly TRAITER_PPM: string = 'CR218';
+     public readonly ACTUALISER_PPM: string = 'CR219';
+     public readonly VALIDER_CONTENU_PPM: string = 'CR220';
+     public readonly AFFICHER_ACTIVITE_PPM: string = 'CR221';
+     public readonly EDITER_ACTIVITE_PPM: string = 'CR222';
+     public readonly SUPPRIMER_ACTIVITE_PPM: string = 'CR223';
+     // Traitement
+     public readonly ANNULER_LIAISON_COURRIERS: string = 'CR305';
+     public readonly LIER_ACTIVITER_COURANTE: string = 'CR306';
+     public readonly SELECTIONNER_RAPPORTEURS: string = 'CR307';
+     public readonly SAISIR_RECOMMANDATION: string = 'CR308';
+     public readonly VALIDER_NOTE: string = 'CR310';
+     public readonly VALIDER_RAPPORTEURS: string = 'CR311';
+     public readonly CREER_CONVOCATION_CS: string = 'CR302';
+     public readonly VALIDER_CONVOCATION_CS: string = 'CR312';
+     public readonly VALIDER_CONVOCATION_CP: string = 'CR361';
+     public readonly INVALIDER_CONVOCATION_CS: string = 'CR313';
+     public readonly MODIFIER_CONVOCATION_CS: string = 'CR314';
+     public readonly CONFIRMER_PRESENCE: string = 'CR315';
+     public readonly CREER_PV: string = 'CR303';
+     public readonly EDITER_DECISION_PV_CS: string = 'CR316';
+     public readonly EDITER_DECISION_PV_CP: string = 'CR363';
+     public readonly VALIDER_PV_CS: string = 'CR317';
+     public readonly CREER_CONVOCATION_CP: string = 'CR309';
+     public readonly CONSULTER_PV_CP: string = 'CR320';
+     public readonly VALIDER_PV_CP: string = 'CR321';
+     public readonly CREER_PV_CP: string = 'CR364';
+     public readonly VEROUILLER_PV_CP: string = 'CR365';
+     public readonly DEVEROUILLER_PV_CP: string = 'CR366';
+     public readonly INVALIDER_PV_CP: string = 'CR367';
+     public readonly IMPRIMER_PV_CP: string = 'CR322';
+     public readonly AFFICHER_NOTE_RAPPORTEUR: string = 'CR323';
+     public readonly RETIRER_POINT_CONVOCATION_CS: string = 'CR324';
+     public readonly INVALIDER_NOTE_RAPPORTEUR: string = 'CR325';
+     public readonly ENVOYER_PV_AU_CP: string = 'CR326';
+     public readonly CREER_FICHE_CONTROLE: string = 'CR327';
+     public readonly CONSULTER_FICHE_POSTERIORI: string = 'CR328';
+     public readonly RETIRER_CRITERE: string = 'CR329';
+     public readonly VALIDER_FICHE_CONTROLE: string = 'CR330';
+     public readonly EDITER_CRITERE_FICHE_CONTROLE: string = 'CR331';
+     public readonly MODIFIER_FICHE_CONTROLE: string = 'CR332';
+     public readonly SUPPRIMER_FICHE_CONTROLE: string = 'CR333';
+     public readonly AFFICHER_FICHE_CONTROLE: string = 'CR334';
+     public readonly SOUMETTRE_FICHE_CONTROLE: string = 'CR335';
+     public readonly ENVOYER_FICHE_CONTROLE_CP: string = 'CR336';
+     public readonly ENVOYER_PPM_CP: string = 'CR337';
+     public readonly ENREGISTRER_DOSSIER_CS: string = 'CR338';
+     public readonly MODIFIER_DOSSIER_CS: string = 'CR339';
+     public readonly APPROUVER_FICHE_CONTROLE_CP: string = 'CR362';
+     public readonly INVALIDER_CONVOCATION_CP: string = 'CR369';
+     public readonly ADD_POINT_CONVOCATION_CP: string = 'CR370';
+     public readonly RETIRER_POINT_PV_CP: string = 'CR371';
+     public readonly RETIRER_POINT_CONVOCATION_CP: string = 'CR372';
+     // Numérotation
+     public readonly AFFICHER_MARCHE: string = 'CR404';
+     public readonly NUMEROTER_MARCHE: string = 'CR405';
+     public readonly ENREGISTRER_MARCHE: string = 'CR406';
+     public readonly VALIDER_MARCHE: string = 'CR407';
+     public readonly CORRIGER_MARCHE: string = 'CR408';
+     public readonly ACTUALISER_MARCHE: string = 'CR409';
+
+     // Suivi Execution
+     public readonly AFFICHER_MISSION: string = 'CR505';
+     public readonly CREER_MISSION: string = 'CR506';
+     public readonly VALIDER_MISSION: string = 'CR507';
+     public readonly ACTUALISER_MISSION: string = 'CR508';
+     public readonly ENREGISTRER_RAPPORT_MISSION: string = 'CR509';
+     public readonly PLAN_MISSION: string = 'CR510';
+     public readonly ACTUALISER_PAM: string = 'CR511';
+     public readonly APPROUVER_MISSION: string = 'CR512';
+     public readonly INVALIDER_MISSION: string = 'CR513';
+     public readonly REJETER_MISSION: string = 'CR514';
+     public readonly RETIRER_MISSION: string = 'CR515';
+     public readonly ENVOYER_MISSION: string = 'CR516';
+
+     // Graphique
+     public readonly DOSSIERS_TRAITES_ANNEE: string = 'CR651';
+     public readonly DOSSIERS_TRAITES_TYPE: string = 'CR652';
+     public readonly DOSSIERS_TRAITES_CS: string = 'CR653';
+     public readonly DOSSIERS_TRAITES_CPMP: string = 'CR654';
+     public readonly ACCES_GRAPHIQUES: string = 'CR655';
+     public readonly ONGLET_CHRONOLOGIE_ACTIVITE: string = 'CR601';
+     public readonly ONGLET_PASSATION_ACTIVITE: string = 'CR602';
+     public readonly ONGLET_NUMEROTATION_ACTIVITE: string = 'CR603';
+     public readonly ONGLET_SUIVI_EXCEUTION_ACTIVITE: string = 'CR604';
+}

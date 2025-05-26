@@ -1,0 +1,77 @@
+/* Stepper Card Styling */
+.card {
+    border-radius: 12px;
+    border: none;
+    background: #ffffff;
+    margin-bottom: 20px;
+}
+
+/* Wizard Header */
+.wizard-header {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+}
+
+/* Progress Line */
+.wizard-header::before {
+    content: "";
+    position: absolute;
+    top: 20px;
+    left: 10%;
+    width: 80%;
+    height: 4px;
+    background: #ddd;
+    z-index: 0;
+}
+
+/* Individual Steps */
+.wizard-step {
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    flex: 1;
+    cursor: pointer;
+}
+
+/* Step Circle */
+.step-circle {
+    width: 40px;
+    height: 40px;
+    background: #ccc;
+    color: #fff;
+    font-weight: bold;
+    font-size: 18px;
+    border-radius: 50%;
+    line-height: 40px;
+    margin: auto;
+    transition: all 0.3s ease;
+}
+
+/* Step Label */
+.step-label {
+    display: block;
+    font-size: 14px;
+    margin-top: 5px;
+    font-weight: bold ;
+    color: #777;
+}
+
+/* Active Step Styling */
+.wizard-step.active .step-circle {
+    background: rgb(70, 159, 84);
+}
+
+.wizard-step.active .step-label {
+    color: rgb(70, 159, 84);
+}
+
+/* Progress Line for Completed Steps */
+.wizard-step.active ~ .wizard-step .step-circle {
+    background: #ccc;
+}
+cdk-step .cdk-step-header {
+    display: none !important;
+  }

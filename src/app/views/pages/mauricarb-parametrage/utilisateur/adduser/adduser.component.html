@@ -1,0 +1,68 @@
+<nav class="page-breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a routerLink=".">Parametrages</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Gestion des utilisateurs</li>
+    </ol>
+</nav>
+
+<div class="animated fadeIn">
+    <div class="row">
+        <div class="card col-md-12">
+            <div class="card-body">
+                <div class="form-group row">
+                    <label class="col-md-3 col-form-label" for="prenom">Prénom</label>
+                    <div class="col-md-4" >
+                        <input type="text" id="prenom" name="prenom"  class="form-control"
+                               mdInput [(ngModel)]="newUser.prenom" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-3 col-form-label" for="nom">Nom</label>
+                    <div class="col-md-4" >
+                        <input type="text" id="nom" name="nom"  class="form-control"
+                               mdInput [(ngModel)]="newUser.nom" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-3 col-form-label" for="nom">Nom d'utilisateur</label>
+                    <div class="col-md-4" >
+                        <input type="text" id="username" name="username" class="form-control"
+                               mdInput [(ngModel)]="newUser.login" [readonly]="modeAjout" />
+                    </div>
+                </div>
+                <div class="form-group row" >
+                    <label class="col-md-3 col-form-label" for="nom">Mot de passe</label>
+                    <div class="col-md-4" >
+                        <input type="password" id="password" name="password"  class="form-control"
+                               mdInput [(ngModel)]="newUser.password" [readonly]="modeAjout" />
+                    </div>
+                </div>
+                <div class="form-group row" *ngIf="!modeAjout">
+                    <label class="col-md-3 col-form-label" for="nom">Confirmer le mot de passe</label>
+                    <div class="col-md-4" >
+                        <input type="password" id="confirmer" name="confirmer"  class="form-control"
+                               mdInput [(ngModel)]="newUser.confirmer" [readonly]="modeAjout" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-3 col-form-label" for="nom">Profil</label>
+                    <div class="col-md-4" >
+                        <select class="form-control" name="groupe" id="groupe" [(ngModel)]="newUser.profil.code" >
+                            <option>--Groupe--</option>
+                            <option *ngFor = "let gro of profils" value="{{gro.code}}">{{gro.libelle}}</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row" align="center">
+                    <!--<a  class="badge badge-primary" *ngIf="modeAjout" (click)="updateUser(); modal.close('by: save a')">-->
+                        <!--<i class="feather icon-save"></i> Enregistrer</a>-->
+                    <a  class="badge badge-primary"  (click)="saveUser();">
+                        <i class="feather icon-save"></i> Enregistrer</a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

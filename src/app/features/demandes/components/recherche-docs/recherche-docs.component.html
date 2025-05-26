@@ -1,0 +1,116 @@
+<p>recherche-docs works!</p>
+<!-- filter-table.component.html -->
+<div class="container mt-4">
+  <div class="card">
+    <div class="card-header bg-primary text-white">
+      <h2 class="mb-0">Product Inventory</h2>
+    </div>
+
+    <div class="card-body">
+      <!-- Table -->
+      <div class="table-responsive mb-4">
+        <table class="table table-striped table-hover table-bordered">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col">Name</th>
+              <th scope="col">Category</th>
+              <th scope="col">Price</th>
+              <th scope="col">Stock</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let item of filteredData"
+              [class.table-warning]="item.stock <= 20 && item.stock > 0"
+              [class.table-danger]="item.stock === 0"
+            >
+              <th scope="row">{{ item.id }}</th>
+              <td>{{ item.name }}</td>
+              <td>{{ item.category }}</td>
+              <td>{{ item.price | currency }}</td>
+              <td>{{ item.stock }}</td>
+            </tr>
+            <tr *ngIf="filteredData.length === 0">
+              <td colspan="5" class="text-center text-muted">
+                No products match the current filters
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Filters -->
+      <div class="row mb-4">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="nameFilter" class="form-label">Product Name</label>
+            <input
+              type="text"
+              class="form-control"
+              id="nameFilter"
+              [(ngModel)]="nameFilter"
+              (ngModelChange)="applyFilters()"
+              placeholder="Filter by name..."
+            />
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="categoryFilter" class="form-label">Category</label>
+            <select
+              class="form-select"
+              id="categoryFilter"
+              [(ngModel)]="categoryFilter"
+              (ngModelChange)="applyFilters()"
+            >
+              <option value="">All Categories</option>
+              <option *ngFor="let category of categories" [value]="category">
+                {{ category }}
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="stockFilter" class="form-label">Stock Status</label>
+            <select
+              class="form-select"
+              id="stockFilter"
+              [(ngModel)]="stockFilter"
+              (ngModelChange)="applyFilters()"
+            >
+              <option value="">All Stock Statuses</option>
+              <option *ngFor="let status of stockStatuses" [value]="status">
+                {{ status }}
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Buttons -->
+      <div class="d-flex justify-content-between">
+        <div>
+          <button
+            class="btn btn-outline-secondary me-2"
+            (click)="resetFilters()"
+          >
+            <i class="bi bi-arrow-counterclockwise"></i> Reset Filters
+          </button>
+        </div>
+        <div>
+          <button class="btn btn-success" (click)="exportData()">
+            <i class="bi bi-download"></i> Export Data
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-footer text-muted">
+      Showing {{ filteredData.length }} of {{ tableData.length }} products
+    </div>
+  </div>
+</div>

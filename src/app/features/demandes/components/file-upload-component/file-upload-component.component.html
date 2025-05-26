@@ -1,0 +1,50 @@
+<!-- file-upload.component.html -->
+<div class="file-upload-container">
+  <label class="form-label">{{ label }}</label>
+
+  <div *ngIf="!control.value" class="upload-area" (click)="fileInput.click()">
+    <i class="fas fa-cloud-upload-alt fa-3x"></i>
+    <p>Drag & drop files here or click to browse</p>
+    <input
+      #fileInput
+      type="file"
+      [accept]="accept"
+      (change)="onFileSelected($event)"
+      style="display: none"
+    />
+  </div>
+
+  <div *ngIf="control.value" class="file-preview">
+    <div *ngIf="previewUrl" class="image-preview">
+      <img [src]="previewUrl" alt="Preview" />
+    </div>
+
+    <div *ngIf="!previewUrl" class="file-info">
+      <i class="fas fa-file-alt fa-3x"></i>
+    </div>
+
+    <div class="file-details">
+      <p>
+        <strong>{{ fileName }}</strong>
+      </p>
+      <p>{{ fileSize }}</p>
+    </div>
+
+    <div class="file-actions">
+      <button
+        type="button"
+        class="btn btn-sm btn-outline-secondary"
+        (click)="fileInput.click()"
+      >
+        <i class="fas fa-sync-alt"></i> Replace
+      </button>
+      <button
+        type="button"
+        class="btn btn-sm btn-outline-danger"
+        (click)="removeFile()"
+      >
+        <i class="fas fa-trash-alt"></i> Remove
+      </button>
+    </div>
+  </div>
+</div>

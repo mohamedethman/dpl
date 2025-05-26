@@ -1,0 +1,42 @@
+<nav class="page-breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a routerLink=".">Parametrages</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Listes référentielles</li>
+  </ol>
+</nav>
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-5 col-md-2">
+            <ul ngbNav #verticalNav="ngbNav" class="nav-tabs nav-tabs-vertical">
+
+              <li [ngbNavItem]="1" >
+                <a ngbNavLink>Entités de Santé</a>
+                <ng-template ngbNavContent>
+                  <app-entite-sante></app-entite-sante>
+                </ng-template>
+              </li>
+              <li [ngbNavItem]="2" >
+                <a ngbNavLink>Services Médicaux</a>
+                <ng-template ngbNavContent>
+                  <app-service-medical></app-service-medical>
+                </ng-template>
+              </li>
+              <li [ngbNavItem]="3" >
+                <a ngbNavLink>Appareils mobiles</a>
+                <ng-template ngbNavContent>
+                  <app-appareils></app-appareils>
+                </ng-template>
+              </li>
+            </ul>
+          </div>
+          <div class="col-7 col-md-10">
+            <div [ngbNavOutlet]="verticalNav" class="tab-content-vertical border p-3"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

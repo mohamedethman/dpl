@@ -1,0 +1,379 @@
+<!-- Medicament Form Section -->
+
+<!-- Wizard Section -->
+<div>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+        <div class="rounded-panel">
+          <h3 class="page-title">ENREGISTREMENT DES MEDICAMENTS</h3>
+        </div>
+      </div>
+
+      <div class="col-12 d-flex justify-content-end">
+        <div class="mt-3">
+          <button class="btn btn-success mr-2" (click)="CompleterPlusTard()">
+            Compléter plus tard
+          </button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="col-12">
+          <div class="card shadow-lg p-1">
+            <div class="card-body">
+              <div
+                class="wizard-header d-flex flex-wrap justify-content-center"
+              >
+                <div
+                  class="wizard-step"
+                  *ngFor="let step of steps; let i = index"
+                  [class.active]="selectedIndex === i"
+                  (click)="selectedIndex = i"
+                >
+                  <div class="step-circle">{{ i + 1 }}</div>
+                  <span class="step-label">{{ step.libelle }}</span>
+                </div>
+                <div
+                  class="wizard-step"
+                  [class.active]="selectedIndex === steps.length"
+                  (click)="selectedIndex = steps.length"
+                >
+                  <div class="step-circle">{{ steps.length + 1 }}</div>
+                  <span class="step-label">Récapitulatif</span>
+                </div>
+              </div>
+
+              <div class="step-content">
+                <form
+                  *ngIf="selectedIndex < steps.length"
+                  [formGroup]="formGroups[selectedIndex]"
+                  (ngSubmit)="onSubmit()"
+                >
+                  <div class="row">
+                    <div
+                      *ngFor="let element of steps[selectedIndex].elements"
+                      class="col-md-6 mb-3"
+                    >
+                      <div *ngIf="element.typeElement === 'TEXTAREA'">
+                        <label>{{ element.nomElement }}</label>
+                        <textarea
+                          formControlName="{{ element.nomElement }}"
+                          class="form-control"
+                          rows="2"
+                        ></textarea>
+                      </div>
+                      <div *ngIf="element.typeElement === 'TEXTE'">
+                        <label>{{ element.nomElement }}</label>
+                        <input
+                          formControlName="{{ element.nomElement }}"
+                          class="form-control"
+                          type="text"
+                        />
+                      </div>
+                      <div *ngIf="element.typeElement === 'FICHIER'">
+                        <label>{{ element.nomElement }}</label>
+                        <input
+                          formControlName="{{ element.nomElement }}"
+                          (change)="onFileSelected($event, element)"
+                          class="form-control"
+                          type="file"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </form>
+
+                <div
+                  class="container-fluid"
+                  *ngIf="selectedIndex === steps.length"
+                >
+                  <h2>Récapitulatif des Informations</h2>
+
+                  <!-- Display recap data if available -->
+
+                  <div
+                    *ngIf="
+                      !loading &&
+                      recapDossier &&
+                      dossierModuleElements.length > 0
+                    "
+                  >
+                    <h2>Détails du Dossier (ID: {{ dossierId }})</h2>
+
+                    <h3>Informations sur le médicament et le laboratoire</h3>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="card mb-3">
+                          <div class="card-header">
+                            <i class="fas fa-capsules"></i> Médicament
+                          </div>
+                          <div class="card-body">
+                            <div class="medicament-info">
+                              <p>
+                                <strong>Nom du médicament:</strong>
+                                {{
+                                  dossierModuleElements[0].dossier.medicament
+                                    .nomMedicament
+                                }}
+                              </p>
+                              <p>
+                                <strong>Code ATC:</strong>
+                                <ng-container
+                                  *ngIf="
+                                    dossierModuleElements[0].dossier.medicament
+                                      .codeATC;
+                                    else autreAtc
+                                  "
+                                >
+                                  {{
+                                    dossierModuleElements[0].dossier.medicament
+                                      .codeATC.codeATC
+                                  }}
+                                  -
+                                  {{
+                                    dossierModuleElements[0].dossier.medicament
+                                      .codeATC.description
+                                  }}
+                                </ng-container>
+                                <ng-template #autreAtc>
+                                  {{
+                                    dossierModuleElements[0].dossier.medicament
+                                      .autreAtc
+                                  }}
+                                </ng-template>
+                              </p>
+                              <p>
+                                <strong>DCI (Nom de la substance):</strong>
+                                <ng-container
+                                  *ngIf="
+                                    dossierModuleElements[0].dossier.medicament
+                                      .dci;
+                                    else autreDci
+                                  "
+                                >
+                                  {{
+                                    dossierModuleElements[0].dossier.medicament
+                                      .dci.nomSubstance
+                                  }}
+                                </ng-container>
+                                <ng-template #autreDci>
+                                  {{
+                                    dossierModuleElements[0].dossier.medicament
+                                      .autreDci
+                                  }}
+                                </ng-template>
+                              </p>
+                              <p>
+                                <strong>Forme Pharmaceutique:</strong>
+                                {{
+                                  dossierModuleElements[0].dossier.medicament
+                                    .libFormePharmaceutique
+                                }}
+                              </p>
+                              <p>
+                                <strong>Dosage:</strong>
+                                {{
+                                  dossierModuleElements[0].dossier.medicament
+                                    .libDosage
+                                }}
+                              </p>
+                              <p>
+                                <strong>Voie d'administration:</strong>
+                                {{
+                                  dossierModuleElements[0].dossier.medicament
+                                    .libVoieAdministration
+                                }}
+                              </p>
+                              <p>
+                                <strong>Conditionnement:</strong>
+                                {{
+                                  dossierModuleElements[0].dossier.medicament
+                                    .libConditionnement
+                                }}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="card mb-3">
+                          <div class="card-header">
+                            <i class="fas fa-flask"></i> Laboratoire
+                          </div>
+                          <div class="card-body">
+                            <div class="laboratoire-info">
+                              <p>
+                                <strong>Nom:</strong>
+                                {{
+                                  dossierModuleElements[0].dossier.medicament
+                                    .laboratoire.nom
+                                }}
+                              </p>
+                              <p>
+                                <strong>Type:</strong>
+                                {{
+                                  dossierModuleElements[0].dossier.medicament
+                                    .laboratoire.type
+                                }}
+                              </p>
+                              <p>
+                                <strong>Adresse:</strong>
+                                {{
+                                  dossierModuleElements[0].dossier.medicament
+                                    .laboratoire.adresse
+                                }}
+                              </p>
+                              <p>
+                                <strong>Contact Principal::</strong>
+                                {{
+                                  dossierModuleElements[0].dossier.medicament
+                                    .laboratoire.contactPrincipal
+                                }}
+                              </p>
+                              <p>
+                                <strong>Pays:</strong>
+                                {{
+                                  dossierModuleElements[0].dossier.medicament
+                                    .laboratoire.pays
+                                }}
+                              </p>
+                              <p>
+                                <strong>Téléphone:</strong>
+                                {{
+                                  dossierModuleElements[0].dossier.medicament
+                                    .laboratoire.telephone
+                                }}
+                              </p>
+                              <p>
+                                <strong>Email:</strong>
+                                {{
+                                  dossierModuleElements[0].dossier.medicament
+                                    .laboratoire.email
+                                }}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <h3>Modules et Éléments</h3>
+                    <div class="row">
+                      <div
+                        class="col-md-6"
+                        *ngFor="
+                          let element of getUniqueModules();
+                          let i = index
+                        "
+                      >
+                        <div class="card mb-3">
+                          <div class="card-header">
+                            <i
+                              class="fas"
+                              [ngClass]="{
+                                'fa-1': element.moduleElement.module.id === 1,
+                                'fa-2': element.moduleElement.module.id === 2,
+                                'fa-3': element.moduleElement.module.id === 3,
+                                'fa-4': element.moduleElement.module.id === 4,
+                                'fa-5': element.moduleElement.module.id === 5
+                              }"
+                            ></i>
+                            {{ element.moduleElement.module.libelle }}
+                          </div>
+                          <div class="card-body">
+                            <ul class="list-group list-group-flush">
+                              <li
+                                class="list-group-item"
+                                *ngFor="
+                                  let item of filterElementsByModule(
+                                    element.moduleElement.module.libelle
+                                  )
+                                "
+                              >
+                                <strong
+                                  >{{ item.moduleElement.nomElement }}:</strong
+                                >
+                                {{ item.contenuTexte }}
+                                <button
+                                  *ngIf="
+                                    item.moduleElement.typeElement === 'FICHIER'
+                                  "
+                                  (click)="
+                                    downloadFile(
+                                      item.dossier.id,
+                                      item.moduleElement.id,
+                                      item.moduleElement.nomElement
+                                    )
+                                  "
+                                  class="ml-2 btn btn-sm btn-outline-secondary"
+                                >
+                                  <i class="fas fa-download"></i>
+                                </button>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- <div class="mt-3" *ngIf="mode == 'list'">
+          <button class="btn btn-success mr-2" (click)="recevoirDossier()">Accepter</button>
+          <button class="btn btn-danger" (click)="rejeterDossier()">Rejeter</button>
+      </div> -->
+                  </div>
+
+                  <div
+                    *ngIf="
+                      !loading &&
+                      (!recapDossier || dossierModuleElements.length === 0)
+                    "
+                    class="text-center"
+                  >
+                    <p>Aucun détail de dossier trouvé.</p>
+                  </div>
+
+                  <!-- Display loading or error messages -->
+                  <div *ngIf="loading" class="text-center">
+                    <p>Chargement des données en cours...</p>
+                  </div>
+
+                  <div *ngIf="!recapDossier && !loading" class="text-center">
+                    <p>Aucun détail de dossier trouvé.</p>
+                  </div>
+                </div>
+              </div>
+              <div class="stepper-navigation mt-4 text-end">
+                <button
+                  class="btn btn-secondary me-4"
+                  (click)="goBack()"
+                  [disabled]="selectedIndex === 0"
+                >
+                  Précédent
+                </button>
+
+                <!-- Show "Suivant" button on all steps except the last one -->
+                <button
+                  *ngIf="selectedIndex < steps.length"
+                  class="btn btn-success"
+                  (click)="goForward()"
+                  [disabled]="!formGroups[selectedIndex].valid"
+                >
+                  Suivant
+                </button>
+
+                <!-- Show "Soumettre" button only on the recap step -->
+                <button
+                  *ngIf="selectedIndex === steps.length"
+                  class="btn btn-success"
+                  (click)="submitDossier()"
+                >
+                  Soumettre
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

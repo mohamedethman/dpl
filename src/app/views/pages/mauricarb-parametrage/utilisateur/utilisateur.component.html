@@ -1,0 +1,679 @@
+<div class="container mt-4">
+  <!-- Header Card -->
+  <div class="card shadow-sm border-0 mb-4">
+    <div class="card-header bg-dpl text-white">
+      <h3 class="mb-0">
+        <i class="fas fa-users me-2"></i>List des Commissions
+      </h3>
+    </div>
+  </div>
+
+  <div class="animated fadeIn">
+    <div class="row">
+      <div class="card col-md-12">
+        <div class="card-body">
+          <form action="" method="post" class="form-horizontal">
+            <div class="form-group row" style="margin-bottom: 10px">
+              <div class="col-md-8">
+                <div class="form-group row">
+                  <div class="col-md-4">
+                    <input
+                      type="text"
+                      name="login"
+                      class="form-control"
+                      placeholder="Login"
+                      mdInput
+                      [(ngModel)]="beanRecherche.username"
+                    />
+                  </div>
+                  <div class="col-md-4">
+                    <input
+                      type="text"
+                      name="nom"
+                      class="form-control"
+                      placeholder="Nom"
+                      mdInput
+                      [(ngModel)]="beanRecherche.nom"
+                    />
+                  </div>
+                  <div class="col-md-4">
+                    <input
+                      type="text"
+                      name="prenom"
+                      class="form-control"
+                      placeholder="Prénom"
+                      mdInput
+                      [(ngModel)]="beanRecherche.prenom"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-2" style="text-align: left">
+                <div>
+                  <a class="btn btn-success" (click)="rechercherUtilisateur()">
+                    <i class="fa fa-search"></i> Recherche</a
+                  >
+                </div>
+              </div>
+              <div class="col-md-2" style="text-align: right">
+                <div>
+                  <a
+                    class="btn btn-success"
+                    data-toggle="modal"
+                    (click)="
+                      openModalEditUser('scrollableModal', newUser, false)
+                    "
+                  >
+                    <i class="fa fa-user-plus"></i> Nouvel
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <div class="card-body p-0">
+              <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                  <thead class="table-primary" class="cursor-pointer">
+                    <tr>
+                      <th>Login</th>
+                      <th>Nom</th>
+                      <th>Prénom</th>
+                      <th>Profil</th>
+                      <th>Etat</th>
+                      <th width="15%">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr
+                      *ngFor="
+                        let idMembre of listUtilisateurs
+                          | slice : (page - 1) * pageSize : page * pageSize
+                      "
+                    >
+                      <td>{{ idMembre.login }}</td>
+                      <td>{{ idMembre.nom }}</td>
+                      <td>{{ idMembre.prenom }}</td>
+                      <td>{{ idMembre?.profil.libelle }}</td>
+                      <td>
+                        <span *ngIf="idMembre.statut">
+                          <i class="feather icon-check"></i> Actif</span
+                        >
+                        <span *ngIf="!idMembre.statut" class="btn btn-info">
+                          <i class="feather icon-x"></i> Désactif</span
+                        >
+                      </td>
+                      <td align="center">
+                        <div class="btn-group">
+                          <div>
+                            <a
+                              class="btn btn-outline-warning"
+                              style="margin-left: 5px"
+                              title="Changer mot de passe"
+                              (click)="
+                                openModalEditPwd('scrollableModalPd', idMembre)
+                              "
+                            >
+                              <i class="fa fa-refresh"></i>
+                            </a>
+                          </div>
+                          <div>
+                            <a
+                              class="btn btn-outline-primary"
+                              style="margin-left: 5px"
+                              title="Modifier"
+                              (click)="
+                                openModalEditUser(
+                                  'scrollableModal',
+                                  idMembre,
+                                  true
+                                )
+                              "
+                            >
+                              <i class="fa fa-edit"></i>
+                            </a>
+                          </div>
+                          <!-- <div >
+                                       <a class="btn btn-secondary" style="margin-left: 5px" title="Supprimer"
+                                          (click)="openModalDeleteUser(scrollableModalDelete, idMembre)">
+                                         <i class="feather icon-trash-2"></i></a>
+                                     </div>-->
+                          <div *ngIf="!idMembre.statut">
+                            <a
+                              class="btn btn-outline-success"
+                              style="margin-left: 5px"
+                              title="Activer"
+                              (click)="
+                                openModalDeleteUser(
+                                  scrollableModalActive,
+                                  idMembre
+                                )
+                              "
+                            >
+                              <i class="fa fa-check-square"></i
+                            ></a>
+                          </div>
+                          <div *ngIf="idMembre.statut">
+                            <a
+                              class="btn btn-outline-danger"
+                              style="margin-left: 5px"
+                              title="Désactiver"
+                              (click)="
+                                openModalDeleteUser(
+                                  scrollableModalDesactive,
+                                  idMembre
+                                )
+                              "
+                            >
+                              <i class="fa fa-xing-square"></i
+                            ></a>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <!-- pager -->
+            <ngb-pagination
+              *ngIf="listUtilisateurs != null && listUtilisateurs.length > 0"
+              class="d-flex justify-content-end"
+              [collectionSize]="listUtilisateurs.length"
+              [(page)]="page"
+              [pageSize]="pageSize"
+              [maxSize]="5"
+              [rotate]="true"
+              [ellipses]="false"
+              [boundaryLinks]="true"
+            >
+            </ngb-pagination>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #scrollableModal let-modal>
+    <div class="modal-header">
+      <h5 class="modal-title" id="exampleModalLabel">Editer un utilisateur</h5>
+      <a
+        class="close"
+        (click)="modal.close('by: close icon')"
+        aria-label="Close"
+      >
+        <span aria-hidden="true">&times;</span>
+      </a>
+    </div>
+    <div class="modal-body">
+      <div class="example" *ngIf="showSpin">
+        <div class="d-flex justify-content-center">
+          <div class="spinner-border" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label class="col-md-3 col-form-label" for="prenom">Prénom</label>
+        <div class="col-md-4">
+          <input
+            type="text"
+            id="prenom"
+            name="prenom"
+            class="form-control"
+            mdInput
+            [(ngModel)]="newUser.prenom"
+          />
+        </div>
+      </div>
+      <div class="form-group row">
+        <label class="col-md-3 col-form-label" for="nom">Nom</label>
+        <div class="col-md-4">
+          <input
+            type="text"
+            id="nom"
+            name="nom"
+            class="form-control"
+            mdInput
+            [(ngModel)]="newUser.nom"
+          />
+        </div>
+      </div>
+      <div class="form-group row">
+        <label class="col-md-3 col-form-label" for="nom"
+          >Nom d'utilisateur</label
+        >
+        <div class="col-md-4">
+          <input
+            type="text"
+            id="username"
+            name="username"
+            class="form-control"
+            mdInput
+            [(ngModel)]="newUser.login"
+            [readonly]="modeAjout"
+          />
+        </div>
+      </div>
+      <div class="form-group row">
+        <label class="col-md-3 col-form-label">Téléphone:</label>
+        <div class="col-md-4">
+          <input
+            type="text"
+            id="password"
+            name="password"
+            class="form-control"
+            mdInput
+            [(ngModel)]="newUser.telephone"
+          />
+        </div>
+      </div>
+
+      <div class="form-group row" style="margin-bottom: 100px">
+        <label class="col-md-3 col-form-label" for="nom">Profil</label>
+        <div class="col-md-4"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <a class="btn btn-secondary" (click)="modal.close('by: close a')">
+        <i class="feather icon-x"></i> Annuler</a
+      >
+      <a
+        class="btn btn-primary"
+        *ngIf="modeAjout"
+        (click)="updateUser(); modal.close('by: save a')"
+      >
+        <i class="feather icon-save"></i> Modifier</a
+      >
+      <a
+        class="btn btn-primary"
+        *ngIf="!modeAjout"
+        (click)="saveUser(); modal.close('by: save a')"
+      >
+        <i class="feather icon-save"></i> Enregistrer</a
+      >
+    </div>
+  </ng-template>
+  <!-- Modal -->
+  <div id="scrollableModal" class="modal modal-lg">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header form-header text-white position-relative">
+          <h5 class="modal-title">
+            <span *ngIf="modeAjout; else addMode">Modifier un utilisateur</span>
+            <ng-template #addMode>+ Nouvel utilisateur</ng-template>
+          </h5>
+        </div>
+
+        <div class="modal-body">
+          <!--<form [formGroup]="dciForm">
+                </form>-->
+          <div class="example" *ngIf="showSpin">
+            <div class="d-flex justify-content-center">
+              <div class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
+              </div>
+            </div>
+          </div>
+          <div class="form-group row" style="padding: 3px">
+            <label class="col-md-4 col-form-label" for="prenom">Prénom</label>
+            <div class="col-md-6">
+              <input
+                type="text"
+                id="prenom"
+                name="prenom"
+                class="form-control"
+                mdInput
+                [(ngModel)]="newUser.prenom"
+              />
+            </div>
+          </div>
+          <div class="form-group row" style="padding: 3px">
+            <label class="col-md-4 col-form-label" for="nom">Nom</label>
+            <div class="col-md-6">
+              <input
+                type="text"
+                id="nom"
+                name="nom"
+                class="form-control"
+                mdInput
+                [(ngModel)]="newUser.nom"
+              />
+            </div>
+          </div>
+          <div class="form-group row" style="padding: 3px">
+            <label class="col-md-4 col-form-label" for="nom"
+              >Nom d'utilisateur</label
+            >
+            <div class="col-md-6">
+              <input
+                type="text"
+                id="username"
+                name="username"
+                class="form-control"
+                mdInput
+                [(ngModel)]="newUser.login"
+                [readonly]="modeAjout"
+              />
+            </div>
+          </div>
+          <div class="form-group row" style="padding: 3px">
+            <label class="col-md-4 col-form-label">Téléphone:</label>
+            <div class="col-md-6">
+              <input
+                type="text"
+                id="password"
+                name="password"
+                class="form-control"
+                mdInput
+                [(ngModel)]="newUser.telephone"
+              />
+            </div>
+          </div>
+          <div class="form-group row" style="padding: 3px" *ngIf="!modeAjout">
+            <label class="col-md-4 col-form-label">Mot de passe</label>
+            <div class="col-md-6">
+              <input
+                #password="ngModel"
+                [(ngModel)]="newUser.password"
+                class="form-control"
+                id="password"
+                mdInput
+                name="password"
+                pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
+                required
+                type="password"
+              />
+              <div
+                *ngIf="password.invalid && (password.dirty || password.touched)"
+                class="text-danger"
+              >
+                <small *ngIf="password.errors?.pattern"
+                  >Mot de passe non valide. Doit contenir une majuscule, une
+                  minuscule, un chiffre, un caractère spécial, et faire au moins
+                  8 caractères.</small
+                >
+                <small *ngIf="password.errors?.required"
+                  >Ce champ est requis.</small
+                >
+              </div>
+            </div>
+          </div>
+          <div class="form-group row" style="padding: 3px" *ngIf="!modeAjout">
+            <label class="col-md-4 col-form-label"
+              >Confirmer le mot de passe?</label
+            >
+            <div class="col-md-6">
+              <input
+                #confirmer="ngModel"
+                [(ngModel)]="newUser.confirmer"
+                class="form-control"
+                id="confirmer"
+                mdInput
+                name="confirmer"
+                pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
+                required
+                type="password"
+              />
+              <div
+                *ngIf="
+                  confirmer.invalid && (confirmer.dirty || confirmer.touched)
+                "
+                class="text-danger"
+              >
+                <small *ngIf="confirmer.errors?.pattern"
+                  >Mot de passe non valide. Doit contenir une majuscule, une
+                  minuscule, un chiffre, un caractère spécial, et faire au moins
+                  8 caractères.</small
+                >
+                <small *ngIf="confirmer.errors?.required"
+                  >Ce champ est requis.</small
+                >
+              </div>
+            </div>
+          </div>
+          <div
+            class="form-group row"
+            style="margin-bottom: 100px; padding: 3px"
+          >
+            <label class="col-md-4 col-form-label" for="nom">Profil</label>
+            <div class="col-md-6">
+              <select [(ngModel)]="newUser.profil.id" class="form-control">
+                <option [value]="null" disabled selected>
+                  -- Sélectionner un profil --
+                </option>
+                <option *ngFor="let profil of profils" [value]="profil.id">
+                  {{ profil.libelle }}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            class="btn btn-secondary"
+            (click)="closeModal('scrollableModal')"
+          >
+            Annuler
+          </button>
+          <button
+            class="btn btn-success"
+            *ngIf="modeAjout"
+            (click)="updateUser()"
+          >
+            Modifier
+          </button>
+          <button
+            class="btn btn-success"
+            *ngIf="!modeAjout"
+            (click)="saveUser()"
+          >
+            Enregistrer
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="scrollableModalPd" class="modal modal-lg">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header form-header text-white position-relative">
+          <h5 class="modal-title">
+            <span
+              >Changer le mot de passe de {{ newUser.prenom }}
+              {{ newUser.nom }} ({{ newUser.login }})</span
+            >
+          </h5>
+        </div>
+
+        <div class="modal-body">
+          <!--<form [formGroup]="dciForm">
+                </form>-->
+          <div class="example" *ngIf="showSpin">
+            <div class="d-flex justify-content-center">
+              <div class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group row" style="padding: 3px" *ngIf="!modeAjout">
+            <label class="col-md-4 col-form-label">Mot de passe</label>
+            <div class="col-md-6">
+              <input
+                #password="ngModel"
+                [(ngModel)]="newUser.password"
+                class="form-control"
+                id="password"
+                mdInput
+                name="password"
+                pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
+                required
+                type="password"
+              />
+              <div
+                *ngIf="password.invalid && (password.dirty || password.touched)"
+                class="text-danger"
+              >
+                <small *ngIf="password.errors?.pattern"
+                  >Mot de passe non valide. Doit contenir une majuscule, une
+                  minuscule, un chiffre, un caractère spécial, et faire au moins
+                  8 caractères.</small
+                >
+                <small *ngIf="password.errors?.required"
+                  >Ce champ est requis.</small
+                >
+              </div>
+            </div>
+          </div>
+          <div class="form-group row" style="padding: 3px" *ngIf="!modeAjout">
+            <label class="col-md-4 col-form-label"
+              >Confirmer le mot de passe?</label
+            >
+            <div class="col-md-6">
+              <input
+                #confirmer="ngModel"
+                [(ngModel)]="newUser.confirmer"
+                class="form-control"
+                id="confirmer"
+                mdInput
+                name="confirmer"
+                pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
+                required
+                type="password"
+              />
+              <div
+                *ngIf="
+                  confirmer.invalid && (confirmer.dirty || confirmer.touched)
+                "
+                class="text-danger"
+              >
+                <small *ngIf="confirmer.errors?.pattern"
+                  >Mot de passe non valide. Doit contenir une majuscule, une
+                  minuscule, un chiffre, un caractère spécial, et faire au moins
+                  8 caractères.</small
+                >
+                <small *ngIf="confirmer.errors?.required"
+                  >Ce champ est requis.</small
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            class="btn btn-secondary"
+            (click)="closeModal('scrollableModalPd')"
+          >
+            Annuler
+          </button>
+          <button
+            class="btn btn-success"
+            *ngIf="!modeAjout"
+            (click)="changePassword()"
+          >
+            Enregistrer
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <ng-template #scrollableModalDelete let-modal>
+    <div class="modal-header">
+      <h5 class="modal-title" id="scrollableModalDelete">
+        Supprimer un utilisateur
+      </h5>
+      <a
+        class="close"
+        (click)="modal.close('by: close icon')"
+        aria-label="Close"
+      >
+        <span aria-hidden="true">&times;</span>
+      </a>
+    </div>
+    <div class="modal-body">
+      <span>
+        Etes vous sûr de bien vouloir supprimer l'utilisateur
+        <b>{{ newUser.prenom }} {{ newUser.nom }} ({{ newUser.login }})</b
+        >?</span
+      >
+    </div>
+    <div class="modal-footer">
+      <a class="btn btn-secondary" (click)="modal.close('by: close a')">
+        <i class="feather icon-x"></i> Non</a
+      >
+      <a
+        class="btn btn-primary"
+        (click)="deleteUser(); modal.close('by: save a')"
+      >
+        <i class="feather icon-trash-2"></i> Oui</a
+      >
+    </div>
+  </ng-template>
+  <ng-template #scrollableModalActive let-modal>
+    <div class="modal-header">
+      <h5 class="modal-title" id="scrollableModalActive">
+        Activer un utilisateur
+      </h5>
+      <a
+        class="close"
+        (click)="modal.close('by: close icon')"
+        aria-label="Close"
+      >
+        <span aria-hidden="true">&times;</span>
+      </a>
+    </div>
+    <div class="modal-body">
+      <span>
+        Etes vous sûr de bien vouloir activer le compte de:
+        <b>{{ newUser.prenom }} {{ newUser.nom }} ({{ newUser.login }})</b
+        >?</span
+      >
+    </div>
+    <div class="modal-footer">
+      <a class="btn btn-secondary" (click)="modal.close('by: close a')">
+        <i class="feather icon-x"></i> Non</a
+      >
+      <a
+        class="btn btn-primary"
+        (click)="activerUser(); modal.close('by: save a')"
+      >
+        <i class="feather icon-trash-2"></i> Oui</a
+      >
+    </div>
+  </ng-template>
+  <ng-template #scrollableModalDesactive let-modal>
+    <div class="modal-header">
+      <h5 class="modal-title" id="scrollableModalDeactive">
+        Désctiver un utilisateur
+      </h5>
+      <a
+        class="close"
+        (click)="modal.close('by: close icon')"
+        aria-label="Close"
+      >
+        <span aria-hidden="true">&times;</span>
+      </a>
+    </div>
+    <div class="modal-body">
+      <span>
+        Etes vous sûr de bien vouloir désactiver le compte de:
+        <b>{{ newUser.prenom }} {{ newUser.nom }} ({{ newUser.login }})</b
+        >?</span
+      >
+    </div>
+    <div class="modal-footer">
+      <a class="btn btn-secondary" (click)="modal.close('by: close a')">
+        <i class="feather icon-x"></i> Non</a
+      >
+      <a
+        class="btn btn-primary"
+        (click)="desactiverUser(); modal.close('by: save a')"
+      >
+        <i class="feather icon-trash-2"></i> Oui</a
+      >
+    </div>
+  </ng-template>
+</div>

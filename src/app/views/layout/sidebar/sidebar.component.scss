@@ -1,0 +1,90 @@
+/* Sidebar styles */
+.sidebar {
+  background-color: #00a95c;
+  padding: 15px;
+  width: 250px;
+  flex: 0 0 250px; /* Prevent sidebar from shrinking */
+  position: sticky;
+  top: 0;
+  height: 100vh; /* Full viewport height */
+  overflow-y: auto; /* Add scroll if content is too long */
+}
+
+.app-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Main menu items */
+.sidebar .nav-link {
+  color: #ffffff !important;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 5px;
+  display: flex;
+  margin-top: 10px;
+  align-items: center;
+  white-space: nowrap; /* Prevent text wrapping */
+  transition: background-color 0.3s ease-in-out;
+}
+
+/* Hover effect */
+.sidebar .nav-link:hover {
+  background-color: #dfcfbe;
+}
+
+/* Active link */
+.sidebar .nav-link.active,
+.sidebar .nav-link.router-link-active {
+  background-color: #dfcfbe !important; /* Highlight active menu */
+
+  font-weight: bold;
+}
+
+/* Adjust icons and spacing */
+.sidebar .nav-item .nav-link i {
+  font-size: 12px;
+}
+
+/* Submenu container */
+.sidebar .nav .nav-item {
+  position: relative;
+}
+
+/* Submenu styles */
+.sidebar .nav .nav-item ul {
+  padding-left: 20px; /* Indent submenus */
+  border-left: 2px solid rgba(255, 255, 255, 0.5); /* Vertical line connecting submenu */
+  margin-left: 8px;
+}
+
+/* Submenu items */
+.sidebar .nav .nav-item ul .nav-link {
+  font-size: 10.7px;
+  padding-left: 10px;
+  position: relative;
+}
+
+/* Highlight active submenu */
+.sidebar .nav .nav-item ul .nav-link.active,
+.sidebar .nav .nav-item ul .nav-link.router-link-active {
+  background-color: #dfcfbe !important;
+  color: black !important;
+}
+
+/* Add small line connecting submenu items */
+.sidebar .nav .nav-item ul .nav-link::before {
+  content: "";
+  position: absolute;
+  left: -12px;
+  top: 50%;
+  width: 10px;
+  height: 2px;
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+/* Expanded Sidebar */
+.sidebar.expanded {
+  width: 250px;
+}

@@ -1,0 +1,108 @@
+<div class="row">
+    <div class="card col-md-12">
+        <!--<div class="card-header">Commissions de passations</div>-->
+        <div class="card-body">
+            <form action="" method="post" class="form-horizontal">
+                <div class="form-group row">
+                    <div class="col-md-12" style="text-align: right">
+                        <a   class="badge badge-primary" data-toggle="modal" (click)="openModalEditEntiteSante(scrollableModal, newEntiteSante, false)" >
+                            <i class="feather icon-plus"></i> Ajouter
+                        </a>
+                    </div>
+                </div>
+
+                <div class="form-group row" *ngIf="entites.length>0">
+                    <label class="col-md-1 col-form-label">Filtre :</label>
+                    <input [(ngModel)]="searchText" placeholder=" Libelle "
+                           class="form-control col-md-4" [ngModelOptions]="{standalone: true}">
+                </div>
+                <table width="100%" class="table-sm table-bordered" style="overflow:hidden;table-layout:fixed;"
+                       *ngIf="entites!=null && entites.length>0">
+                    <thead>
+                    <tr>
+                        <th width="60%">Libelle</th>
+                        <th width="20%">code</th>
+                        <!--<th width="15%">Abréviation</th>-->
+                        <th width="15%">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let entite of entites
+           | grdFilterPipe: {nom: searchText}
+          | slice: (page-1) * pageSize : page * pageSize">
+                        <td style="overflow: auto">{{entite.nom}}</td>
+                        <td style="overflow: auto">{{entite.code}}</td>
+                        <td align="center">
+                            <div class="btn-group">
+                                <a class="badge badge-primary" (click)="openModalEditEntiteSante(scrollableModal, entite, true)">
+                                    <i class="feather icon-edit"></i>
+                                </a>
+                                <span style="margin-left: 5px"></span>
+                                <a class="badge badge-secondary" (click)="openModalDeleteEntiteSante(scrollableModalDelete, entite)">
+                                    <i class="feather icon-trash-2"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <ngb-pagination *ngIf="entites!=null && entites.length>0" class="d-flex justify-content-end" [collectionSize]="entites.length" [(page)]="page"
+                                [pageSize]="pageSize" [maxSize]="5" [rotate]="true" [ellipses]="false" [boundaryLinks]="true">
+                </ngb-pagination>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<ng-template #scrollableModal let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Editer une entite</h5>
+        <a  class="close" (click)="modal.close('by: close icon')" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </a>
+    </div>
+    <div class="modal-body">
+        <div class="form-group row">
+            <label class="col-md-3 col-form-label" for="nom">Libelle</label>
+            <div class="col-md-6" >
+                <input type="text" id="nom" name="nom"  class="form-control"
+                       mdInput [(ngModel)]="newEntiteSante.nom" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-md-3 col-form-label" for="code">Code</label>
+            <div class="col-md-6" >
+                <input type="text" id="code" name="code"  class="form-control"
+                       mdInput [(ngModel)]="newEntiteSante.code" />
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a  class="badge badge-secondary" (click)="modal.close('by: close a')">
+            <i class="feather icon-x"></i> Annuler</a>
+        <a  class="badge badge-primary" (click)="saveEntiteSante(); modal.close('by: save a')">
+            <i class="feather icon-save"></i> Enregistrer</a>
+
+    </div>
+</ng-template>
+
+<!-- Modal -->
+<ng-template #scrollableModalDelete let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title" id="scrollableModalDelete">Supprimer une entite</h5>
+        <a  class="close" (click)="modal.close('by: close icon')" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </a>
+    </div>
+    <div class="modal-body">
+        <span> Etes vous sûr de bien vouloir supprimer la entite?</span>
+    </div>
+    <div class="modal-footer">
+        <a  class="badge badge-secondary" (click)="modal.close('by: close a')">
+            <i class="feather icon-x"></i> Non</a>
+        <a  class="badge badge-primary" (click)="deleteEntiteSante(); modal.close('by: save a')">
+            <i class="feather icon-trash-2"></i> Oui</a>
+
+    </div>
+</ng-template>

@@ -1,0 +1,29 @@
+quill-editor {
+  .ql-toolbar {
+    @extend .border;
+    .ql-formats {
+      button {
+        svg {
+          color: $text-muted;
+        }
+      }
+      .ql-picker-options {
+        @extend .border;
+        box-shadow: $card-box-shadow;
+      }
+    }
+  }
+  .ql-container {
+    @extend .border;
+    @extend .border-top-0;
+    margin-bottom: 30px;
+    .ql-editor {
+      min-height: 120px;
+    }
+    .ql-tooltip {
+      z-index: 999;
+      border-color: $border-color;
+      box-shadow: $card-box-shadow;
+    }
+  }
+}

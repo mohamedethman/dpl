@@ -1,0 +1,369 @@
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Spinner Styles */
+.spinner-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid #3498db;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.module {
+  border: 1px solid #ddd;
+  margin-bottom: 20px;
+  padding: 15px;
+  border-radius: 5px;
+}
+
+.module-title {
+  font-size: 1.2em;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #0056b3;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+input[type="text"],
+textarea {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box; /* Ensures padding doesn't affect width */
+}
+
+input[type="file"] {
+  margin-bottom: 10px;
+}
+
+.step {
+  margin-bottom: 15px;
+}
+
+button {
+  background-color: #0056b3;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #003366;
+}
+
+.navigation {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.navigation button {
+  margin: 0 5px;
+}
+#progress-bar-container {
+  width: 100%;
+  background-color: #f3f3f3;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+#progress-bar {
+  width: 20%; /* Starts at 0%, adjust based on module completed */
+  height: 20px;
+  background-color: #4caf50;
+  text-align: center;
+  line-height: 20px;
+  color: white;
+  border-radius: 5px;
+}
+
+.hidden {
+  display: none;
+}
+
+/* .header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 80px;
+    background-color: #f8f9fa;
+  }
+  
+  .logo-container {
+    text-align: center;
+    flex: 1;
+  }
+  
+  .logo {
+    width: 85px;
+    height: 85;
+    object-fit: cover;
+  }
+  
+  .app-name {
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: 10px;
+  } */
+
+.user-panel {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.user-image-container {
+  position: relative;
+}
+
+.user-image {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #ccc;
+}
+
+.user-status-circle {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 10px;
+  height: 10px;
+  background-color: green;
+  border-radius: 50%;
+  border: 2px solid white;
+}
+
+.logout-button {
+  margin-left: 15px;
+}
+
+.logout-button .btn {
+  padding: 5px 10px;
+  font-size: 14px;
+}
+
+.user-panel-options {
+  display: block; /* Ensures the panel is shown when isPanelVisible is true */
+  position: absolute;
+  top: 40px; /* Adjust the position */
+  left: 0;
+  background: white;
+  border: 1px solid #ddd;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  list-style: none;
+}
+
+.user-panel-options ul {
+  margin: 0;
+  padding: 0;
+}
+
+.user-panel-options li {
+  margin: 5px 0;
+}
+
+.user-panel-options li a {
+  text-decoration: none;
+  color: #333;
+}
+
+.user-panel-options li a:hover {
+  color: #007bff;
+}
+/* Styling the rounded panel containing the header */
+.rounded-panel {
+  display: flex;
+  align-items: center;
+  background-color: #f5f5f5;
+  border-radius: 15px;
+  padding: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+/* Vertical line before the header */
+.vertical-line {
+  height: 40px;
+  width: 4px;
+  background-color: brown;
+  margin-right: 15px;
+}
+
+/* Page title styles */
+.page-title {
+  font-size: 1.75rem;
+  color: brown;
+  text-align: left;
+  margin: 0; /* Remove default margin */
+  font-weight: 600;
+}
+
+td .d-flex {
+  gap: 10px; /* Manually force a gap */
+}
+/* Styling the rounded panel containing the header */
+.rounded-panel {
+  display: flex;
+  align-items: center;
+  background-color: #f5f5f5;
+  border-radius: 15px;
+  padding: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+.table {
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.bg-dpl {
+  background-color: #00a95c;
+}
+.table thead th {
+  background-color: #00a95c;
+  color: rgb(255, 255, 255) !important;
+}
+.btn {
+  margin-top: 20px;
+  margin-right: 10px; /* Corrected margin syntax */
+}
+
+.btn-add {
+  border-color: #00a95c;
+  text-align: right;
+  color: #00a95c;
+}
+
+.btn-edit {
+  border-color: #efc050;
+  text-align: right;
+  color: #efc050;
+}
+
+.btn-delete {
+  border-color: #d01c1f;
+  text-align: right;
+  color: #d01c1f;
+}
+/* Styling the rounded panel containing the header */
+.rounded-panel {
+  display: flex;
+  align-items: center;
+  background-color: #f5f5f5;
+  border-radius: 15px;
+  padding: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+/* Vertical line before the header */
+.vertical-line {
+  height: 40px;
+  width: 4px;
+  background-color: #d01c1f;
+  margin-right: 15px;
+}
+
+/* Page title styles */
+.page-title {
+  font-size: 20px;
+  color: #797979;
+  text-align: left;
+  margin: 0; /* Remove default margin */
+  font-weight: 600;
+}
+
+.pagination .page-item .page-link {
+  border-radius: 5% !important;
+  margin: 0 5px;
+  color: #00a95c;
+  border: none;
+  font-weight: bold;
+}
+
+.pagination .page-item.active .page-link {
+  background-color: #00a95c;
+  color: white;
+}
+
+.pagination .page-item .page-link:hover {
+  background-color: rgba(69, 184, 172, 0.2);
+}
+
+.page-link {
+  padding: 8px 12px;
+  border-radius: 50%;
+}
+
+/* Reduce table row height */
+.table tbody tr {
+  height: 30px; /* Adjust height */
+}
+
+.table tbody td {
+  padding: 6px 10px; /* Reduce padding */
+  font-size: 14px; /* Optional: Decrease font size */
+}
+
+/* Pagination positioning */
+.pagination-container {
+  display: flex;
+  justify-content: end; /* Align to right */
+  margin-top: 20px; /* Add space above pagination */
+}
+.table-responsive {
+  /* Use the bootstrap class */
+  overflow-x: auto; /* Enable horizontal scrolling on small screens */
+}
+
+.table {
+  width: 100%; /* Make the table take the full available width */
+  table-layout: fixed; /* Important for controlling column widths */
+}
+
+th,
+td {
+  word-wrap: break-word; /* Prevent long words from overflowing */
+  overflow: hidden; /* Hide any overflowing content */
+  text-overflow: ellipsis; /* Show an ellipsis (...) if the text is truncated */
+  white-space: nowrap; /* Prevent text from wrapping to the next line */
+}

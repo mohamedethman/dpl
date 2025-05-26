@@ -1,0 +1,16 @@
+<div class="row">
+  <ngb-alert class="col-md-12" [dismissible]="true" [dismissible]="false" [type]="'icon-success'" *ngIf="resultVO.messagesInfo?.length > 0">
+    <!--<i class="feather icon-alert-octagon"></i>-->
+    <strong>Message d'information:</strong>
+    <ul class="list-group">
+      <li *ngFor="let info of resultVO.messagesInfo" class="list-group list-group-accent">{{info}}</li>
+    </ul>
+  </ngb-alert>
+  <ngb-alert class="col-md-12" [dismissible]="true" [type]="'icon-danger'" *ngIf="resultVO.messagesErrors?.length > 0">
+    <!--<i class="feather icon-x-octagon"></i>-->
+    <strong>Message d'erreur:</strong>
+    <ul class="list-group">
+      <li *ngFor="let err of resultVO.messagesErrors" class="list-group list-group-accent">{{err}}</li>
+    </ul>
+  </ngb-alert>
+</div>

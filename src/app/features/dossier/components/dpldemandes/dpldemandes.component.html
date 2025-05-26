@@ -1,0 +1,240 @@
+<div class="container mt-4">
+  <!-- Search Card -->
+  <div class="card shadow-sm border-0 mb-4">
+    <div class="card-header bg-dpl text-white">
+      <h3 class="mb-0">
+        <i class="fas fa-list-ul me-2"></i>Listes des demandes DPL
+      </h3>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="text-center mt-5 py-5">
+    <div
+      class="spinner-border text-primary"
+      style="width: 3rem; height: 3rem"
+      role="status"
+    >
+      <span class="visually-hidden">Chargement...</span>
+    </div>
+    <h5 class="mt-3 text-muted">Chargement des dossiers...</h5>
+  </div>
+
+  <!-- No Results State -->
+  <div *ngIf="!loading && collectionSize === 0" class="text-center mt-5 py-5">
+    <div class="card shadow-sm border-0">
+      <div class="card-body py-5">
+        <i class="fas fa-inbox fa-4x text-muted mb-4"></i>
+        <h4 class="text-muted">Aucun dossier trouvé</h4>
+        <p class="text-muted" *ngIf="searchText">
+          Essayez de modifier vos critères de recherche
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Results Table -->
+  <div class="card shadow-sm border-0" *ngIf="!loading && totalItems > 0">
+    <div class="card-header bg-light"></div>
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover mb-0">
+          <thead class="table-primary">
+            <tr>
+              <th class="ps-4" (click)="onSort('medicament.nomMedicament')">
+                <i class="fas fa-pills me-2"></i>Médicament
+                <i
+                  class="fas fa-sort ms-2"
+                  *ngIf="sortColumn !== 'medicament.nomMedicament'"
+                ></i>
+                <i
+                  class="fas fa-sort-up ms-2"
+                  *ngIf="
+                    sortColumn === 'medicament.nomMedicament' &&
+                    sortDirection === 'asc'
+                  "
+                ></i>
+                <i
+                  class="fas fa-sort-down ms-2"
+                  *ngIf="
+                    sortColumn === 'medicament.nomMedicament' &&
+                    sortDirection === 'desc'
+                  "
+                ></i>
+              </th>
+              <th (click)="onSort('typeDossier')">
+                <i class="fas fa-folder me-2"></i>Type
+                <i
+                  class="fas fa-sort ms-2"
+                  *ngIf="sortColumn !== 'typeDossier'"
+                ></i>
+                <i
+                  class="fas fa-sort-up ms-2"
+                  *ngIf="
+                    sortColumn === 'typeDossier' && sortDirection === 'asc'
+                  "
+                ></i>
+                <i
+                  class="fas fa-sort-down ms-2"
+                  *ngIf="
+                    sortColumn === 'typeDossier' && sortDirection === 'desc'
+                  "
+                ></i>
+              </th>
+              <th (click)="onSort('dateSoumission')">
+                <i class="far fa-calendar me-2"></i>Date Soumission
+                <i
+                  class="fas fa-sort ms-2"
+                  *ngIf="sortColumn !== 'dateSoumission'"
+                ></i>
+                <i
+                  class="fas fa-sort-up ms-2"
+                  *ngIf="
+                    sortColumn === 'dateSoumission' && sortDirection === 'asc'
+                  "
+                ></i>
+                <i
+                  class="fas fa-sort-down ms-2"
+                  *ngIf="
+                    sortColumn === 'dateSoumission' && sortDirection === 'desc'
+                  "
+                ></i>
+              </th>
+              <th (click)="onSort('statut')">
+                <i class="fas fa-tag me-2"></i>Statut
+                <i class="fas fa-sort ms-2" *ngIf="sortColumn !== 'statut'"></i>
+                <i
+                  class="fas fa-sort-up ms-2"
+                  *ngIf="sortColumn === 'statut' && sortDirection === 'asc'"
+                ></i>
+                <i
+                  class="fas fa-sort-down ms-2"
+                  *ngIf="sortColumn === 'statut' && sortDirection === 'desc'"
+                ></i>
+              </th>
+              <th (click)="onSort('medicament.codeATC.description')">
+                <i class="fas fa-info-circle me-2"></i>Description
+                <i
+                  class="fas fa-sort ms-2"
+                  *ngIf="sortColumn !== 'medicament.codeATC.description'"
+                ></i>
+                <i
+                  class="fas fa-sort-up ms-2"
+                  *ngIf="
+                    sortColumn === 'medicament.codeATC.description' &&
+                    sortDirection === 'asc'
+                  "
+                ></i>
+                <i
+                  class="fas fa-sort-down ms-2"
+                  *ngIf="
+                    sortColumn === 'medicament.codeATC.description' &&
+                    sortDirection === 'desc'
+                  "
+                ></i>
+              </th>
+              <th (click)="onSort('medicament.dosage')">
+                <i class="fas fa-prescription-bottle me-2"></i>Dosage
+                <i
+                  class="fas fa-sort ms-2"
+                  *ngIf="sortColumn !== 'medicament.dosage'"
+                ></i>
+                <i
+                  class="fas fa-sort-up ms-2"
+                  *ngIf="
+                    sortColumn === 'medicament.dosage' &&
+                    sortDirection === 'asc'
+                  "
+                ></i>
+                <i
+                  class="fas fa-sort-down ms-2"
+                  *ngIf="
+                    sortColumn === 'medicament.dosage' &&
+                    sortDirection === 'desc'
+                  "
+                ></i>
+              </th>
+              <th class="pe-4 text-end">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let dossier of displayedDossiers">
+              <td class="ps-4">
+                <strong>{{
+                  dossier.medicament?.nomMedicament || "N/A"
+                }}</strong>
+              </td>
+              <td>{{ dossier.typeDossier || "N/A" }}</td>
+              <td>
+                {{ dossier.dateSoumission | date : "dd/MM/yyyy" : "" : "fr" }}
+              </td>
+              <td>
+                <span
+                  class="badge rounded-pill py-2 px-3"
+                  [ngClass]="{
+                    'bg-secondary': dossier.statut === 'DRAFT',
+                    'bg-info': dossier.statut === 'SOUMIS',
+                    'bg-success': dossier.statut === 'AUTORISE',
+                    'bg-primary': dossier.statut === 'EXAMINE',
+                    'bg-danger': dossier.statut === 'REJETE',
+                    'bg-warning text-dark':
+                      dossier.statut === 'EN_COURS_EVALUATION',
+                    'bg-dark': dossier.statut === 'SUSPENDU',
+                    'bg-danger': dossier.statut === 'DOSSIER_MANQUANT',
+                    'bg-light text-dark': dossier.statut === 'RETIRE',
+                    'bg-light text-dark border': dossier.statut === 'EXPIRE'
+                  }"
+                >
+                  {{ dossier.statut }}
+                </span>
+              </td>
+              <td>{{ dossier.medicament?.codeATC?.description || "N/A" }}</td>
+              <td>{{ dossier.medicament?.dosage || "N/A" }}</td>
+              <td class="pe-4 text-end">
+                <button
+                  class="btn btn-sm btn-outline-primary"
+                  (click)="viewDetails(dossier.id)"
+                  title="Voir détails"
+                >
+                  <i class="fas fa-eye me-1"></i> Détails
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pagination -->
+  <div
+    class="d-flex justify-content-between align-items-center p-3 bg-light border-top"
+  >
+    <ngb-pagination
+      [collectionSize]="totalItems"
+      [(page)]="currentPage"
+      [pageSize]="pageSize"
+      [maxSize]="5"
+      [rotate]="true"
+      [boundaryLinks]="true"
+      (pageChange)="onPageChange()"
+      class="mb-0"
+    >
+    </ngb-pagination>
+
+    <div class="d-flex align-items-center">
+      <span class="me-2 text-muted small">Items per page:</span>
+      <select
+        class="form-select form-select-sm"
+        style="width: auto"
+        [(ngModel)]="pageSize"
+        (ngModelChange)="onPageSizeChange()"
+      >
+        <option [ngValue]="5">5</option>
+        <option [ngValue]="10">10</option>
+        <option [ngValue]="20">20</option>
+        <option [ngValue]="50">50</option>
+      </select>
+    </div>
+  </div>
+</div>

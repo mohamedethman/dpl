@@ -1,0 +1,157 @@
+<nav class="page-breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a routerLink=".">Parametrages</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Gestion des produits</li>
+    </ol>
+</nav>
+
+<div class="animated fadeIn">
+    <div class="row">
+        <div class="card col-md-12">
+            <div class="card-body">
+                <form action="" method="post" class="form-horizontal">
+                    <div class="form-group row" style="margin-bottom: 10px; margin-top: 10px">
+                        <div class="col-md-8">
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <input type="text"  name="tel" class="form-control" placeholder="Code"
+                                           mdInput [(ngModel)]="beanRecherche.code">
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="text"  name="nom" class="form-control" placeholder="Nom"
+                                           mdInput [(ngModel)]="beanRecherche.nom">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2" style="text-align: left">
+                            <!--                            <div *ngxPermissionsOnly="[roles.RECHERCHER_CLIENT]">-->
+                            <div>
+                                <a  class="badge badge-primary" (click)="rechercherProduit()">
+                                    <i class="feather icon-search"></i> Recherche</a>
+                            </div>
+                        </div>
+                        <div class="col-md-2" style="text-align: right">
+                            <!--                            <div *ngxPermissionsOnly="[roles.AJOUTER_CLIENT]">-->
+                            <div >
+                                <a   class="badge badge-pill" data-toggle="modal" (click)="openModalEditProduit(scrollableModal,newProduit , false)">
+                                    <i class="feather icon-user-plus"></i> Nouvel
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <table width="100%" class="table-sm table-bordered">
+                        <thead>
+                        <tr>
+                            <th>Code</th>
+                            <th>Nom</th>
+                            <th>Score</th>
+                            <th width="10%">Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr *ngFor="let cli of listProduit | slice: (page-1) * pageSize : page * pageSize">
+                            <td>{{cli.code}}</td>
+                            <td>{{cli.nom}}</td>
+                            <td>{{cli.score}}</td>
+                            <td align="center">
+                                <div class="btn-group">
+                                    <!--                                    <div *ngxPermissionsOnly="[roles.MODIFIER_CLIENT]">-->
+                                    <div>
+                                        <a class="badge badge-primary" style="margin-left: 5px" title="Modifier"
+                                           (click)="openModalEditProduit(scrollableModal, cli, true)">
+                                            <i class="feather icon-edit"></i>
+                                        </a>
+                                    </div>
+                                    <!--                                    <div *ngxPermissionsOnly="[roles.SUPPRIMER_CLIENT]">-->
+                                    <div>
+                                        <a class="badge badge-secondary" style="margin-left: 5px" title="Supprimer"
+                                           (click)="openModalDeleteProduit(scrollableModalDelete, cli)">
+                                            <i class="feather icon-trash-2"></i></a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <!-- pager -->
+                    <ngb-pagination *ngIf="listProduit!=null && listProduit.length>0" class="d-flex justify-content-end"
+                                    [collectionSize]="listProduit.length" [(page)]="page"
+                                    [pageSize]="pageSize" [maxSize]="5" [rotate]="true" [ellipses]="false" [boundaryLinks]="true">
+                    </ngb-pagination>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<ng-template #scrollableModal let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Editer un produit</h5>
+        <a  class="close" (click)="modal.close('by: close icon')" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </a>
+    </div>
+    <div class="modal-body">
+        <div class="example" *ngIf="showSpin">
+            <div class="d-flex justify-content-center">
+                <div class="spinner-border" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-md-3 col-form-label" >Code</label>
+            <div class="col-md-4" >
+                <input type="text" name="code"  class="form-control"
+                       mdInput [(ngModel)]="newProduit.code" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-md-3 col-form-label" >Nom</label>
+            <div class="col-md-4" >
+                <input type="text"  name="nom"  class="form-control"
+                       mdInput [(ngModel)]="newProduit.nom" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-md-3 col-form-label" >Score</label>
+            <div class="col-md-4" >
+                <input type="number" name="score"  class="form-control"
+                       mdInput [(ngModel)]="newProduit.score" />
+            </div>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <a  class="badge badge-secondary" (click)="modal.close('by: close a')">
+            <i class="feather icon-x"></i> Annuler</a>
+        <a  class="badge badge-primary" *ngIf="modeAjout" (click)="updateProduit()">
+            <i class="feather icon-save"></i> Modifier</a>
+        <a  class="badge badge-primary" *ngIf="!modeAjout" (click)="saveProduit();">
+            <i class="feather icon-save"></i> Enregistrer</a>
+
+    </div>
+</ng-template>
+
+
+<!-- Modal -->
+<ng-template #scrollableModalDelete let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title" id="scrollableModalDelete">Supprimer un produit</h5>
+        <a  class="close" (click)="modal.close('by: close icon')" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </a>
+    </div>
+    <div class="modal-body">
+    <span> Etes vous sûr de bien vouloir supprimer le produit
+      <b>{{newProduit.nom}} ({{newProduit.code}})</b>?</span>
+    </div>
+    <div class="modal-footer">
+        <a  class="badge badge-secondary" (click)="modal.close('by: close a')">
+            <i class="feather icon-x"></i> Non</a>
+        <a  class="badge badge-primary" (click)="deleteProduit(); modal.close('by: save a')">
+            <i class="feather icon-trash-2"></i> Oui</a>
+    </div>
+</ng-template>

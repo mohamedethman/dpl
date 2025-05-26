@@ -1,0 +1,118 @@
+.table {
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.bg-dpl {
+  background-color: #00a95c;
+}
+.table thead th {
+  background-color: #00a95c;
+  color: rgb(255, 255, 255) !important;
+}
+.btn {
+  // margin-top: 20px;
+  margin-right: 10px; /* Corrected margin syntax */
+}
+
+.btn-add {
+  border-color: #00a95c;
+  text-align: right;
+  color: #00a95c;
+}
+
+.btn-edit {
+  border-color: #efc050;
+  text-align: right;
+  color: #efc050;
+}
+
+.btn-delete {
+  border-color: #d01c1f;
+  text-align: right;
+  color: #d01c1f;
+}
+/* Styling the rounded panel containing the header */
+.rounded-panel {
+  display: flex;
+  align-items: center;
+  background-color: #f5f5f5;
+  border-radius: 15px;
+  padding: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+/* Vertical line before the header */
+.vertical-line {
+  height: 40px;
+  width: 4px;
+  background-color: #d01c1f;
+  margin-right: 15px;
+}
+
+/* Page title styles */
+.page-title {
+  font-size: 20px;
+  color: #797979;
+  text-align: left;
+  margin: 0; /* Remove default margin */
+  font-weight: 600;
+}
+
+.pagination .page-item .page-link {
+  border-radius: 5% !important;
+  margin: 0 5px;
+  color: #00a95c;
+  border: none;
+  font-weight: bold;
+}
+
+.pagination .page-item.active .page-link {
+  background-color: #00a95c;
+  color: white;
+}
+
+.pagination .page-item .page-link:hover {
+  background-color: rgba(69, 184, 172, 0.2);
+}
+
+.page-link {
+  padding: 8px 12px;
+  border-radius: 50%;
+}
+
+/* Reduce table row height */
+.table tbody tr {
+  height: 30px; /* Adjust height */
+}
+
+.table tbody td {
+  padding: 6px 10px; /* Reduce padding */
+  font-size: 14px; /* Optional: Decrease font size */
+}
+
+/* Pagination positioning */
+.pagination-container {
+  display: flex;
+  justify-content: end; /* Align to right */
+  margin-top: 20px; /* Add space above pagination */
+}
+.table-responsive {
+  /* Use the bootstrap class */
+  overflow-x: auto; /* Enable horizontal scrolling on small screens */
+}
+
+.table {
+  width: 100%; /* Make the table take the full available width */
+  table-layout: fixed; /* Important for controlling column widths */
+}
+
+th,
+td {
+  word-wrap: break-word; /* Prevent long words from overflowing */
+  overflow: hidden; /* Hide any overflowing content */
+  text-overflow: ellipsis; /* Show an ellipsis (...) if the text is truncated */
+  white-space: nowrap; /* Prevent text from wrapping to the next line */
+}

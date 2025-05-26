@@ -1,0 +1,76 @@
+<nav class="page-breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a routerLink=".">Parametrages</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Traces</li>
+  </ol>
+</nav>
+
+<div class="row">
+  <div class="card col-md-12">
+    <div class="card-body">
+      <div class="form-group row">
+        <div class="col-md-12">
+          <div class="form-group row">
+            <div class="col-md-3">
+              <input type="number" id="annee" name="annee" class="form-control" placeholder="Année"
+                     [(ngModel)]="beanRecherche.annee">
+            </div>
+            <div class="col-md-3">
+              <input type="text" id="ref" name="ref" class="form-control" placeholder="Nom d'utilisateur"
+                     [(ngModel)]="beanRecherche.username">
+            </div>
+            <div class="col-md-2">
+              <a class="btn btn-primary" (click)="rechercherTrace()">
+                <i class="feather icon-search"></i> Rechercher
+              </a>
+            </div>
+            <div class="col-md-2" *ngIf="traces!=null && traces.length>0">
+              <a class="btn btn-warning" (click)="searchExport()">
+                <i class="feather icon-download"></i> Exporter
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="spinner-wrapper" *ngIf="showSpin">
+    <div class="spinner"></div>
+  </div>
+  <div class="card col-md-12" style="margin-top: 5px">
+    <div class="card-body" *ngIf="checkSearhc">
+      <span *ngIf="!showSpin && checkSearhc && (traces==null || traces.length==0)">Aucun résultat</span>
+      <table width="100%" class="table-sm table-bordered" *ngIf="traces!=null && traces.length>0">
+        <thead>
+        <tr>
+          <th>Date opération</th>
+          <th>Login user</th>
+          <th>Opération</th>
+          <th>Objet</th>
+          <th>Référence objet</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let doc of traces | slice: (page-1) * pageSize : page * pageSize">
+          <td>{{utilService.formatDateT(doc.dateOperation)}}</td>
+          <td>{{doc.login}}</td>
+          <td>{{doc.description}}</td>
+          <td>{{doc.entite}}</td>
+          <td>{{doc.refObjet}}</td>
+        </tr>
+        </tbody>
+      </table>
+
+      <ngb-pagination class="d-flex justify-content-end"
+                      [collectionSize]="totalElements"
+                      [(page)]="currentPage"
+                      [pageSize]="pageSize"
+                      (pageChange)="onPageChange($event)"
+                      [maxSize]="5" [rotate]="true" [ellipses]="false"
+                      [boundaryLinks]="true">
+      </ngb-pagination>
+
+    </div>
+  </div>
+</div>

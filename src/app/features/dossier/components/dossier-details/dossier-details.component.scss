@@ -1,0 +1,224 @@
+.medicament-info,
+.laboratoire-info {
+  display: flex;
+  flex-direction: column;
+
+  p {
+    margin-bottom: 0.5rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%; /* Make each p element take up 100% of the available width */
+  }
+}
+
+.card-body {
+  display: flex; /* Use flex layout */
+  flex-direction: column; /* Arrange children vertically */
+  justify-content: space-between; /* Distribute space evenly */
+  min-height: 250px; /* Set a minimum height, adjust as needed */
+}
+
+.has-download-button .card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.has-download-button .card-header .btn {
+  margin-left: auto; /* Push button to the right */
+}
+
+.btn {
+  margin-top: 20px;
+  margin-right: 10px; /* Corrected margin syntax */
+}
+
+.card-header i {
+  margin-right: 5px; /* Add some spacing between icon and label */
+}
+
+.scrollable-content {
+  max-height: 800px; /* Adjust based on your needs */
+  overflow-y: auto; /* Enables scrolling */
+  padding-right: 10px; /* Prevents text from being hidden by the scrollbar */
+}
+
+.sticky-buttons {
+  position: sticky;
+  bottom: 0;
+  background: white; /* Ensures the buttons are visible */
+  padding: 10px;
+  text-align: center; /* Centers the buttons */
+  z-index: 10;
+}
+.accordion-button:not(.collapsed) {
+  color: var(--bs-accordion-active-color);
+  background-color: #19875438;
+  box-shadow: inset 0 calc(-1 * var(--bs-accordion-border-width)) 0
+    var(--bs-accordion-border-color);
+}
+
+/* Custom styles for the enhanced accordion */
+.bg-light-blue {
+  background-color: #f0f8ff;
+}
+
+.bg-purple {
+  background-color: #6f42c1;
+}
+
+.text-purple {
+  color: #6f42c1;
+}
+
+.accordion-button:not(.collapsed) {
+  background-color: #f0f8ff;
+  box-shadow: none;
+}
+
+.accordion-button:after {
+  display: none;
+}
+
+.accordion-button.collapsed .fa-chevron-down {
+  transform: rotate(0deg);
+}
+
+.accordion-button .fa-chevron-down {
+  transform: rotate(180deg);
+  transition: transform 0.3s ease;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.info-label {
+  font-size: 0.8rem;
+  color: #6c757d;
+  font-weight: 500;
+}
+
+.info-value {
+  font-size: 0.95rem;
+  color: #495057;
+}
+
+.rounded-top-3 {
+  border-top-left-radius: 0.75rem !important;
+  border-top-right-radius: 0.75rem !important;
+}
+
+.rounded-bottom-3 {
+  border-bottom-left-radius: 0.75rem !important;
+  border-bottom-right-radius: 0.75rem !important;
+}
+
+.transition-all {
+  transition: all 0.3s ease;
+}
+.bg-light-blue {
+  background-color: #f0f8ff;
+}
+
+/* Card hover effects */
+.card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+/* File upload card styling */
+.file-upload-card {
+  border: 2px dashed #dee2e6;
+  transition: all 0.3s ease;
+}
+
+.file-upload-card:hover {
+  border-color: #0d6efd;
+  background-color: #f8f9fa;
+}
+
+/* Badge enhancements */
+.badge {
+  padding: 0.35em 0.65em;
+  font-weight: 500;
+}
+.file-upload-area {
+  background-color: #f8f9fa;
+  border: 2px dashed #dee2e6;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-height: 150px;
+}
+
+.file-upload-area.has-file {
+  border-style: solid;
+  background-color: #fff;
+}
+
+.file-upload-area.uploading {
+  background-color: #f8f9fa;
+}
+
+.file-upload-area.drag-over {
+  border-color: #0d6efd;
+  background-color: #e7f1ff;
+}
+
+.file-preview {
+  width: 100%;
+}
+
+.file-icon {
+  width: 40px;
+  text-align: center;
+}
+
+.modal {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal.show {
+  display: block;
+  opacity: 1;
+}
+
+.progress {
+  height: 8px;
+}
+.validation-section {
+  padding: 1rem;
+  border: 1px solid #dee2e6;
+  border-radius: 0.25rem;
+  margin-bottom: 1rem;
+}
+
+.file-preview {
+  margin: 0.5rem 0;
+  border: 1px solid #eee;
+  border-radius: 0.25rem;
+  padding: 0.5rem;
+}
+
+.file-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.25rem 0;
+}
+
+.file-name {
+  margin-right: 1rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

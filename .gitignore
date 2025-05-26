@@ -1,0 +1,7 @@
+/.angular/cache
+# Project exclude paths
+/node_modules/
+/mauricarb/
+/dist/
+/dpl
+/.idea/*

@@ -1,0 +1,141 @@
+<div class="container mt-4">
+  <!-- Header Card -->
+  <div class="card shadow-sm border-0 mb-4">
+    <div class="card-header bg-dpl text-white">
+      <h3 class="mb-0">
+        <i class="fas fa-user-shield me-2"></i>Comptes Laboratoires à Valider
+      </h3>
+    </div>
+  </div>
+
+  <!-- Search Bar -->
+  <!-- <div class="card shadow-sm border-0 mb-4">
+    <div class="card-body">
+      <div class="input-group">
+        <span class="input-group-text">
+          <i class="fas fa-search"></i>
+        </span>
+        <input
+          type="text"
+          class="form-control"
+          [(ngModel)]="searchText"
+          placeholder="Rechercher par nom, email ou téléphone..."
+          (keyup.enter)="onSearch()"
+        />
+        <button class="btn btn-primary" (click)="onSearch()">Rechercher</button>
+      </div>
+    </div>
+  </div> -->
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="text-center mt-5 py-5">
+    <div
+      class="spinner-border text-primary"
+      style="width: 3rem; height: 3rem"
+      role="status"
+    >
+      <span class="visually-hidden">Chargement...</span>
+    </div>
+    <h5 class="mt-3 text-muted">Chargement des comptes...</h5>
+  </div>
+
+  <!-- No Results State -->
+  <div *ngIf="!loading && !hasData()" class="text-center mt-5 py-5">
+    <div class="card shadow-sm border-0">
+      <div class="card-body py-5">
+        <i class="fas fa-inbox fa-4x text-muted mb-4"></i>
+        <h4 class="text-muted">Aucun compte à valider</h4>
+        <p class="text-muted" *ngIf="searchText">
+          Essayez de modifier vos critères de recherche
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Results Table -->
+  <div class="card shadow-sm border-0" *ngIf="!loading && hasData()">
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover mb-0">
+          <thead class="table-primary">
+            <tr>
+              <th class="ps-4 align-middle text-center" (click)="onSort('nom')">
+                <i class="fas fa-building me-2"></i>Nom
+                <i class="fas fa-sort ms-2" *ngIf="sortColumn !== 'nom'"></i>
+                <i
+                  class="fas fa-sort-up ms-2"
+                  *ngIf="sortColumn === 'nom' && sortDirection === 'asc'"
+                ></i>
+                <i
+                  class="fas fa-sort-down ms-2"
+                  *ngIf="sortColumn === 'nom' && sortDirection === 'desc'"
+                ></i>
+              </th>
+              <th class="align-middle text-center" (click)="onSort('code')">
+                <i class="fas fa-hashtag me-2"></i>Code
+                <i class="fas fa-sort ms-2" *ngIf="sortColumn !== 'code'"></i>
+                <i
+                  class="fas fa-sort-up ms-2"
+                  *ngIf="sortColumn === 'code' && sortDirection === 'asc'"
+                ></i>
+                <i
+                  class="fas fa-sort-down ms-2"
+                  *ngIf="sortColumn === 'code' && sortDirection === 'desc'"
+                ></i>
+              </th>
+              <th class="align-middle text-center">Email</th>
+              <th class="align-middle text-center">Date Enregistrement</th>
+              <th class="align-middle text-center">Statut</th>
+              <th class="pe-4 text-center align-middle">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let lab of displayedLaboratoires">
+              <td class="ps-4 align-middle text-center">
+                {{ lab.nom || "N/A" }}
+              </td>
+              <td class="align-middle text-center">{{ lab.code || "N/A" }}</td>
+              <td class="align-middle text-center">{{ lab.email || "N/A" }}</td>
+              <td class="align-middle text-center">
+                {{ lab.dateEnregistrement | date : "dd/MM/yyyy" }}
+              </td>
+              <td class="align-middle text-center">
+                <span class="badge bg-danger rounded-pill py-2 px-3">
+                  {{ lab.statut }}
+                </span>
+              </td>
+              <td class="pe-4 text-center align-middle">
+                <button
+                  class="btn btn-sm btn-success me-2"
+                  (click)="activateLaboratoire(lab.id)"
+                >
+                  <i class="fas fa-check-circle me-1"></i> Valider
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pagination -->
+  <div
+    class="d-flex justify-content-between align-items-center p-3 bg-light border-top"
+  >
+    <div class="d-flex align-items-center">
+      <span class="me-2 text-muted small">Items par page:</span>
+      <select
+        class="form-select form-select-sm"
+        style="width: auto"
+        [(ngModel)]="pageSize"
+        (ngModelChange)="onPageSizeChange()"
+      >
+        <option [ngValue]="5">5</option>
+        <option [ngValue]="10">10</option>
+        <option [ngValue]="20">20</option>
+        <option [ngValue]="50">50</option>
+      </select>
+    </div>
+  </div>
+</div>

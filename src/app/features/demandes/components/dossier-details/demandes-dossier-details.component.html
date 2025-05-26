@@ -1,0 +1,464 @@
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <button class="btn btn-secondary" (click)="goBackToList()">
+      Retour à la liste
+    </button>
+    <button class="btn btn-primary" (click)="downloadAllFiles(dossierId)">
+      <i class="fas fa-download"></i> Télécharger tous les fichiers
+    </button>
+  </div>
+
+  <div *ngIf="loading" class="text-center">
+    <p>Chargement des détails du dossier...</p>
+  </div>
+
+  <div *ngIf="error" class="alert alert-danger">
+    {{ error }}
+  </div>
+
+  <div *ngIf="!loading && recapDossier && dossierModuleElements.length > 0">
+    <h2>
+      Détails du Dossier (Médicament:
+      {{ dossierModuleElements[0].dossier.medicament.nomMedicament }} )
+    </h2>
+
+    <div class="accordion mb-4" id="medicamentAccordion">
+      <div class="accordion-item border-0 shadow-sm">
+        <h2 class="accordion-header" id="medicamentHeading">
+          <button
+            class="accordion-button rounded-top-3 py-3 bg-light-blue text-dark border-0 shadow-none"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#medicamentCollapse"
+            aria-expanded="true"
+            aria-controls="medicamentCollapse"
+          >
+            <div class="d-flex align-items-center w-100">
+              <!-- <div
+                class="flex-shrink-0 bg-primary bg-opacity-10 p-2 rounded-circle me-3"
+              ></div> -->
+              <div class="flex-grow-1">
+                <h5 class="mb-0 fw-semibold">Médicament et Laboratoire</h5>
+              </div>
+              <div class="flex-shrink-0">
+                <i class="fas fa-chevron-down transition-all"></i>
+              </div>
+            </div>
+          </button>
+        </h2>
+        <div
+          id="medicamentCollapse"
+          class="accordion-collapse collapse show border-0"
+          aria-labelledby="medicamentHeading"
+          data-bs-parent="#medicamentAccordion"
+        >
+          <div class="accordion-body px-4 pt-4 pb-0 bg-white rounded-bottom-3">
+            <div class="row g-4">
+              <!-- Medicine Column -->
+              <div class="col-lg-6">
+                <div class="card h-100 border-0 shadow-none">
+                  <div class="card-header bg-white border-0 px-0 pt-0 pb-3">
+                    <h5 class="d-flex align-items-center mb-0">
+                      <span
+                        class="flex-shrink-0 bg-info bg-opacity-10 p-2 rounded-circle me-2"
+                      >
+                        <i class="fas fa-capsules text-info"></i>
+                      </span>
+                      <span>Médicament</span>
+                    </h5>
+                  </div>
+                  <div class="card-body px-0 pt-0 pb-3">
+                    <div class="info-grid mb-3">
+                      <div class="info-item">
+                        <span class="info-label">Nom du médicament</span>
+                        <span class="info-value text-dark fw-medium">
+                          {{
+                            dossierModuleElements[0].dossier.medicament
+                              .nomMedicament
+                          }}
+                        </span>
+                      </div>
+                      <div class="info-item">
+                        <span class="info-label">Code ATC</span>
+                        <span class="info-value">
+                          {{
+                            dossierModuleElements[0].dossier.medicament.codeATC
+                              ?.codeATC ||
+                              dossierModuleElements[0].dossier.medicament
+                                .autreAtc
+                          }}
+                        </span>
+                      </div>
+                      <div class="info-item">
+                        <span class="info-label">Forme Pharmaceutique</span>
+                        <span class="info-value">
+                          {{
+                            dossierModuleElements[0].dossier.medicament
+                              .libFormePharmaceutique
+                          }}
+                        </span>
+                      </div>
+                      <div class="info-item">
+                        <span class="info-label">Voie d'administration</span>
+                        <span class="info-value">
+                          {{
+                            dossierModuleElements[0].dossier.medicament
+                              .voieAdministration
+                          }}
+                        </span>
+                      </div>
+                      <div class="info-item">
+                        <span class="info-label">Conditionnement</span>
+                        <span class="info-value">
+                          {{
+                            dossierModuleElements[0].dossier.medicament
+                              .autreConditionnement
+                          }}
+                        </span>
+                      </div>
+                    </div>
+
+                    <!-- Substances Table -->
+                    <div class="mb-4">
+                      <h6 class="d-flex align-items-center mb-2 text-dark">
+                        <i class="fas fa-list-ul text-muted me-2 fs-6"></i>
+                        Substances
+                      </h6>
+                      <ng-container
+                        *ngIf="
+                          dossierModuleElements[0].dossier.medicament.substances
+                            ?.length > 0;
+                          else noSubstances
+                        "
+                      >
+                        <div class="table-responsive border rounded">
+                          <table class="table table-sm table-hover mb-0">
+                            <thead class="table-light">
+                              <tr>
+                                <th class="ps-3">Nom</th>
+                                <th>Type</th>
+                                <th class="pe-3 text-end">Dosage</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr
+                                *ngFor="
+                                  let substance of dossierModuleElements[0]
+                                    .dossier.medicament.substances
+                                "
+                              >
+                                <td class="ps-3">
+                                  {{ substance.nomSubstance }}
+                                </td>
+                                <td>
+                                  <span
+                                    class="badge bg-primary bg-opacity-10 text-primary"
+                                  >
+                                    {{ substance.typeSubstance }}
+                                  </span>
+                                </td>
+                                <td class="pe-3 text-end">
+                                  {{ substance.dosage }}
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </ng-container>
+                      <ng-template #noSubstances>
+                        <div
+                          class="alert alert-light border text-center py-2 mb-0"
+                        >
+                          <i class="fas fa-info-circle me-2"></i>Aucune
+                          substance renseignée
+                        </div>
+                      </ng-template>
+                    </div>
+
+                    <!-- Evaluation Report -->
+                    <!-- <div
+                      *ngIf="dossierModuleElements?.[0]?.dossier"
+                      class="border-top pt-3"
+                    >
+                      <div
+                        class="d-flex justify-content-between align-items-center"
+                      >
+                        <div>
+                          <span class="d-block text-muted small"
+                            >Conformité des échantillons</span
+                          >
+                          <span
+                            class="badge"
+                            [ngClass]="{
+                              'bg-success':
+                                dossierModuleElements[0].dossier
+                                  .conformeEchantillons,
+                              'bg-danger':
+                                !dossierModuleElements[0].dossier
+                                  .conformeEchantillons
+                            }"
+                          >
+                            {{
+                              dossierModuleElements[0].dossier
+                                .conformeEchantillons
+                                ? "Conforme"
+                                : "Non conforme"
+                            }}
+                          </span>
+                        </div>
+                        <button
+                          *ngIf="
+                            dossierModuleElements[0].dossier
+                              .conformeEchantillons
+                          "
+                          class="btn btn-outline-primary btn-sm"
+                          (click)="downloadEvaluationReport()"
+                        >
+                          <i class="fas fa-download me-1"></i> Rapport
+                          d'évaluation
+                        </button>
+                      </div>
+                    </div> -->
+                  </div>
+                </div>
+              </div>
+
+              <!-- Laboratory Column -->
+              <div class="col-lg-6">
+                <div class="card h-100 border-0 shadow-none">
+                  <div class="card-header bg-white border-0 px-0 pt-0 pb-3">
+                    <h5 class="d-flex align-items-center mb-0">
+                      <span
+                        class="flex-shrink-0 bg-warning bg-opacity-10 p-2 rounded-circle me-2"
+                      >
+                        <i class="fas fa-flask text-purple"></i>
+                      </span>
+                      <span>Laboratoire</span>
+                    </h5>
+                  </div>
+                  <div class="card-body px-0 pt-0">
+                    <div class="info-grid">
+                      <div class="info-item">
+                        <span class="info-label">Nom</span>
+                        <span class="info-value text-dark fw-medium">
+                          {{
+                            dossierModuleElements[0].dossier.medicament
+                              .laboratoire.nom
+                          }}
+                        </span>
+                      </div>
+
+                      <!-- 2. Type (always shown) -->
+                      <div class="info-item">
+                        <span class="info-label">Type</span>
+                        <span class="info-value">
+                          <span
+                            class="badge bg-secondary bg-opacity-10 text-secondary"
+                          >
+                            {{
+                              dossierModuleElements[0].dossier.medicament
+                                .laboratoire.type
+                            }}
+                          </span>
+                        </span>
+                      </div>
+
+                      <!-- 3. Nom Fabricant (show if exists AND different from laboratoire.nom) -->
+                      <div
+                        class="info-item"
+                        *ngIf="
+                          dossierModuleElements[0].dossier.medicament
+                            .nomFabricant &&
+                          dossierModuleElements[0].dossier.medicament
+                            .nomFabricant !==
+                            dossierModuleElements[0].dossier.medicament
+                              .laboratoire.nom
+                        "
+                      >
+                        <span class="info-label">Nom Fabricant</span>
+                        <span class="info-value text-dark fw-medium">
+                          {{
+                            dossierModuleElements[0].dossier.medicament
+                              .nomFabricant
+                          }}
+                        </span>
+                      </div>
+                      <!-- 5. Adresse Fabricant (show if exists AND different from laboratoire.adresse) -->
+                      <div
+                        class="info-item"
+                        *ngIf="
+                          dossierModuleElements[0].dossier.medicament
+                            .adresseFabricant &&
+                          dossierModuleElements[0].dossier.medicament
+                            .adresseFabricant !==
+                            dossierModuleElements[0].dossier.medicament
+                              .laboratoire.adresse
+                        "
+                      >
+                        <span class="info-label">Adresse Fabricant</span>
+                        <span class="info-value">
+                          <i class="fas fa-map-marker-alt text-muted me-1"></i>
+                          {{
+                            dossierModuleElements[0].dossier.medicament
+                              .adresseFabricant
+                          }}
+                        </span>
+                      </div>
+                      <!-- 4. Adresse (show laboratoire.adresse by default) -->
+                      <div class="info-item">
+                        <span class="info-label">Adresse</span>
+                        <span class="info-value">
+                          <i class="fas fa-map-marker-alt text-muted me-1"></i>
+                          {{
+                            dossierModuleElements[0].dossier.medicament
+                              .laboratoire.adresse
+                          }}
+                        </span>
+                      </div>
+
+                      <div class="info-item">
+                        <span class="info-label">Pays</span>
+                        <span class="info-value">
+                          <i class="fas fa-globe text-muted me-1"></i>
+                          {{
+                            dossierModuleElements[0].dossier.medicament
+                              .laboratoire.pays
+                          }}
+                        </span>
+                      </div>
+                      <div class="info-item">
+                        <span class="info-label">Contact Principal</span>
+                        <span class="info-value">
+                          <i class="fas fa-user text-muted me-1"></i>
+                          {{
+                            dossierModuleElements[0].dossier.medicament
+                              .laboratoire.contactPrincipal
+                          }}
+                        </span>
+                      </div>
+                      <div class="info-item">
+                        <span class="info-label">Téléphone</span>
+                        <span class="info-value">
+                          <i class="fas fa-phone text-muted me-1"></i>
+                          {{
+                            dossierModuleElements[0].dossier.medicament
+                              .laboratoire.telephone
+                          }}
+                        </span>
+                      </div>
+                      <div class="info-item">
+                        <span class="info-label">Email</span>
+                        <span class="info-value">
+                          <i class="fas fa-envelope text-muted me-1"></i>
+                          {{
+                            dossierModuleElements[0].dossier.medicament
+                              .laboratoire.email
+                          }}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modules accordion -->
+    <div class="accordion mb-3" id="modulesAccordion">
+      <div
+        class="accordion-item"
+        *ngFor="let element of getUniqueModules(); let i = index"
+      >
+        <h2 class="accordion-header" id="moduleHeading{{ i }}">
+          <button
+            class="accordion-button collapsed"
+            type="button"
+            data-bs-toggle="collapse"
+            [attr.data-bs-target]="'#moduleCollapse' + i"
+            aria-expanded="false"
+            [attr.aria-controls]="'moduleCollapse' + i"
+          >
+            <i
+              class="fas me-2"
+              [ngClass]="{
+                'fa-1': element.moduleElement.module.id === 1,
+                'fa-2': element.moduleElement.module.id === 2,
+                'fa-3': element.moduleElement.module.id === 3,
+                'fa-4': element.moduleElement.module.id === 4,
+                'fa-5': element.moduleElement.module.id === 5
+              }"
+            ></i>
+            {{ element.moduleElement.module.libelle }}
+            <span class="ms-auto">
+              <button
+                *ngIf="element.hasMenu"
+                (click)="
+                  downloadFolder(
+                    dossierId,
+                    element.moduleElement.module.id,
+                    element.moduleElement.module.libelle
+                  );
+                  $event.stopPropagation()
+                "
+                class="btn btn-sm btn-outline-secondary"
+              >
+                <i class="fas fa-download"></i>
+              </button>
+            </span>
+          </button>
+        </h2>
+        <div
+          [id]="'moduleCollapse' + i"
+          class="accordion-collapse collapse"
+          [attr.aria-labelledby]="'moduleHeading' + i"
+          data-bs-parent="#modulesAccordion"
+        >
+          <div class="accordion-body">
+            <div class="list-group">
+              <div
+                class="list-group-item"
+                *ngFor="
+                  let item of filterElementsByModule(
+                    element.moduleElement.module.libelle
+                  )
+                "
+              >
+                <div class="d-flex justify-content-between align-items-center">
+                  <div>
+                    <strong>{{ item.moduleElement.nomElement }}:</strong>
+                    <span *ngIf="item.moduleElement.typeElement !== 'FICHIER'">
+                      {{ item.contenuTexte }}</span
+                    >
+                  </div>
+                  <button
+                    *ngIf="item.moduleElement.typeElement === 'FICHIER'"
+                    (click)="
+                      downloadFile(
+                        item.dossier.id,
+                        item.moduleElement.id,
+                        item.moduleElement.nomElement
+                      )
+                    "
+                    class="btn btn-sm btn-outline-secondary"
+                  >
+                    <i class="fas fa-download"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div
+    *ngIf="!loading && (!recapDossier || dossierModuleElements.length === 0)"
+    class="text-center"
+  >
+    <p>Aucun détail de dossier trouvé.</p>
+  </div>
+</div>

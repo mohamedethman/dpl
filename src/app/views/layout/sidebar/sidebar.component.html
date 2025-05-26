@@ -1,0 +1,36 @@
+<div class="app-container">
+  <div class="sidebar">
+    <ul class="nav flex-column">
+      <li class="nav-item" *ngFor="let menuItem of menuItems">
+        <a
+          class="nav-link d-flex justify-content-between align-items-center"
+          href="javascript:void(0);"
+          (click)="toggleCollapse(menuItem, $event)"
+        >
+          <span> <i class="fas fa-folder me-2"></i> {{ menuItem.label }} </span>
+          <i
+            class="fas me-2"
+            [ngClass]="
+              menuItem.isCollapsed ? 'fa-chevron-down' : 'fa-chevron-up'
+            "
+          ></i>
+        </a>
+
+        <!-- Display submenus when NOT collapsed -->
+        <ul *ngIf="!menuItem.isCollapsed" class="nav flex-column ms-3">
+          <li class="nav-item" *ngFor="let subMenu of menuItem.subMenus">
+            <a
+              class="nav-link text-white"
+              [routerLink]="subMenu.link"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              (click)="$event.stopPropagation()"
+            >
+              <i class="fas fa-folder-open me-2"></i> {{ subMenu.label }}
+            </a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</div>
