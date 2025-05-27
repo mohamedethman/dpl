@@ -7,9 +7,9 @@
 export const environment = {
   production: false,
   ip:'http://localhost',
-  port:'8085',
+  port:'8095',
   context:'/amm-web-backend',
-  baseUrl: 'http://localhost/amm-web-backend',
+  baseUrl: 'http://localhost:8095/amm-web-backend',
 };
 
 /*
