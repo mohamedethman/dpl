@@ -10,6 +10,7 @@ import { Router } from "@angular/router";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { ToastrService } from "ngx-toastr";
 import {environment} from "../../../../../environments/environment";
+import {host} from "../../../../util/constantes-app";
 
 declare var bootstrap: any;
 
@@ -326,7 +327,8 @@ export class RegisterComponent implements OnInit {
     this.loading = true;
     this.formEnabled = false;
 
-    const url = "${this.apiUrl}/saveLaboratoire";
+    //const url = "${this.apiUrl}/saveLaboratoire";
+    const url = `${this.apiUrl}/saveLaboratoire`;
     const headers = new HttpHeaders({
       "Content-Type": "application/json",
       Accept: "application/json",
