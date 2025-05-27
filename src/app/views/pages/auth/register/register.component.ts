@@ -9,6 +9,7 @@ import {
 import { Router } from "@angular/router";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { ToastrService } from "ngx-toastr";
+import {environment} from "../../../../../environments/environment";
 
 declare var bootstrap: any;
 
@@ -71,6 +72,7 @@ export class RegisterComponent implements OnInit {
   otpError: boolean = false;
   otpResendDisabled: boolean = false;
   otpResendCountdown: number = 0;
+  private apiUrl = `${environment.baseUrl}`;
 
   constructor(
     private router: Router,
@@ -93,7 +95,7 @@ export class RegisterComponent implements OnInit {
 
     this.http
       .get(
-        `http://93.115.16.90:8085/amm-web-backend/checkLoginExists/${this.laboratoire.login}`
+        `${this.apiUrl}/checkLoginExists/${this.laboratoire.login}`
       )
       .subscribe({
         next: (exists: any) => {
@@ -202,7 +204,7 @@ export class RegisterComponent implements OnInit {
   sendOtp() {
     this.loading = true;
     const email = this.laboratoire.email;
-    const url = `http://93.115.16.90:8085/amm-web-backend/otp/generate/${email}`;
+    const url = `${this.apiUrl}/otp/generate/${email}`;
 
     const headers = new HttpHeaders({
       "Content-Type": "application/json",
@@ -248,7 +250,7 @@ export class RegisterComponent implements OnInit {
     this.loading = true;
     const email = this.laboratoire.email;
     const otp = this.otp;
-    const url = `http://93.115.16.90:8085/amm-web-backend/otp/verify?email=${email}&otp=${otp}`;
+    const url = `${this.apiUrl}/otp/verify?email=${email}&otp=${otp}`;
 
     this.http
       .post<any>(
@@ -324,7 +326,7 @@ export class RegisterComponent implements OnInit {
     this.loading = true;
     this.formEnabled = false;
 
-    const url = "http://93.115.16.90:8085/amm-web-backend/saveLaboratoire";
+    const url = "${this.apiUrl}/saveLaboratoire";
     const headers = new HttpHeaders({
       "Content-Type": "application/json",
       Accept: "application/json",

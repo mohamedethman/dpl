@@ -2,12 +2,14 @@
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
-import {TIMEOUT} from "../app/util/constantes-app";
+
 
 export const environment = {
   production: false,
-  idleTimeInMinutes: TIMEOUT,
-  baseUrl: 'http://93.115.16.90:8085/amm-web-backend'
+  ip:'http://localhost',
+  port:'8085',
+  context:'/amm-web-backend',
+  baseUrl: 'http://localhost/amm-web-backend',
 };
 
 /*

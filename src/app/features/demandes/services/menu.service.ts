@@ -2,12 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AuthenticationService } from '../../../service/authenticationService';
+import {environment} from "../../../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
 })
 export class MenuService {
-  private apiUrl = 'http://93.115.16.90:8085/amm-web-backend/menuuser';
+
+  private apiUrl = `${environment.baseUrl}`;
 
   constructor(private http: HttpClient, private authService: AuthenticationService) {}
 
@@ -21,6 +23,6 @@ export class MenuService {
 
   // Fetch full menu (includes submenus)
   getMenu(): Observable<any[]> {
-    return this.http.get<any[]>(this.apiUrl, { headers: this.getHeaders() });
+    return this.http.get<any[]>(`${this.apiUrl}/menuuser/`, { headers: this.getHeaders() });
   }
 }
