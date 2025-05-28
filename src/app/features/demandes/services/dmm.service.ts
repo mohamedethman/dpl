@@ -24,6 +24,7 @@ export class DmmService {
     saveMedicament: `${this.baseUrl}/saveMedicament`,
     saveAllModuleElementData: `${this.baseUrl}/saveAllModuleElementData`,
     autocompleteDCIs: `${this.baseUrl}/autocompleteDCIs/`,
+    autocompleteATCs: `${this.baseUrl}/autocompleteATCs/`,
     soumettreDossier: `${this.baseUrl}/soumettreDossier`,
     stockerFichier: `${this.baseUrl}/stockerFichier`,
     getElementsAndElementsData: `${this.baseUrl}/getElementsAndElementsData/`,
@@ -44,6 +45,34 @@ export class DmmService {
     });
   }
 
+  getATCs(query: string): Observable<any[]> {
+    const url = `${this.endpoints.autocompleteATCs}${query}`;
+    return this.http.get<any>(url, { headers: this.createHeaders() }).pipe(
+      map((response) => response.data), // Extracting the 'data' array from the response
+      tap((data) => console.log("Fetched DCIs:", data))
+    );
+  }
+  // getATCs(query: string): Observable<any[]> {
+  //   const url = `${this.baseUrl}/autocompleteATCs/${query}`;
+  //   const headers = this.createHeaders();
+
+  //   console.log('Fetching ATCs with query:', query); // Add this for debugging
+
+  //   return this.http.get<any>(url, { headers }).pipe(
+  //     tap(response => console.log('ATC API Response:', response)), // Log full response
+  //     map((response) => {
+  //       if (response && response.data) {
+  //         console.log('ATC Data:', response.data); // Log the data
+  //         return response.data;
+  //       }
+  //       return [];
+  //     }),
+  //     catchError((error) => {
+  //       console.error("❌ Error fetching ATC codes:", error);
+  //       return throwError(() => new Error("Failed to fetch ATC codes"));
+  //     })
+  //   );
+  // }
   // Fetch wizard steps dynamically from API
   getSteps(): Observable<ApiResponse> {
     return this.http

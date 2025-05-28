@@ -9,8 +9,8 @@ import {
 import { Router } from "@angular/router";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { ToastrService } from "ngx-toastr";
-import {environment} from "../../../../../environments/environment";
-import {host} from "../../../../util/constantes-app";
+import { environment } from "../../../../../environments/environment";
+import { host } from "../../../../util/constantes-app";
 
 declare var bootstrap: any;
 
@@ -95,9 +95,7 @@ export class RegisterComponent implements OnInit {
     if (!this.laboratoire.login) return;
 
     this.http
-      .get(
-        `${this.apiUrl}/checkLoginExists/${this.laboratoire.login}`
-      )
+      .get(`${this.apiUrl}/checkLoginExists/${this.laboratoire.login}`)
       .subscribe({
         next: (exists: any) => {
           if (exists) {
@@ -249,6 +247,7 @@ export class RegisterComponent implements OnInit {
     }
 
     this.loading = true;
+    this.otpError = false; // Reset error state before new verification attempt
     const email = this.laboratoire.email;
     const otp = this.otp;
     const url = `${this.apiUrl}/otp/verify?email=${email}&otp=${otp}`;
@@ -270,7 +269,7 @@ export class RegisterComponent implements OnInit {
           this.loading = false;
           if (response.body?.success) {
             this.otpVerified = true;
-            this.otpError = false;
+            this.otpError = false; // Ensure error is cleared on success
             this.toastr.success("Email vérifié avec succès");
             this.submitRegistration();
           } else {
@@ -282,13 +281,16 @@ export class RegisterComponent implements OnInit {
         },
         error: (error) => {
           this.loading = false;
-          this.otpError = true;
-          if (error.status === 200) {
+          // Only set error if it's not a successful response
+          if (error.status !== 200) {
+            this.otpError = true;
+            this.toastr.error(error.error?.message || "Erreur de vérification");
+          } else {
+            // Handle cases where status is 200 but comes through error callback
             this.otpVerified = true;
+            this.otpError = false;
             this.toastr.success("Email vérifié avec succès");
             this.submitRegistration();
-          } else {
-            this.toastr.error(error.error?.message || "Erreur de vérification");
           }
         },
       });

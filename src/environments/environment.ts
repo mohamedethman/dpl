@@ -2,14 +2,12 @@
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
-
-
 export const environment = {
   production: false,
-  ip:'http://localhost',
-  port:'8095',
-  context:'/amm-web-backend',
-  baseUrl: 'http://localhost:8095/amm-web-backend',
+  ip: "http://localhost",
+  port: "8095",
+  context: "/amm-web-backend",
+  baseUrl: "http://localhost:8095/amm-web-backend",
 };
 
 /*
