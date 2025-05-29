@@ -39,7 +39,10 @@ export class RenouvellementAmmComponent implements OnInit {
   stepSaved: boolean[] = [];
   dossierId: number | null = null;
   labFabriquantValue: boolean = false;
-
+  atcSearchTerm = new Subject<string>();
+  atcOptions: any[] = [];
+  selectedATCCode: any = null;
+  atcInputValue: string = "";
   recapDossier: RecapDossierApiResponse | null = null;
   dossierModuleElements: DossierModuleElement[] = [];
   loading = true;
@@ -152,6 +155,19 @@ export class RenouvellementAmmComponent implements OnInit {
       .subscribe((data) => {
         this.substanceOptions = data;
       });
+    this.atcSearchTerm
+      .pipe(
+        debounceTime(300),
+        distinctUntilChanged(),
+        switchMap((term) => {
+          console.log("Searching ATC with term:", term); // Add this
+          return term ? this.dmmService.getATCs(term) : of([]);
+        })
+      )
+      .subscribe((data) => {
+        console.log("Received ATC options:", data); // Add this
+        this.atcOptions = data;
+      });
   }
 
   // Main DCI methods
@@ -166,7 +182,34 @@ export class RenouvellementAmmComponent implements OnInit {
       dci: dci.nomSubstance,
     });
   }
+  onATCSearch(term: string) {
+    this.atcSearchTerm.next(term);
+  }
 
+  onATCSelect(atc: any) {
+    console.log("Selected ATC:", atc);
+    this.selectedATCCode = atc;
+    this.atcInputValue = atc.codeATC;
+    this.medicamentForm.patchValue({
+      code_atc: atc.codeATC,
+    });
+
+    // Clear the dropdown list
+    this.atcOptions = [];
+    this.atcSearchTerm.next(""); // Reset the search term
+
+    // Clear manual ATC input if needed
+    this.medicamentForm.get("autreAtc")?.setValue("");
+  }
+
+  clearATCSelection() {
+    this.selectedATCCode = null;
+    this.atcInputValue = "";
+    this.atcOptions = [];
+    this.medicamentForm.patchValue({
+      code_atc: null,
+    });
+  }
   clearMainDciSelection() {
     this.selectedMainDci = null;
     this.mainDciInputValue = "";

@@ -109,7 +109,10 @@
                         <input
                           type="checkbox"
                           [checked]="isOtherATCSelected"
-                          (change)="isOtherATCSelected = !isOtherATCSelected"
+                          (change)="
+                            isOtherATCSelected = !isOtherATCSelected;
+                            clearATCSelection()
+                          "
                           class="form-check-input"
                           id="toggleATC"
                         />
@@ -119,28 +122,44 @@
                       </div>
                     </label>
 
-                    <select
-                      formControlName="code_atc"
-                      class="form-select border-theme"
+                    <!-- Autocomplete input -->
+                    <input
+                      *ngIf="!isOtherATCSelected"
+                      type="text"
+                      class="form-control border-theme"
+                      [(ngModel)]="atcInputValue"
+                      [ngModelOptions]="{ standalone: true }"
+                      (input)="onATCSearch($event.target.value)"
+                      placeholder="Rechercher un code ATC"
+                    />
+
+                    <!-- Autocomplete dropdown -->
+                    <!-- In your template -->
+                    <div
+                      *ngIf="atcOptions.length > 0 && !isOtherATCSelected"
+                      class="list-group shadow-sm mt-2"
                     >
-                      <option
-                        *ngFor="let atc of atcCodes"
-                        [value]="atc.codeATC"
+                      <button
+                        *ngFor="let atc of atcOptions"
+                        type="button"
+                        class="list-group-item list-group-item-action"
+                        (click)="onATCSelect(atc)"
                       >
                         {{ atc.codeATC }}
-                      </option>
-                    </select>
+                      </button>
+                    </div>
 
-                    <label *ngIf="isOtherATCSelected" class="mt-3"
-                      >Autre Code ATC</label
-                    >
-                    <input
-                      *ngIf="isOtherATCSelected"
-                      type="text"
-                      formControlName="autreAtc"
-                      class="form-control border-theme mt-2"
-                      placeholder="Saisir un Code ATC"
-                    />
+                    <!-- Manual input when "Autre" is selected -->
+                    <div *ngIf="isOtherATCSelected">
+                      <label class="mt-3">Autre Code ATC</label>
+                      <input
+                        type="text"
+                        formControlName="autreAtc"
+                        class="form-control border-theme mt-2"
+                        placeholder="Saisir un Code ATC"
+                        (input)="onToggleOtherATC()"
+                      />
+                    </div>
                   </div>
                 </div>
 
