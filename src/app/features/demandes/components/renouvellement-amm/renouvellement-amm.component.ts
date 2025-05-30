@@ -8,7 +8,12 @@ import { Subject } from "rxjs";
 
 import { DmmService } from "../../services/dmm.service";
 import { ApiResponse } from "../../models/step.model"; // Import ApiResponse interface
-import { debounceTime, distinctUntilChanged, switchMap } from "rxjs/operators";
+import {
+  catchError,
+  debounceTime,
+  distinctUntilChanged,
+  switchMap,
+} from "rxjs/operators";
 import { Observable, of } from "rxjs";
 import { tap } from "rxjs/operators";
 import { ToastrService } from "ngx-toastr";
@@ -43,6 +48,8 @@ export class RenouvellementAmmComponent implements OnInit {
   atcOptions: any[] = [];
   selectedATCCode: any = null;
   atcInputValue: string = "";
+  isAtcDropdownOpen: boolean = false;
+  minSearchLength: number = 1; // Change from 2 to 1 to show results from first character
   recapDossier: RecapDossierApiResponse | null = null;
   dossierModuleElements: DossierModuleElement[] = [];
   loading = true;
@@ -159,14 +166,30 @@ export class RenouvellementAmmComponent implements OnInit {
       .pipe(
         debounceTime(300),
         distinctUntilChanged(),
+        tap(() => {
+          if (
+            this.atcInputValue &&
+            this.atcInputValue.length >= this.minSearchLength
+          ) {
+            this.isAtcDropdownOpen = true;
+          }
+        }),
         switchMap((term) => {
-          console.log("Searching ATC with term:", term); // Add this
-          return term ? this.dmmService.getATCs(term) : of([]);
+          if (!term || term.length < this.minSearchLength) {
+            this.atcOptions = [];
+            return of([]);
+          }
+          return this.dmmService.getATCs(term).pipe(
+            catchError(() => {
+              this.isAtcDropdownOpen = false;
+              return of([]);
+            })
+          );
         })
       )
       .subscribe((data) => {
-        console.log("Received ATC options:", data); // Add this
         this.atcOptions = data;
+        this.isAtcDropdownOpen = data.length > 0;
       });
   }
 

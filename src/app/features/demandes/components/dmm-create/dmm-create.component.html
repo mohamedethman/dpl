@@ -123,30 +123,65 @@
                     </label>
 
                     <!-- Autocomplete input -->
-                    <input
-                      *ngIf="!isOtherATCSelected"
-                      type="text"
-                      class="form-control border-theme"
-                      [(ngModel)]="atcInputValue"
-                      [ngModelOptions]="{ standalone: true }"
-                      (input)="onATCSearch($event.target.value)"
-                      placeholder="Rechercher un code ATC"
-                    />
+                    <div *ngIf="!isOtherATCSelected" class="position-relative">
+                      <input
+                        type="text"
+                        class="form-control border-theme"
+                        [(ngModel)]="atcInputValue"
+                        [ngModelOptions]="{ standalone: true }"
+                        (input)="onATCInputChange($event.target.value)"
+                        (focus)="onATCFocus()"
+                        (blur)="onATCBlur()"
+                        placeholder="Rechercher un code ATC"
+                      />
 
-                    <!-- Autocomplete dropdown -->
-                    <!-- In your template -->
-                    <div
-                      *ngIf="atcOptions.length > 0 && !isOtherATCSelected"
-                      class="list-group shadow-sm mt-2"
-                    >
+                      <!-- Clear button (X) -->
                       <button
-                        *ngFor="let atc of atcOptions"
+                        *ngIf="atcInputValue"
                         type="button"
-                        class="list-group-item list-group-item-action"
-                        (click)="onATCSelect(atc)"
+                        class="btn btn-sm position-absolute end-0 top-50 translate-middle-y me-2"
+                        style="background: none; border: none"
+                        (click)="clearATCSelection()"
+                        (mousedown)="$event.preventDefault()"
                       >
-                        {{ atc.codeATC }}
+                        <i class="fas fa-times"></i>
                       </button>
+
+                      <!-- Autocomplete dropdown -->
+                      <div
+                        *ngIf="
+                          isAtcDropdownOpen &&
+                          atcOptions.length > 0 &&
+                          !isOtherATCSelected
+                        "
+                        class="list-group shadow-sm mt-1 position-absolute w-100 z-index-1000 bg-white"
+                        style="max-height: 200px; overflow-y: auto"
+                      >
+                        <button
+                          *ngFor="let atc of atcOptions"
+                          type="button"
+                          class="list-group-item list-group-item-action text-start"
+                          (mousedown)="$event.preventDefault()"
+                          (click)="onATCSelect(atc)"
+                        >
+                          {{ atc.codeATC }}
+                        </button>
+                      </div>
+
+                      <!-- No results message -->
+                      <div
+                        *ngIf="
+                          isAtcDropdownOpen &&
+                          atcOptions.length === 0 &&
+                          atcInputValue &&
+                          atcInputValue.length >= minSearchLength
+                        "
+                        class="list-group shadow-sm mt-1 position-absolute w-100 z-index-1000 bg-white"
+                      >
+                        <div class="list-group-item text-muted">
+                          Aucun résultat trouvé
+                        </div>
+                      </div>
                     </div>
 
                     <!-- Manual input when "Autre" is selected -->

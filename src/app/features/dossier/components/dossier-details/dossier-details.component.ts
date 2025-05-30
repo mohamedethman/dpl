@@ -140,6 +140,16 @@ export class DossierDetailsComponent implements OnInit {
       ? "Oui"
       : "Non";
   }
+
+  removeFileFromList(fileList: FileList, index: string): FileList {
+    const filesArray = Array.from(fileList);
+    filesArray.splice(+index, 1);
+
+    // Convert back to FileList-like object
+    const dataTransfer = new DataTransfer();
+    filesArray.forEach((file) => dataTransfer.items.add(file));
+    return dataTransfer.files;
+  }
   loadRecommendations(): void {
     this.dossierService.getAllRecommendations().subscribe({
       next: (response: any) => {

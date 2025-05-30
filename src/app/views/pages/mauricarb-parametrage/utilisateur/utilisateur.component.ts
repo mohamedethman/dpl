@@ -15,7 +15,7 @@ import { NgxPermissionsService } from "ngx-permissions";
 import { ListesService } from "../listes/listes.service";
 import { Dci } from "../../../../features/references/dcis/models/dcis";
 import { ToastrService } from "ngx-toastr";
-
+import Swal from "sweetalert2";
 const pattern =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 @Component({
@@ -220,7 +220,15 @@ export class UtilisateurComponent implements OnInit {
           !this.resultVO.messagesErrors ||
           this.resultVO.messagesErrors.length === 0
         ) {
-          // this.toastr.success('Utilisateur ajouté avec succés!');
+          // Show SweetAlert2 success message
+          Swal.fire({
+            title: "Succès!",
+            text: "Utilisateur créé avec succès",
+            icon: "success",
+            timer: 1500, // Auto-close after 1.5s
+            showConfirmButton: false,
+          });
+          this.closeModal("scrollableModal");
           this.rechercherUtilisateur();
         } else {
           this.toastr.error(this.resultVO.messagesErrors[0]);
@@ -229,6 +237,13 @@ export class UtilisateurComponent implements OnInit {
       (error) => {
         this.resultVO = error;
         this.initializeResultVO();
+        // Show SweetAlert2 error message if needed
+        Swal.fire({
+          title: "Erreur!",
+          text: "Une erreur est survenue lors de la création de l'utilisateur",
+          icon: "error",
+          confirmButtonText: "OK",
+        });
       }
     );
   }
