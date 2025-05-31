@@ -70,6 +70,7 @@ export class RenouvellementAmmComponent implements OnInit {
   dcis$: Observable<any[]> = of([]); // ✅ Observable for DCI suggestions
 
   dcisList: any[] = [];
+  uploadStatus: { [key: string]: "success" | "error" | null } = {};
 
   dciSearchText: string = "";
   selectedDci: any = null;
@@ -597,14 +598,22 @@ export class RenouvellementAmmComponent implements OnInit {
     const file = event.target.files[0];
     if (file) {
       const fileExtension =
-        file.name.split(".").pop()?.toLowerCase() || "unknown"; // Get file extension
+        file.name.split(".").pop()?.toLowerCase() || "unknown";
 
       this.convertFileToBase64(file)
         .then((base64File) => {
-          this.uploadFileToBackend(base64File, element.id, fileExtension); // Send to backend
+          return this.uploadFileToBackend(
+            base64File,
+            element.id,
+            fileExtension
+          );
+        })
+        .then(() => {
+          this.uploadStatus[element.id] = "success";
         })
         .catch((error) => {
-          console.error("❌ Error converting file:", error);
+          console.error("❌ Error uploading file:", error);
+          this.uploadStatus[element.id] = "error";
         });
     }
   }

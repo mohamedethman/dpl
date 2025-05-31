@@ -60,6 +60,10 @@ export class DmmCreateComponent implements OnInit {
   error: string | null = null;
   dosages: string[] = [];
   isFabricantLab: boolean = false;
+  uploadStatus: { [key: string]: "success" | "error" | null } = {};
+
+  uploadProgress: { [key: number]: number } = {}; // Tracks progress by element ID
+
   // Dropdown data
   atcCodes: string[] = [];
   conditionnements: string[] = [];
@@ -583,14 +587,22 @@ export class DmmCreateComponent implements OnInit {
     const file = event.target.files[0];
     if (file) {
       const fileExtension =
-        file.name.split(".").pop()?.toLowerCase() || "unknown"; // Get file extension
+        file.name.split(".").pop()?.toLowerCase() || "unknown";
 
       this.convertFileToBase64(file)
         .then((base64File) => {
-          this.uploadFileToBackend(base64File, element.id, fileExtension); // Send to backend
+          return this.uploadFileToBackend(
+            base64File,
+            element.id,
+            fileExtension
+          );
+        })
+        .then(() => {
+          this.uploadStatus[element.id] = "success";
         })
         .catch((error) => {
-          console.error("❌ Error converting file:", error);
+          console.error("❌ Error uploading file:", error);
+          this.uploadStatus[element.id] = "error";
         });
     }
   }

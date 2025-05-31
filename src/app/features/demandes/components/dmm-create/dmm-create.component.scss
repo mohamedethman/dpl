@@ -338,3 +338,43 @@ cdk-step .cdk-step-header {
   background-color: #6c757d;
   opacity: 0.65;
 }
+.file-upload-container {
+  position: relative;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  padding: 5px;
+  transition: all 0.3s ease;
+}
+
+.file-upload-container.upload-success {
+  border-color: #28a745;
+}
+
+.file-upload-container.upload-error {
+  border-color: #dc3545;
+}
+
+.upload-progress {
+  margin-top: 5px;
+}
+
+.upload-status {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.2rem;
+}
+
+.progress {
+  height: 20px;
+  margin-top: 5px;
+}
+
+.progress-bar {
+  line-height: 20px;
+  font-size: 12px;
+}
+input[type="file"].form-control {
+  padding-right: 2.5rem; /* room for the icon */
+}

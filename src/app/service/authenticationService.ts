@@ -13,7 +13,7 @@ import { ResultVO } from "../modele/commun/ResultVO";
 import { MenuItem } from "../views/layout/navbar/menu.model";
 import { Prestation } from "../views/pages/mauricarb-parametrage/modele/referentiels";
 import { throwError, Observable, of } from "rxjs";
-import { map, catchError, tap } from "rxjs/operators";
+import { map, catchError, tap, timeout, retry } from "rxjs/operators";
 
 /**
  * Created by Med.Mansour on 02/05/2024.
@@ -337,11 +337,14 @@ export class AuthenticationService {
 
     const url = `${host}/download-file-amm?idDossier=${idDossier}`;
 
-    // First try HEAD request
+    // First try HEAD request which is lighter and doesn't trigger CORS preflight
     return this.http
       .head(url, {
         headers: new HttpHeaders({
           Authorization: this.getJwtToken(),
+          // Add these headers to help with CORS
+          "Content-Type": "application/json",
+          Accept: "application/json",
         }),
         observe: "response",
       })
@@ -351,12 +354,14 @@ export class AuthenticationService {
           return response.status >= 200 && response.status < 300;
         }),
         catchError((error: HttpErrorResponse) => {
-          // If HEAD fails, try GET as fallback
-          if (error.status === 405 || error.status === 404) {
+          // If HEAD fails with 405 (Method Not Allowed), try GET
+          if (error.status === 405) {
             return this.http
               .get(url, {
                 headers: new HttpHeaders({
                   Authorization: this.getJwtToken(),
+                  "Content-Type": "application/json",
+                  Accept: "application/json",
                 }),
                 responseType: "blob",
                 observe: "response",
@@ -366,8 +371,13 @@ export class AuthenticationService {
                 catchError(() => of(false))
               );
           }
+          // For CORS errors or other issues, return false
           return of(false);
-        })
+        }),
+        // Add timeout to prevent hanging requests
+        timeout(5000),
+        // Retry once if the request fails
+        retry(1)
       );
   }
   markNotificationAsRead(notificationId: number): Observable<void> {

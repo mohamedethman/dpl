@@ -19,8 +19,8 @@ import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { ResultVO } from "../../../modele/commun/ResultVO";
 //import {ToastrService} from "ngx-toastr";
 import { CncmpEnregistrementService } from "../../pages/mauricarb-enregistrement/cncmp-enregistrement.service";
-import { forkJoin, of } from "rxjs";
-import { catchError, map } from "rxjs/operators";
+import { forkJoin, Observable, of } from "rxjs";
+import { catchError, finalize, map, shareReplay } from "rxjs/operators";
 
 @Component({
   selector: "app-navbar",
@@ -228,23 +228,48 @@ export class NavbarComponent implements OnInit {
     });
   }
 
+  // In your navbar.component.ts
+
+  // Add a class-level variable to track pending requests
+  private ammCheckCache: { [key: number]: Observable<boolean> } = {};
+
   checkAmmFilesAvailability() {
-    // Clear previous availability data
+    // Clear previous availability data but keep cached observables
     this.ammAvailability = {};
 
-    // Filter notifications with idDossier and check AMM for each
-    this.notifications
-      .filter((n) => n.idDossier)
-      .forEach((notification) => {
-        this.authService.checkAmmExists(notification.idDossier).subscribe({
-          next: (exists) => {
-            this.ammAvailability[notification.idDossier] = exists;
-          },
-          error: () => {
-            this.ammAvailability[notification.idDossier] = false;
-          },
-        });
+    // Get unique idDossier values from notifications
+    const uniqueDossiers = [
+      ...new Set(
+        this.notifications.filter((n) => n.idDossier).map((n) => n.idDossier)
+      ),
+    ];
+
+    // Process each unique dossier
+    uniqueDossiers.forEach((idDossier) => {
+      // Check if we already have a pending request for this idDossier
+      if (!this.ammCheckCache[idDossier]) {
+        this.ammCheckCache[idDossier] = this.authService
+          .checkAmmExists(idDossier)
+          .pipe(
+            // Share the observable to prevent duplicate requests
+            shareReplay(1),
+            // Automatically clean up cache after some time (5 minutes)
+            finalize(() => {
+              setTimeout(() => delete this.ammCheckCache[idDossier], 300000);
+            })
+          );
+      }
+
+      // Subscribe to the cached observable
+      this.ammCheckCache[idDossier].subscribe({
+        next: (exists) => {
+          this.ammAvailability[idDossier] = exists;
+        },
+        error: () => {
+          this.ammAvailability[idDossier] = false;
+        },
       });
+    });
   }
   downalodamm(idDossier: number): void {
     this.authService.downloadAmmn(idDossier).subscribe({
@@ -447,7 +472,7 @@ export class NavbarComponent implements OnInit {
           link: notif.link,
         }));
         this.updateNotificationCount();
-        this.checkAmmFilesAvailability();
+        // this.checkAmmFilesAvailability();
       },
       (error) =>
         console.error("Erreur lors de la récupération des notifications", error)
