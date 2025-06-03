@@ -148,7 +148,7 @@ export class NavbarComponent implements OnInit {
 
     // Validate inputs
     if (
-      !this.passwordData.currentPassword ||
+      // !this.passwordData.currentPassword ||
       !this.passwordData.newPassword ||
       !this.confirmPassword
     ) {
