@@ -23,6 +23,12 @@ export class LoginComponent implements OnInit {
   login: any;
   password: any;
   pageLoading = true;
+  forgotEmail: string;
+  otp: string;
+  newPassword: string;
+  showForgotModal = false;
+  otpSent = false;
+  resetDone = false;
 
   constructor(
     private authService: AuthenticationService,
@@ -51,6 +57,34 @@ export class LoginComponent implements OnInit {
     });
   }
 
+  openForgotModal() {
+    this.forgotEmail = "";
+    this.showForgotModal = true;
+  }
+
+  closeModal() {
+    this.showForgotModal = false;
+  }
+
+  sendResetLink() {
+    if (!this.forgotEmail || this.forgotEmail.trim() === "") {
+      this.toastr.error("Veuillez saisir votre email");
+      return;
+    }
+
+    this.authService.sendPasswordResetLink(this.forgotEmail).subscribe({
+      next: () => {
+        this.toastr.success(
+          "Un lien de réinitialisation a été envoyé à votre email"
+        );
+        this.closeModal();
+      },
+      error: () => {
+        this.toastr.error("Erreur lors de l'envoi du lien de réinitialisation");
+      },
+    });
+  }
+
   initializeResultVO() {
     if (this.resultVO == null) {
       this.resultVO = new ResultVO();
@@ -69,6 +103,47 @@ export class LoginComponent implements OnInit {
     }
   }
 
+  sendOtp() {
+    if (!this.forgotEmail || this.forgotEmail.trim() === "") {
+      this.toastr.error("Veuillez saisir votre email");
+      return;
+    }
+
+    this.http
+      .post(`${host}/auth/send-otp`, { email: this.forgotEmail })
+      .subscribe(
+        (res: any) => {
+          this.toastr.success("OTP envoyé à votre email");
+          this.otpSent = true;
+        },
+        (err) => {
+          this.toastr.error("Email introuvable");
+        }
+      );
+  }
+
+  verifyOtpAndReset() {
+    if (!this.otp || !this.newPassword) {
+      this.toastr.error("Veuillez remplir tous les champs");
+      return;
+    }
+
+    const payload = {
+      email: this.forgotEmail,
+      otp: this.otp,
+      newPassword: this.newPassword,
+    };
+
+    this.http.post(`${host}/auth/reset-password`, payload).subscribe(
+      (res: any) => {
+        this.toastr.success("Mot de passe réinitialisé avec succès");
+        this.resetDone = true;
+      },
+      (err) => {
+        this.toastr.error("OTP invalide ou expiré");
+      }
+    );
+  }
   onLogin() {
     console.log(this.login);
     localStorage.clear();

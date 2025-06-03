@@ -42,6 +42,31 @@ export class AuthenticationService {
       .catch(this.handleError);
   }
 
+  // Add these methods to your AuthenticationService
+  sendPasswordResetOTP(email: string): Observable<any> {
+    return this.http.post(`${host}/auth/forgot-password`, { email });
+  }
+
+  sendPasswordResetLink(email: string): Observable<any> {
+    const encodedEmail = encodeURIComponent(email);
+    return this.http.post(`${host}/resetPassword/${encodedEmail}`, {});
+  }
+  verifyPasswordResetOTP(email: string, otp: string): Observable<any> {
+    return this.http.post(`${host}/auth/verify-reset-otp`, { email, otp });
+  }
+
+  resetPassword(
+    email: string,
+    otp: string,
+    newPassword: string
+  ): Observable<any> {
+    return this.http.post(`${host}/auth/reset-password`, {
+      email,
+      otp,
+      newPassword,
+    });
+  }
+
   downloadFile(endpoint: string): Observable<Blob> {
     const url = `${host}${endpoint}`;
     const headers = new HttpHeaders({
@@ -146,6 +171,33 @@ export class AuthenticationService {
       .toPromise()
       .then((response) => response as ResultVO)
       .catch(this.handleError);
+  }
+  // Add to your authentication.service.ts
+  updatePassword(data: {
+    login: string;
+    currentPassword: string;
+    newPassword: string;
+  }): Promise<any> {
+    return this.http
+      .post(host + "/updatePassword", data, {
+        headers: new HttpHeaders({ authorization: this.getJwtToken() }),
+      })
+      .toPromise()
+      .then((response) => response)
+      .catch((error) => {
+        throw error.error || "Erreur lors de la mise à jour du mot de passe";
+      });
+  }
+  // In your authentication.service.ts
+  getUserConnected2(): Observable<any> {
+    if (this.jwtToken == null) {
+      return of(new Utilisateur());
+    }
+    return this.http
+      .get<any>(host + "/getuserconnected", {
+        headers: new HttpHeaders({ authorization: this.getJwtToken() }),
+      })
+      .pipe(catchError(this.handleError));
   }
 
   deconnectCurrentUser() {
@@ -393,18 +445,18 @@ export class AuthenticationService {
     );
   }
 
-  resetPassword(user: Utilisateur): Promise<ResultVO> {
-    return this.http
-      .post(host + "/resetPassword", JSON.stringify(user), {
-        headers: new HttpHeaders({
-          authorization: this.getJwtToken(),
-          "Content-Type": "application/json",
-        }),
-      })
-      .toPromise()
-      .then((res) => res as ResultVO)
-      .catch(this.handleError);
-  }
+  // resetPassword(user: Utilisateur): Promise<ResultVO> {
+  //   return this.http
+  //     .post(host + "/resetPassword", JSON.stringify(user), {
+  //       headers: new HttpHeaders({
+  //         authorization: this.getJwtToken(),
+  //         "Content-Type": "application/json",
+  //       }),
+  //     })
+  //     .toPromise()
+  //     .then((res) => res as ResultVO)
+  //     .catch(this.handleError);
+  // }
 
   logout() {
     let resultVO: ResultVO = new ResultVO();

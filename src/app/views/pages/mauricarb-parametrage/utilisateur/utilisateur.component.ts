@@ -30,6 +30,8 @@ export class UtilisateurComponent implements OnInit {
   @Input() resultVO: ResultVO;
   profils: Groupe[];
   profilsPresents: Groupe[];
+  filteredProfils: any[] = []; // Filtered list (without LAB)
+
   pager: any = {};
   page = 1;
   pageSize = 10;
@@ -179,6 +181,11 @@ export class UtilisateurComponent implements OnInit {
     }
     if (this.newUser.login == null || this.newUser.login.trim() === "") {
       this.toastr.error("Saisir le login!");
+      return;
+    }
+
+    if (this.newUser.email == null || this.newUser.email.trim() === "") {
+      this.toastr.error("Saisir le email!");
       return;
     }
     if (
@@ -386,22 +393,22 @@ export class UtilisateurComponent implements OnInit {
     }
 
     this.showpin1 = true;
-    this.authServiceApp.resetPassword(this.newUser).then(
-      (resultat) => {
-        let user = resultat.data as Utilisateur;
-        this.showpin1 = false;
-        if (user != null) {
-          this.modalService.dismissAll();
-          this.toastr.success("Votre mot de passe a été modifié!");
-        } else {
-          // this.toastr.error('Mot de passe incorrect!');
-        }
-      },
-      (error) => {
-        this.toastr.error(error);
-        this.showpin1 = false;
-      }
-    );
+    // this.authServiceApp.resetPassword(this.newUser).then(
+    //   (resultat) => {
+    //     let user = resultat.data as Utilisateur;
+    //     this.showpin1 = false;
+    //     if (user != null) {
+    //       this.modalService.dismissAll();
+    //       this.toastr.success("Votre mot de passe a été modifié!");
+    //     } else {
+    //       // this.toastr.error('Mot de passe incorrect!');
+    //     }
+    //   },
+    //   (error) => {
+    //     this.toastr.error(error);
+    //     this.showpin1 = false;
+    //   }
+    // );
   }
 
   openModalEditPwd(content, user: Utilisateur) {

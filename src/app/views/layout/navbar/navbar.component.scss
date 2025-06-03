@@ -97,3 +97,354 @@
   text-overflow: ellipsis;
   max-width: 100%;
 }
+/* Add to your navbar.component.scss */
+.custom-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1050;
+
+  .custom-modal-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+
+  .custom-modal-content {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    width: 90%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+    z-index: 1;
+    animation: modalFadeIn 0.3s ease-out;
+  }
+
+  .custom-modal-header {
+    padding: 15px 20px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    h3 {
+      margin: 0;
+      font-size: 1.5rem;
+      color: #333;
+    }
+  }
+
+  .custom-modal-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #777;
+    &:hover {
+      color: #333;
+    }
+  }
+
+  .custom-modal-body {
+    padding: 20px;
+  }
+
+  .profile-details {
+    .profile-row {
+      display: flex;
+      margin-bottom: 15px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid #f5f5f5;
+
+      &:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+        padding-bottom: 0;
+      }
+    }
+
+    .profile-label {
+      font-weight: bold;
+      width: 150px;
+      color: #555;
+    }
+
+    .profile-value {
+      flex: 1;
+      color: #333;
+    }
+  }
+
+  .laboratoire-section {
+    margin-top: 25px;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+
+    h4 {
+      margin-bottom: 15px;
+      color: #444;
+    }
+  }
+
+  .loading-spinner {
+    text-align: center;
+    padding: 30px;
+    color: #666;
+
+    .fa-spinner {
+      margin-right: 10px;
+    }
+  }
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+/* Add to your navbar.component.scss */
+.custom-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1050;
+
+  .custom-modal-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(2px);
+  }
+
+  .custom-modal-content {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    max-width: 700px;
+    max-height: 90vh;
+    overflow-y: auto;
+    z-index: 1;
+    animation: modalFadeIn 0.3s ease-out;
+    border: 1px solid #e0e0e0;
+  }
+
+  .custom-modal-header {
+    padding: 20px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f8f9fa;
+    border-radius: 10px 10px 0 0;
+
+    h3 {
+      margin: 0;
+      font-size: 1.5rem;
+      color: #333;
+      font-weight: 600;
+    }
+  }
+
+  .custom-modal-close {
+    background: none;
+    border: none;
+    font-size: 1.8rem;
+    cursor: pointer;
+    color: #777;
+    transition: color 0.2s;
+
+    &:hover {
+      color: #333;
+    }
+  }
+
+  .custom-modal-body {
+    padding: 20px;
+  }
+
+  .profile-tabs {
+    display: flex;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #eee;
+
+    .tab-btn {
+      padding: 10px 20px;
+      background: none;
+      border: none;
+      border-bottom: 3px solid transparent;
+      cursor: pointer;
+      font-weight: 500;
+      color: #666;
+      transition: all 0.2s;
+
+      i {
+        margin-right: 8px;
+      }
+
+      &:hover {
+        color: #333;
+      }
+
+      &.active {
+        color: #2c58a0;
+        border-bottom-color: #2c58a0;
+      }
+    }
+  }
+
+  .profile-details {
+    .profile-section {
+      margin-bottom: 25px;
+
+      h4 {
+        color: #2c58a0;
+        margin-bottom: 15px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid #eee;
+      }
+    }
+
+    .profile-row {
+      display: flex;
+      margin-bottom: 12px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #f8f8f8;
+
+      &:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+        padding-bottom: 0;
+      }
+    }
+
+    .profile-label {
+      font-weight: 600;
+      width: 180px;
+      color: #555;
+    }
+
+    .profile-value {
+      flex: 1;
+      color: #333;
+    }
+  }
+
+  .password-form {
+    .form-group {
+      margin-bottom: 20px;
+
+      label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 500;
+        color: #555;
+      }
+
+      .form-control {
+        width: 100%;
+        padding: 10px 15px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        transition: border-color 0.2s;
+
+        &:focus {
+          outline: none;
+          border-color: #2c58a0;
+          box-shadow: 0 0 0 3px rgba(44, 88, 160, 0.1);
+        }
+      }
+    }
+
+    .form-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 25px;
+
+      .btn {
+        padding: 10px 20px;
+        border-radius: 5px;
+        font-weight: 500;
+        transition: all 0.2s;
+
+        &.btn-secondary {
+          background-color: #f0f0f0;
+          color: #333;
+          border: 1px solid #ddd;
+
+          &:hover {
+            background-color: #e0e0e0;
+          }
+        }
+
+        &.btn-primary {
+          background-color: #2c58a0;
+          color: white;
+          border: 1px solid #1d4b8f;
+
+          &:hover {
+            background-color: #1d4b8f;
+          }
+
+          &:disabled {
+            background-color: #a0b0c0;
+            cursor: not-allowed;
+          }
+        }
+      }
+    }
+  }
+
+  .alert {
+    padding: 12px 15px;
+    border-radius: 5px;
+    margin-top: 15px;
+
+    &.alert-danger {
+      background-color: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+
+    &.alert-success {
+      background-color: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+  }
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

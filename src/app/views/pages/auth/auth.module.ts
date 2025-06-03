@@ -7,9 +7,9 @@ import {
 } from "./register/register.component";
 import { Routes, RouterModule } from "@angular/router";
 import { AuthComponent } from "./auth.component";
-import { FormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { AlertmessagesComponent } from "../mauricarb-alertmessages/alertmessages.component";
-import { NgbAlertModule } from "@ng-bootstrap/ng-bootstrap";
+import { NgbAlertModule, NgbModalModule } from "@ng-bootstrap/ng-bootstrap";
 
 const routes: Routes = [
   {
@@ -44,7 +44,9 @@ const routes: Routes = [
   imports: [
     CommonModule,
     NgbAlertModule,
+    NgbModalModule, // <-- Add this import
     FormsModule,
+    ReactiveFormsModule, // <-- Recommended for forms
     RouterModule.forChild(routes),
   ],
   exports: [AlertmessagesComponent],

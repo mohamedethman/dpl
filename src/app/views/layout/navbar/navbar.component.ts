@@ -52,6 +52,20 @@ export class NavbarComponent implements OnInit {
   notifications = [];
   notificationCount = 0;
   filterType: string = "all"; // "all" | "unread"
+
+  showProfileModal: boolean = false;
+  userDetails: any = null;
+  activeTab: string = "profile";
+  passwordData = {
+    currentPassword: "",
+    newPassword: "",
+  };
+  confirmPassword: string = "";
+  isUpdatingPassword: boolean = false;
+  passwordError: string = "";
+  passwordSuccess: string = "";
+  showNewPassword: boolean = false;
+  showConfirmPassword: boolean = false;
   /**
    * Fixed header menu on scroll
    */
@@ -127,6 +141,83 @@ export class NavbarComponent implements OnInit {
     }
   }
 
+  updatePassword() {
+    // Reset messages
+    this.passwordError = "";
+    this.passwordSuccess = "";
+
+    // Validate inputs
+    if (
+      !this.passwordData.currentPassword ||
+      !this.passwordData.newPassword ||
+      !this.confirmPassword
+    ) {
+      this.passwordError = "Tous les champs sont obligatoires";
+      return;
+    }
+
+    if (this.passwordData.newPassword !== this.confirmPassword) {
+      this.passwordError = "Les mots de passe ne correspondent pas";
+      return;
+    }
+
+    if (this.passwordData.newPassword.length < 6) {
+      this.passwordError =
+        "Le mot de passe doit contenir au moins 6 caractères";
+      return;
+    }
+
+    this.isUpdatingPassword = true;
+
+    const payload = {
+      login: this.userConnected.login,
+      currentPassword: this.passwordData.currentPassword,
+      newPassword: this.passwordData.newPassword,
+    };
+
+    this.authService.updatePassword(payload).then(
+      (response) => {
+        this.isUpdatingPassword = false;
+        this.passwordSuccess = "Mot de passe mis à jour avec succès";
+        this.passwordData = { currentPassword: "", newPassword: "" };
+        this.confirmPassword = "";
+
+        // Clear success message after 3 seconds
+        setTimeout(() => {
+          this.passwordSuccess = "";
+        }, 3000);
+      },
+      (error) => {
+        this.isUpdatingPassword = false;
+        this.passwordError =
+          error.message || "Erreur lors de la mise à jour du mot de passe";
+      }
+    );
+  }
+
+  openProfileModal(event: Event) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.showProfileModal = true;
+    this.loadUserDetails();
+  }
+
+  closeProfileModal() {
+    this.showProfileModal = false;
+    this.userDetails = null;
+  }
+
+  loadUserDetails() {
+    this.authService.getUserConnected2().subscribe(
+      (response: any) => {
+        this.userDetails = response.data;
+      },
+      (error) => {
+        console.error("Error loading user details:", error);
+        // Handle error (show message, etc.)
+      }
+    );
+  }
   openModalEditUser(content) {
     this.modalService
       .open(content, { scrollable: true, size: "lg" })

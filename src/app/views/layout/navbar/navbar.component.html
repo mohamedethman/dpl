@@ -72,10 +72,6 @@
               </button>
             </li>
             <hr class="my-1" />
-
-            <!-- Notifications List -->
-            <!-- Notifications List -->
-            <!-- Notifications List -->
             <li
               *ngFor="let notification of getPaginatedNotifications()"
               class="dropdown-item"
@@ -320,14 +316,20 @@
               <p class="text-muted mb-0">{{ userConnected.profil?.libelle }}</p>
             </li>
             <hr class="my-2" />
-            <!-- <li>
+
+            <!-- Mon Profile Option -->
+            <li>
               <a
-                class="dropdown-item d-flex align-items-center"
-                (click)="openModalEditUser(modalEditerUser)"
+                href="#"
+                class="dropdown-item d-flex align-items-center text-primary"
+                (click)="openProfileModal($event)"
               >
-                <i class="fas fa-key me-2"></i> Changer mot de passe
+                <i class="fas fa-user me-2"></i> Mon Profile
               </a>
-            </li> -->
+            </li>
+
+            <hr class="my-2" />
+
             <li>
               <a
                 href="#"
@@ -350,4 +352,179 @@
       </button>
     </div>
   </nav>
+</div>
+<!-- Add to your navbar.component.html -->
+<div class="custom-modal" *ngIf="showProfileModal">
+  <div class="custom-modal-backdrop" (click)="closeProfileModal()"></div>
+  <div class="custom-modal-content">
+    <div class="custom-modal-header">
+      <h3><i class="fas fa-account me-2"></i> Mon Profile</h3>
+      <button class="custom-modal-close" (click)="closeProfileModal()">
+        &times;
+      </button>
+    </div>
+
+    <div class="custom-modal-body">
+      <div class="profile-tabs">
+        <button
+          class="tab-btn"
+          [class.active]="activeTab === 'profile'"
+          (click)="activeTab = 'profile'"
+        >
+          <i class="fas fa-user"></i> Profile
+        </button>
+        <button
+          class="tab-btn"
+          [class.active]="activeTab === 'password'"
+          (click)="activeTab = 'password'"
+        >
+          <i class="fas fa-lock"></i> Mot de passe
+        </button>
+      </div>
+
+      <div *ngIf="activeTab === 'profile'" class="profile-details">
+        <!-- Profile Information -->
+        <div class="profile-section">
+          <h4>
+            <i><i class="fas fa-info"></i></i> Information Personnelle
+          </h4>
+          <div class="profile-row">
+            <i></i>
+            <span class="profile-label">Nom complet:</span>
+            <span class="profile-value"
+              >{{ userDetails?.prenom }} {{ userDetails?.nom }}</span
+            >
+          </div>
+          <div class="profile-row">
+            <span class="profile-label">Email:</span>
+            <span class="profile-value">{{ userDetails?.email }}</span>
+          </div>
+          <div class="profile-row">
+            <span class="profile-label">Profil:</span>
+            <span class="profile-value">{{
+              userDetails?.profil?.libelle
+            }}</span>
+          </div>
+        </div>
+
+        <div *ngIf="userDetails?.laboratoire" class="profile-section">
+          <h4><i class="fas fa-laboratory"></i> Information du Laboratoire</h4>
+          <div class="profile-row">
+            <span class="profile-label">Nom:</span>
+            <span class="profile-value">{{ userDetails.laboratoire.nom }}</span>
+          </div>
+          <div class="profile-row">
+            <span class="profile-label">Code:</span>
+            <span class="profile-value">{{
+              userDetails.laboratoire.code
+            }}</span>
+          </div>
+          <div class="profile-row">
+            <span class="profile-label">Adresse:</span>
+            <span class="profile-value">{{
+              userDetails.laboratoire.adresse
+            }}</span>
+          </div>
+          <div class="profile-row">
+            <span class="profile-label">Téléphone:</span>
+            <span class="profile-value">{{
+              userDetails.laboratoire.telephone
+            }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="activeTab === 'password'" class="password-form">
+        <form (ngSubmit)="updatePassword()">
+          <!-- <div class="form-group">
+            <label for="currentPassword">Mot de passe actuel</label>
+            <input
+              type="password"
+              id="currentPassword"
+              [(ngModel)]="passwordData.currentPassword"
+              name="currentPassword"
+              required
+              class="form-control"
+            />
+          </div> -->
+
+          <div class="form-group position-relative">
+            <label for="newPassword">Nouveau mot de passe</label>
+            <input
+              [type]="showNewPassword ? 'text' : 'password'"
+              id="newPassword"
+              [(ngModel)]="passwordData.newPassword"
+              name="newPassword"
+              required
+              class="form-control pr-5"
+            />
+            <i
+              class="fas"
+              [ngClass]="showNewPassword ? 'fa-eye-slash' : 'fa-eye'"
+              (click)="showNewPassword = !showNewPassword"
+              style="
+                position: absolute;
+                top: 38px;
+                right: 10px;
+                cursor: pointer;
+              "
+            ></i>
+          </div>
+
+          <div class="form-group position-relative">
+            <label for="confirmPassword"
+              >Confirmer le nouveau mot de passe</label
+            >
+            <input
+              [type]="showConfirmPassword ? 'text' : 'password'"
+              id="confirmPassword"
+              [(ngModel)]="confirmPassword"
+              name="confirmPassword"
+              required
+              class="form-control pr-5"
+            />
+            <i
+              class="fas"
+              [ngClass]="showConfirmPassword ? 'fa-eye-slash' : 'fa-eye'"
+              (click)="showConfirmPassword = !showConfirmPassword"
+              style="
+                position: absolute;
+                top: 38px;
+                right: 10px;
+                cursor: pointer;
+              "
+            ></i>
+          </div>
+
+          <div class="form-actions">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              (click)="activeTab = 'profile'"
+            >
+              Annuler
+            </button>
+            <button
+              type="submit"
+              class="btn btn-success"
+              [disabled]="isUpdatingPassword"
+            >
+              <span *ngIf="!isUpdatingPassword">Mettre à jour</span>
+              <span *ngIf="isUpdatingPassword">
+                <i class="fas fa-spinner fa-spin"></i> En cours...
+              </span>
+            </button>
+          </div>
+
+          <div *ngIf="passwordError" class="alert alert-danger mt-3">
+            {{ passwordError }}
+          </div>
+
+          <div *ngIf="passwordSuccess" class="alert alert-success mt-3">
+            {{ passwordSuccess }}
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 </div>

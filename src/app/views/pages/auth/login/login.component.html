@@ -39,7 +39,7 @@
             <form class="auth-form" #f="ngForm" (ngSubmit)="onLogin()">
               <!-- Username Input -->
               <div class="form-group">
-                <label for="username">Nom de l'utilisateur*</label>
+                <label for="username">Nom de l'utilisateur / Email*</label>
                 <div class="input-with-icon">
                   <i class="fas fa-user"></i>
                   <input
@@ -87,6 +87,12 @@
                   >
                 </p>
               </div>
+
+              <div class="text-center mt-2">
+                <a href="javascript:void(0)" (click)="openForgotModal()"
+                  >Mot de passe oublié ?</a
+                >
+              </div>
             </form>
           </div>
         </div>
@@ -117,5 +123,34 @@
         sont réservés
       </p>
     </div>
+  </div>
+</div>
+<!-- Forgot Password Modal -->
+<div class="custom-modal" *ngIf="showForgotModal">
+  <div class="modal-content">
+    <h4 class="modal-title">
+      <i class="fas fa-key me-2"></i>Réinitialiser le mot de passe
+    </h4>
+    <form (ngSubmit)="sendResetLink()">
+      <div class="form-group">
+        <label for="forgotEmail">Email*</label>
+        <input
+          type="email"
+          id="forgotEmail"
+          class="form-control"
+          [(ngModel)]="forgotEmail"
+          name="forgotEmail"
+          required
+        />
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn dpl">
+          Envoyer le lien de réinitialisation
+        </button>
+        <button type="button" class="btn btn-secondary" (click)="closeModal()">
+          Annuler
+        </button>
+      </div>
+    </form>
   </div>
 </div>

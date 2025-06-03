@@ -356,6 +356,20 @@
               />
             </div>
           </div>
+
+          <div class="form-group row" style="padding: 3px">
+            <label class="col-md-4 col-form-label" for="nom">Email</label>
+            <div class="col-md-6">
+              <input
+                type="text"
+                id="email"
+                name="email"
+                class="form-control"
+                mdInput
+                [(ngModel)]="newUser.email"
+              />
+            </div>
+          </div>
           <div class="form-group row" style="padding: 3px">
             <label class="col-md-4 col-form-label">Téléphone:</label>
             <div class="col-md-6">
@@ -441,7 +455,11 @@
                 <option [value]="null" disabled selected>
                   -- Sélectionner un profil --
                 </option>
-                <option *ngFor="let profil of profils" [value]="profil.id">
+                <option
+                  *ngFor="let profil of profils"
+                  [value]="profil.id"
+                  [hidden]="profil.code === 'LAB'"
+                >
                   {{ profil.libelle }}
                 </option>
               </select>
