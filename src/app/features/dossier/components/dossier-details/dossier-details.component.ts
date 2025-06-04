@@ -976,16 +976,19 @@ export class DossierDetailsComponent implements OnInit {
             "Validé!",
             "La décision du dossier a été enregistrée avec succès.",
             "success"
-          );
-          this.goBackToList();
+          ).then(() => {
+            this.goBackToList(); // Redirect after success
+          });
         },
         error: (error) => {
           console.error("Erreur lors de la validation du dossier:", error);
-          Swal.fire(
-            "Erreur!",
-            "Une erreur est survenue lors de l'enregistrement de la décision.",
-            "error"
-          );
+
+          const errorMessage =
+            error.error?.message || error.message || "Erreur inconnue";
+
+          Swal.fire("Erreur!", errorMessage, "error").then(() => {
+            this.goBackToList(); // Redirect after error (when user clicks OK)
+          });
         },
       });
     } else {

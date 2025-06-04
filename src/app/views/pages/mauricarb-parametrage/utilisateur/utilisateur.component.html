@@ -358,7 +358,7 @@
           </div>
 
           <div class="form-group row" style="padding: 3px">
-            <label class="col-md-4 col-form-label" for="nom">Email</label>
+            <label class="col-md-4 col-form-label" for="email">Email</label>
             <div class="col-md-6">
               <input
                 type="text"
@@ -455,11 +455,7 @@
                 <option [value]="null" disabled selected>
                   -- Sélectionner un profil --
                 </option>
-                <option
-                  *ngFor="let profil of profils"
-                  [value]="profil.id"
-                  [hidden]="profil.code === 'LAB'"
-                >
+                <option *ngFor="let profil of profils" [value]="profil.id">
                   {{ profil.libelle }}
                 </option>
               </select>
