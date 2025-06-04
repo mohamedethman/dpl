@@ -148,7 +148,7 @@ export class NavbarComponent implements OnInit {
 
     // Validate inputs
     if (
-      // !this.passwordData.currentPassword ||
+      !this.passwordData.currentPassword ||
       !this.passwordData.newPassword ||
       !this.confirmPassword
     ) {
@@ -178,6 +178,14 @@ export class NavbarComponent implements OnInit {
     this.authService.updatePassword(payload).then(
       (response) => {
         this.isUpdatingPassword = false;
+
+        // First check for errors in successful response
+        if (response.messagesErrors && response.messagesErrors.length > 0) {
+          this.passwordError = response.messagesErrors[0];
+          return;
+        }
+
+        // Only show success if there are no error messages
         this.passwordSuccess = "Mot de passe mis à jour avec succès";
         this.passwordData = { currentPassword: "", newPassword: "" };
         this.confirmPassword = "";
@@ -189,8 +197,13 @@ export class NavbarComponent implements OnInit {
       },
       (error) => {
         this.isUpdatingPassword = false;
-        this.passwordError =
-          error.message || "Erreur lors de la mise à jour du mot de passe";
+
+        // Handle error response (status not 200)
+        if (error.messagesErrors && error.messagesErrors.length > 0) {
+          this.passwordError = error.messagesErrors[0];
+        } else {
+          this.passwordError = "Erreur lors de la mise à jour du mot de passe";
+        }
       }
     );
   }

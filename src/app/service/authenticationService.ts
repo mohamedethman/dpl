@@ -183,9 +183,19 @@ export class AuthenticationService {
         headers: new HttpHeaders({ authorization: this.getJwtToken() }),
       })
       .toPromise()
-      .then((response) => response)
+      .then((response: any) => {
+        // Return the complete response for inspection
+        return response;
+      })
       .catch((error) => {
-        throw error.error || "Erreur lors de la mise à jour du mot de passe";
+        // For non-200 responses
+        if (error.error && error.error.messagesErrors) {
+          throw error.error;
+        } else {
+          throw {
+            messagesErrors: ["Erreur lors de la mise à jour du mot de passe"],
+          };
+        }
       });
   }
   // In your authentication.service.ts
