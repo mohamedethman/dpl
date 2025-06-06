@@ -1,4 +1,3 @@
-// app-config.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
@@ -24,8 +23,11 @@ export class AppConfigService {
       });
   }
 
-
-  get Config()() {
+  get Config() {
     return this.config;
+  }
+
+  get host(): string {
+    return `${this.config.ip}:${this.config.port}${this.config.context}`;
   }
 }
