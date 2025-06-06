@@ -21,5 +21,6 @@ function loadTextFileAjaxSync(filePath, mimeType) {
 }
 
 export const params = loadJSON("assets/parametres.json");
-export const host: string =
-  environment.ip + ":" + environment.port + environment.context;
+export const host: string = params.ip + ":" + params.port + params.context;
+export const ID_CSEC = params.ID_CSEC;
+export const TIMEOUT = params.TIME_OUT;

@@ -5,21 +5,24 @@ import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import { Observable, throwError, of } from "rxjs";
 import { catchError, map, tap } from "rxjs/operators";
 import { AuthenticationService } from "src/app/service/authenticationService";
-import { environment } from "src/environments/environment";
+
 import { Laboratoire } from "../models/laboratoires";
 import { LaboratoireResponse } from "../models/laboratoire-response";
-
+import { AppConfigService } from "src/app/app-config.service";
 @Injectable({
   providedIn: "root",
 })
 export class LaboratoiresService {
-  private apiUrl = `${environment.baseUrl}`;
+  private apiUrl: string;
   LaboratoireList: any[] = [];
 
   constructor(
     private http: HttpClient,
-    private authService: AuthenticationService
-  ) {}
+    private authService: AuthenticationService,
+    private appConfig: AppConfigService
+  ) {
+    this.apiUrl = this.appConfig.getConfig().baseUrl; // or whatever your key is in parameters.json
+  }
 
   private getHeaders(): HttpHeaders {
     const token = this.authService.getJwtToken();

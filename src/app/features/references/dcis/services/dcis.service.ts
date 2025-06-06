@@ -5,7 +5,8 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Observable, throwError, of } from "rxjs";
 import { catchError, map } from "rxjs/operators";
 import { AuthenticationService } from "src/app/service/authenticationService";
-import { environment } from "src/environments/environment";
+
+import { AppConfigService } from "src/app/app-config.service";
 import { Dci } from "../models/dcis";
 import { ApiResponse } from "../models/dcis";
 
@@ -13,13 +14,17 @@ import { ApiResponse } from "../models/dcis";
   providedIn: "root",
 })
 export class DcisService {
-  private apiUrl = `${environment.baseUrl}`;
+  private apiUrl: string;
+
   dciList: any[] = [];
 
   constructor(
     private http: HttpClient,
-    private authService: AuthenticationService
-  ) {}
+    private authService: AuthenticationService,
+    private appConfig: AppConfigService
+  ) {
+    this.apiUrl = this.appConfig.getConfig().baseUrl;
+  }
 
   private getHeaders(): HttpHeaders {
     const token = this.authService.getJwtToken();

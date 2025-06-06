@@ -7,9 +7,9 @@ import {
   DossierApiResponse,
   StatutResponse,
 } from "../models/recherche.dossier";
-import { environment } from "../../../../environments/environment";
-import { ApiResponse } from "../models/dossier-details";
 
+import { ApiResponse } from "../models/dossier-details";
+import { AppConfigService } from "src/app/app-config.service";
 interface AutocompleteResponse {
   data: any[]; // Adjust the type if necessary
   estModeConnecte: boolean;
@@ -23,12 +23,14 @@ interface AutocompleteResponse {
   providedIn: "root",
 })
 export class RechercheDossierService {
-  private apiUrl = `${environment.baseUrl}`;
+  private apiUrl: string;
   constructor(
     private http: HttpClient,
-    private authService: AuthenticationService
-  ) {}
-
+    private authService: AuthenticationService,
+    private appConfig: AppConfigService
+  ) {
+    this.apiUrl = this.appConfig.getConfig().baseUrl;
+  }
   searchDossiers(
     idLaboratoire: number | null,
     idMedicament: number | null,

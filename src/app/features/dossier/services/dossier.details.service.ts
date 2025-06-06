@@ -7,10 +7,11 @@ import {
 } from "@angular/common/http";
 import { map, catchError } from "rxjs/operators";
 import { Observable, throwError } from "rxjs";
-import { environment } from "../../../../environments/environment";
+
 import { AuthenticationService } from "../../../service/authenticationService";
 import { RecapDossierApiResponse } from "../models/dossier-details";
 import { ApiResponse } from "../models/dossier";
+import { AppConfigService } from "src/app/app-config.service";
 
 @Injectable({
   providedIn: "root",
@@ -18,12 +19,15 @@ import { ApiResponse } from "../models/dossier";
 export class DossierService {
   // Renamed to a service name
 
-  private apiUrl = `${environment.baseUrl}`;
+  private apiUrl: string;
 
   constructor(
     private http: HttpClient,
-    private authService: AuthenticationService
-  ) {}
+    private authService: AuthenticationService,
+    private appConfig: AppConfigService
+  ) {
+    this.apiUrl = this.appConfig.getConfig().baseUrl;
+  }
 
   getDossiersBrouillon(): Observable<ApiResponse> {
     // Renamed method and to French

@@ -1,5 +1,6 @@
-{"ip" : "http://93.115.16.90",
-  "port" : "8085",
-  "context" : "/amm-web-backend",
-  "version" : "v0"
+{
+  "ip": "http://93.115.16.90",
+  "port": "8085",
+  "context": "/amm-web-backend",
+  "baseUrl": "http://93.115.16.90:8085/amm-web-backend"
 }

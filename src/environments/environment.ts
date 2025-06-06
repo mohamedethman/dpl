@@ -4,10 +4,10 @@
 
 export const environment = {
   production: false,
-  ip: "http://localhost",
+  ip: "http://93.115.16.90:8085/amm-web-backend",
   port: "8095",
   context: "/amm-web-backend",
-  baseUrl: "http://localhost:8095/amm-web-backend",
+  baseUrl: "http://93.115.16.90:8085/amm-web-backend",
 };
 
 /*

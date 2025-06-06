@@ -14,6 +14,7 @@ import { MenuItem } from "../views/layout/navbar/menu.model";
 import { Prestation } from "../views/pages/mauricarb-parametrage/modele/referentiels";
 import { throwError, Observable, of } from "rxjs";
 import { map, catchError, tap, timeout, retry } from "rxjs/operators";
+import { AppConfigService } from "../app-config.service";
 
 /**
  * Created by Med.Mansour on 02/05/2024.
@@ -29,7 +30,11 @@ export class AuthenticationService {
   // private host:string = "http://localhost:8080";
   private jwtToken: string = null;
   private roles: Array<MenuItem> = [];
-  constructor(private http: HttpClient, private router: Router) {
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private appConfig: AppConfigService
+  ) {
     //  super();
   }
 

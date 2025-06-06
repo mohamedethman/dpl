@@ -5,21 +5,25 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Observable, throwError, of } from "rxjs";
 import { catchError, map } from "rxjs/operators";
 import { AuthenticationService } from "src/app/service/authenticationService";
-import { environment } from "src/environments/environment";
+
 import { Atc } from "../models/atcs";
 import { ApiResponse } from "../models/atcs";
+import { AppConfigService } from "src/app/app-config.service";
 
 @Injectable({
   providedIn: "root",
 })
 export class AtcsService {
-  private apiUrl = `${environment.baseUrl}`;
   atcList: any[] = [];
+  private apiUrl: string;
 
   constructor(
     private http: HttpClient,
-    private authService: AuthenticationService
-  ) {}
+    private authService: AuthenticationService,
+    private appConfig: AppConfigService
+  ) {
+    this.apiUrl = this.appConfig.getConfig().baseUrl;
+  }
 
   private getHeaders(): HttpHeaders {
     const token = this.authService.getJwtToken();

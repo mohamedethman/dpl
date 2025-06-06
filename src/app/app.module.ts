@@ -2,6 +2,7 @@ import { BrowserModule } from "@angular/platform-browser";
 import { NgModule } from "@angular/core";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms"; // Import ReactiveFormsModule here
+import { APP_INITIALIZER } from "@angular/core";
 
 import { AppRoutingModule } from "./app-routing.module";
 
@@ -19,7 +20,7 @@ import { ListesService } from "./views/pages/mauricarb-parametrage/listes/listes
 import { CncmpEnregistrementService } from "./views/pages/mauricarb-enregistrement/cncmp-enregistrement.service";
 import { ToastrModule } from "ngx-toastr";
 import { NgxPermissionsModule } from "ngx-permissions";
-
+import { AppConfigService } from "./app-config.service";
 import { NgWizardModule, NgWizardConfig, THEME } from "ng-wizard";
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 
@@ -41,7 +42,6 @@ import { RechercherDocumentsComponent } from "./features/demandes/components/rec
 import { CommissionComponent } from "./views/pages/mauricarb-parametrage/commission/commission.component";
 import { RenouvellementAmmComponent } from "./features/demandes/components/renouvellement-amm/renouvellement-amm.component";
 import { DplcomptesComponent } from "./features/dplcomptes/dplcomptes.component";
-
 import { UtilisateurComponent } from "./views/pages/mauricarb-parametrage/utilisateur/utilisateur.component";
 import { GroupesComponent } from "./views/pages/mauricarb-parametrage/groupes/groupes.component";
 import { NgSelectModule } from "@ng-select/ng-select";
@@ -49,7 +49,9 @@ import { NgSelectModule } from "@ng-select/ng-select";
 const ngWizardConfig: NgWizardConfig = {
   theme: THEME.default,
 };
-
+export function initializeApp(appConfig: AppConfigService) {
+  return () => appConfig.loadAppConfig();
+}
 @NgModule({
   declarations: [
     AppComponent,
@@ -99,6 +101,12 @@ const ngWizardConfig: NgWizardConfig = {
     CncmpParametrageService,
     CncmpEnregistrementService,
     ListesService,
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initializeApp,
+      deps: [AppConfigService],
+      multi: true,
+    },
   ],
   bootstrap: [AppComponent],
 })

@@ -9,9 +9,7 @@ import {
 import { Router } from "@angular/router";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { ToastrService } from "ngx-toastr";
-import { environment } from "../../../../../environments/environment";
-import { host } from "../../../../util/constantes-app";
-
+import { AppConfigService } from "src/app/app-config.service";
 declare var bootstrap: any;
 
 @Pipe({
@@ -73,13 +71,17 @@ export class RegisterComponent implements OnInit {
   otpError: boolean = false;
   otpResendDisabled: boolean = false;
   otpResendCountdown: number = 0;
-  private apiUrl = `${environment.baseUrl}`;
 
+  private apiUrl: string;
   constructor(
     private router: Router,
     private toastr: ToastrService,
-    private http: HttpClient
-  ) {}
+    private http: HttpClient,
+
+    private appConfig: AppConfigService
+  ) {
+    this.apiUrl = this.appConfig.getConfig().baseUrl; // or whatever your key is in parameters.json
+  }
 
   ngOnInit() {
     setTimeout(() => {

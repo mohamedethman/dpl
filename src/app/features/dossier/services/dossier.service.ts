@@ -2,9 +2,10 @@ import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import { map, catchError } from "rxjs/operators";
 import { Observable, throwError } from "rxjs";
-import { environment } from "../../../../environments/environment";
+
 import { AuthenticationService } from "../../../service/authenticationService";
 import { ApiResponse } from "../models/dossier";
+import { AppConfigService } from "src/app/app-config.service";
 
 @Injectable({
   providedIn: "root",
@@ -12,12 +13,16 @@ import { ApiResponse } from "../models/dossier";
 export class DossierService {
   // Renamed to a service name
 
-  private apiUrl = `${environment.baseUrl}`;
+  private apiUrl: string;
 
   constructor(
     private http: HttpClient,
-    private authService: AuthenticationService
-  ) {}
+    private authService: AuthenticationService,
+    private appConfig: AppConfigService
+  ) {
+    this.apiUrl = this.appConfig.getConfig().baseUrl;
+  }
+
   getDossiersByStatut(statut: string, params?: any): Observable<ApiResponse> {
     const token = this.authService.getJwtToken();
     const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });

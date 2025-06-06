@@ -4,39 +4,40 @@ import { Observable, throwError } from "rxjs";
 import { AuthenticationService } from "../../../service/authenticationService";
 import { map, catchError, tap } from "rxjs/operators";
 import { ApiResponse } from "../models/step.model";
-import { environment } from "src/environments/environment";
+import { AppConfigService } from "src/app/app-config.service";
 @Injectable({
   providedIn: "root",
 })
 export class DmmService {
-  private readonly baseUrl = environment.baseUrl;
-  // private apiUrl = `${environment.baseUrl}`;
-
-  // Define the endpoints relative to the base URL
-  private readonly endpoints = {
-    allModules: `${this.baseUrl}/allModules`,
-    allCodeATCs: `${this.baseUrl}/allCodeATCs`,
-    allConditionnements: `${this.baseUrl}/allConditionnements`,
-    allVoieAdministrations: `${this.baseUrl}/allVoieAdministrations`,
-    allDosages: `${this.baseUrl}/allDosages`,
-    allFormePharmaceutiques: `${this.baseUrl}/allFormePharmaceutiques`,
-    recapDossier: `${this.baseUrl}/recapDossier/dossierId`,
-    saveMedicament: `${this.baseUrl}/saveMedicament`,
-    saveAllModuleElementData: `${this.baseUrl}/saveAllModuleElementData`,
-    autocompleteDCIs: `${this.baseUrl}/autocompleteDCIs/`,
-    autocompleteATCs: `${this.baseUrl}/autocompleteATCs/`,
-    soumettreDossier: `${this.baseUrl}/soumettreDossier`,
-    stockerFichier: `${this.baseUrl}/stockerFichier`,
-    getElementsAndElementsData: `${this.baseUrl}/getElementsAndElementsData/`,
-  };
-
   steps: any[] = []; // Define steps as an array to store the response
+
+  private readonly apiUrl: string;
+  private endpoints: any;
 
   constructor(
     private http: HttpClient,
-    private authService: AuthenticationService
-  ) {}
+    private authService: AuthenticationService,
+    private appConfig: AppConfigService
+  ) {
+    this.apiUrl = this.appConfig.getConfig().baseUrl;
 
+    this.endpoints = {
+      allModules: `${this.apiUrl}/allModules`,
+      allCodeATCs: `${this.apiUrl}/allCodeATCs`,
+      allConditionnements: `${this.apiUrl}/allConditionnements`,
+      allVoieAdministrations: `${this.apiUrl}/allVoieAdministrations`,
+      allDosages: `${this.apiUrl}/allDosages`,
+      allFormePharmaceutiques: `${this.apiUrl}/allFormePharmaceutiques`,
+      recapDossier: `${this.apiUrl}/recapDossier/dossierId`,
+      saveMedicament: `${this.apiUrl}/saveMedicament`,
+      saveAllModuleElementData: `${this.apiUrl}/saveAllModuleElementData`,
+      autocompleteDCIs: `${this.apiUrl}/autocompleteDCIs/`,
+      autocompleteATCs: `${this.apiUrl}/autocompleteATCs/`,
+      soumettreDossier: `${this.apiUrl}/soumettreDossier`,
+      stockerFichier: `${this.apiUrl}/stockerFichier`,
+      getElementsAndElementsData: `${this.apiUrl}/getElementsAndElementsData/`,
+    };
+  }
   private createHeaders(): HttpHeaders {
     const token = this.authService.getJwtToken();
     return new HttpHeaders({
@@ -53,7 +54,7 @@ export class DmmService {
     );
   }
   // getATCs(query: string): Observable<any[]> {
-  //   const url = `${this.baseUrl}/autocompleteATCs/${query}`;
+  //   const url = `${this.apiUrl}/autocompleteATCs/${query}`;
   //   const headers = this.createHeaders();
 
   //   console.log('Fetching ATCs with query:', query); // Add this for debugging
@@ -207,7 +208,7 @@ export class DmmService {
     const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
 
     return this.http
-      .get<ApiResponse>(`${this.baseUrl}/allDcis`, { headers })
+      .get<ApiResponse>(`${this.apiUrl}/allDcis`, { headers })
       .pipe(
         map((response) => response) // You can remove the map(response => response), it's redundant
       );

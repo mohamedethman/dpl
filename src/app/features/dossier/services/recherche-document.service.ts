@@ -10,9 +10,8 @@ import {
 import { Observable, of, throwError } from "rxjs";
 import { catchError, map, tap } from "rxjs/operators";
 import { AuthenticationService } from "../../../service/authenticationService";
-import { environment } from "../../../../environments/environment";
 import { RechercheDocumentResponse } from "../../demandes/models/recherche-document";
-
+import { AppConfigService } from "src/app/app-config.service";
 interface RechercheDocumentRequest {
   typeDocument: string;
   id?: number;
@@ -23,12 +22,15 @@ interface RechercheDocumentRequest {
   providedIn: "root",
 })
 export class RechercheDocumentService {
-  private apiUrl = `${environment.baseUrl}`;
+  private apiUrl: string;
 
   constructor(
     private http: HttpClient,
-    private authService: AuthenticationService
-  ) {}
+    private authService: AuthenticationService,
+    private appConfig: AppConfigService
+  ) {
+    this.apiUrl = this.appConfig.getConfig().baseUrl;
+  }
 
   // recherche-document.service.ts
   // recherche-document.service.ts

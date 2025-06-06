@@ -19,6 +19,12 @@ import { ToastrService } from "ngx-toastr";
 import { ActivatedRoute, Router } from "@angular/router"; // ✅ Import Router
 import Swal from "sweetalert2"; // Import SweetAlert2
 import { first } from "rxjs/operators"; // ✅ Add this line
+import {
+  HttpClient,
+  HttpEventType,
+  HttpRequest,
+  HttpResponse,
+} from "@angular/common/http";
 
 @Component({
   selector: "app-completsavemedicament",
@@ -44,6 +50,26 @@ export class CompletsavemedicamentComponent implements OnInit {
   dossierId: number | null = null;
   recapDossier: RecapDossierApiResponse | null = null;
   dossierModuleElements: DossierModuleElement[] = [];
+  uploadStatus: {
+    [key: string]:
+      | "pending"
+      | "reading"
+      | "uploading"
+      | "success"
+      | "error"
+      | null;
+  } = {};
+  uploadProgress: {
+    [key: string]: {
+      percent: number;
+      loaded: number;
+      total: number;
+    };
+  } = {};
+
+  currentUploads: { [key: string]: File } = {};
+  isConverting: boolean = false;
+  currentUploadElement: any = null;
   // Dropdown data
   atcCodes: string[] = [];
   conditionnements: string[] = [];
@@ -57,6 +83,7 @@ export class CompletsavemedicamentComponent implements OnInit {
     private fb: UntypedFormBuilder,
     private dossierService: DossierService,
     private toastr: ToastrService,
+    private http: HttpClient,
     // private toastr: ToastrService,
     private router: Router, // ✅ Inject Router
     private route: ActivatedRoute,
@@ -376,20 +403,116 @@ export class CompletsavemedicamentComponent implements OnInit {
     );
   }
 
-  onFileSelected(event: any, element: any) {
+  async onFileSelected(event: any, element: any) {
     const file = event.target.files[0];
-    if (file) {
-      const fileExtension =
-        file.name.split(".").pop()?.toLowerCase() || "unknown"; // Get file extension
+    if (!file) return;
 
-      this.convertFileToBase64(file)
-        .then((base64File) => {
-          this.uploadFileToBackend(base64File, element.id, fileExtension); // Send to backend
-        })
-        .catch((error) => {
-          console.error("❌ Error converting file:", error);
-        });
+    const elementId = element.id;
+    this.currentUploads[elementId] = file;
+    this.uploadStatus[elementId] = "reading";
+    this.uploadProgress[elementId] = {
+      percent: 0,
+      loaded: 0,
+      total: file.size,
+    };
+
+    try {
+      // Step 1: Read file as base64 (with progress)
+      const base64String = await this.readFileWithProgress(file, elementId);
+
+      // Step 2: Upload with progress tracking
+      this.uploadStatus[elementId] = "uploading";
+      await this.uploadWithProgress(base64String, element, elementId);
+    } catch (error) {
+      this.uploadStatus[elementId] = "error";
+      this.toastr.error("File processing failed");
+      console.error("Upload error:", error);
     }
+  }
+
+  private readFileWithProgress(file: File, elementId: string): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+
+      reader.onprogress = (event) => {
+        if (event.lengthComputable) {
+          const percent = Math.round((event.loaded / event.total) * 50);
+          this.uploadProgress[elementId] = {
+            percent,
+            loaded: event.loaded,
+            total: event.total,
+          };
+        }
+      };
+
+      reader.onload = () => {
+        const base64String = (reader.result as string).split(",")[1];
+        resolve(base64String);
+      };
+
+      reader.onerror = () => {
+        reject(reader.error);
+      };
+
+      reader.readAsDataURL(file);
+    });
+  }
+
+  private uploadWithProgress(
+    base64String: string,
+    element: any,
+    elementId: string
+  ): Promise<void> {
+    return new Promise((resolve, reject) => {
+      const filePayload = {
+        idDossier: this.idDossier,
+        idModuleElement: element.id,
+        fileBase64: base64String,
+        extension:
+          this.currentUploads[elementId].name.split(".").pop()?.toLowerCase() ||
+          "",
+      };
+
+      // Create a request with progress reporting
+      const req = new HttpRequest(
+        "POST",
+        "/api/upload", // Your upload endpoint
+        filePayload,
+        { reportProgress: true }
+      );
+
+      this.http.request(req).subscribe({
+        next: (event: any) => {
+          if (event.type === HttpEventType.UploadProgress) {
+            // Calculate overall progress (50% from reading + 50% from uploading)
+            const uploadPercent = Math.round((event.loaded / event.total) * 50);
+            const totalPercent = 50 + uploadPercent;
+
+            this.uploadProgress[elementId] = {
+              percent: totalPercent,
+              loaded: event.loaded,
+              total: event.total,
+            };
+          } else if (event instanceof HttpResponse) {
+            this.uploadStatus[elementId] = "success";
+            this.toastr.success("File uploaded successfully!");
+            resolve();
+          }
+        },
+        error: (err) => {
+          this.uploadStatus[elementId] = "error";
+          reject(err);
+        },
+      });
+    });
+  }
+
+  getUploadProgress(elementId: string): number {
+    return this.uploadProgress[elementId]?.percent || 0;
+  }
+
+  getUploadStatus(elementId: string): string {
+    return this.uploadStatus[elementId] || "pending";
   }
 
   downloadFile(dossierId: number, moduleId: number, name: string): void {
