@@ -27,6 +27,11 @@ export class AppConfigService {
     return this.config;
   }
 
+  getConfig() {
+  return this.config;
+}
+
+
   get host(): string {
     return `${this.config.ip}:${this.config.port}${this.config.context}`;
   }
